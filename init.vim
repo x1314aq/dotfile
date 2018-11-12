@@ -2,25 +2,32 @@ set nocompatible
 
 let mapleader=";"
 
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+  silent !curl -fLo ~/.nvim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 call plug#begin('~/.nvim')
 
 Plug 'morhetz/gruvbox'
 Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-fugitive'
-Plug 'Valloric/YouCompleteMe', {'for': ['c', 'cpp', 'python']}
+Plug 'Valloric/YouCompleteMe', {'for': ['c', 'cpp', 'python'], 'do': './install.py --clang-completer'}
 Plug 'rdnetto/YCM-Generator', {'branch': 'stable'}
 Plug 'scrooloose/nerdcommenter'
-Plug 'Yggdroot/LeaderF'
+Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
 Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
 Plug 'w0rp/ale', {'for': ['c', 'cpp', 'python']}
-Plug 'jsfaint/gen_tags.vim'
+"Plug 'jsfaint/gen_tags.vim'
+Plug 'ludovicchabant/vim-gutentags'
 Plug 'sbdchd/neoformat'
 Plug 'Shougo/echodoc.vim', {'for': ['c', 'cpp']}
 Plug 'jiangmiao/auto-pairs'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-syntax'
-Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim', 'java'] }
+Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim'] }
 Plug 'sgur/vim-textobj-parameter'
 Plug 'wsdjeg/FlyGrep.vim'
 
@@ -73,6 +80,7 @@ let g:NERDDefaultAligh = 'left'
 let g:NERDTrimTrailingWhitespace = 1
 
 " YCM config
+let g:ycm_confirm_extra_conf = 0
 let g:ycm_use_ultisnips_completer = 0
 let g:ycm_auto_start_csharp_server = 0
 let g:ycm_show_diagnostics_ui = 0
@@ -92,17 +100,32 @@ let g:ycm_semantic_triggers =  {
 let g:ycm_filetype_whitelist = {
                                \ 'c': 1,
                                \ 'cpp': 1,
-                               \ 'h': 1,
-                               \ 'hpp': 1,
                                \ 'python': 1
                                \ }
 
 " gen_tags config
-let g:loaded_gentags#ctags = 1
-let g:gen_tags#ctags_bin = '/usr/local/bin/ctags'
-let g:gen_tags#gtags_bin = '/usr/local/bin/gtags'
-let g:gen_tags#global_bin = '/usr/local/bin/gtags'
-let g:gen_tags#use_cache_dir = 0
+"let g:loaded_gentags#ctags = 1
+"let g:gen_tags#ctags_bin = '/usr/local/bin/ctags'
+"let g:gen_tags#gtags_bin = '/usr/bin/gtags'
+"let g:gen_tags#global_bin = '/usr/bin/gtags'
+"let g:gen_tags#use_cache_dir = 0
+
+" vim-gutentags config
+let g:gutentags_project_root = ['.git', '.svn', '.root', '.hg', '.project']
+let g:gutentags_ctags_tagfile = '.tags'
+let s:vim_tags = expand('~/.cache/tags')
+let g:gutentags_cache_dir = s:vim_tags
+let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q', '--c++-kinds=+px', '--c-kinds=+px']
+let g:gutentags_trace = 1
+let g:gutentags_file_list_command = {
+            \  'markers': {
+                \  '.git': 'git ls-files',
+                \  '.hg': 'hg files',
+                \  }
+            \  }
+if !isdirectory(s:vim_tags)
+    silent! call mkdir(s:vim_tags, 'p')
+endif
 
 " echodoc config
 let g:echodoc_enable_at_startup = 1
