@@ -174,11 +174,20 @@ let g:ale_linters_explicit = 1
 let g:ale_echo_msg_format = '[%linter%] [%severity%] %s'
 let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
-let g:ale_linters = {
-        \  'c': ['clang'],
-        \  'cpp': ['clang'],
-        \  'python': ['pylint'],
-        \  }
+let uname = substitute(system('uname'), '\n', '', '')
+if uname == 'Darwin'
+    let g:ale_linters = {
+            \  'c': ['clang'],
+            \  'cpp': ['clang'],
+            \  'python': ['pylint'],
+            \  }
+elseif uname == 'Linux'
+    let g:ale_linters = {
+            \  'c': ['gcc'],
+            \  'cpp': ['gcc'],
+            \  'python': ['pylint'],
+            \  }
+endif
 nmap <silent> <C-n> <Plug>(ale_next_wrap)
 nmap <silent> <S-n> <Plug>(ale_previous_wrap)
 nmap <silent> <C-m> <Plug>(ale_detail)
