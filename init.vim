@@ -20,8 +20,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
 Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
 Plug 'w0rp/ale', {'for': ['c', 'cpp', 'python']}
-"Plug 'jsfaint/gen_tags.vim'
-Plug 'ludovicchabant/vim-gutentags'
+Plug 'ludovicchabant/vim-gutentags', {'for': ['c', 'cpp', 'python']}
 Plug 'sbdchd/neoformat'
 Plug 'Shougo/echodoc.vim', {'for': ['c', 'cpp']}
 Plug 'jiangmiao/auto-pairs'
@@ -30,9 +29,9 @@ Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-syntax'
 Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim'] }
 Plug 'sgur/vim-textobj-parameter'
-"Plug 'wsdjeg/FlyGrep.vim'
 Plug 'dyng/ctrlsf.vim'
 Plug 'terryma/vim-multiple-cursors'
+Plug 'skywind3000/gutentags_plus', {'for': ['c', 'cpp', 'python']}
 
 call plug#end()
 
@@ -114,13 +113,19 @@ let g:ycm_filetype_whitelist = {
 "let g:gen_tags#global_bin = '/usr/bin/gtags'
 "let g:gen_tags#use_cache_dir = 0
 
+" GNU global config
+let $GTAGSLABEL = 'native'
+let $GTAGSCONF = '/root/.globalrc'
+
 " vim-gutentags config
 let g:gutentags_project_root = ['.git', '.svn', '.root', '.hg', '.project']
 let g:gutentags_ctags_tagfile = '.tags'
 let s:vim_tags = expand('~/.cache/tags')
 let g:gutentags_cache_dir = s:vim_tags
+let g:gutentags_modules = ['ctags', 'gtags_cscope']
 let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q', '--c++-kinds=+px', '--c-kinds=+px']
 "let g:gutentags_trace = 1
+let g:gutentags_auto_add_gtags_cscope = 0
 let g:gutentags_file_list_command = {
             \  'markers': {
                 \  '.git': 'git ls-files',
@@ -194,8 +199,8 @@ let g:airline#extensions#ale#enabled = 0
 let g:ale_sign_column_always = 1
 let g:ale_linters_explicit = 1
 let g:ale_echo_msg_format = '[%linter%] [%severity%] %s'
-let g:ale_lint_on_text_changed = 'normal'
-let g:ale_lint_on_insert_leave = 1
+let g:ale_lint_on_text_changed = 0
+let g:ale_lint_on_insert_leave = 0
 if uname == 'Darwin'
     let g:ale_linters = {
             \  'c': ['clang'],
@@ -227,3 +232,13 @@ let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
 let g:cpp_concepts_highlight = 1
 
+" vim-multiple-cursors config
+let g:multi_cursor_use_default_mapping = 0
+let g:multi_cursor_start_word_key = '<C-j>'
+let g:multi_cursor_select_all_word_key = '<M-j>'
+let g:multi_cursor_start_key = 'g<C-j>'
+let g:multi_cursor_select_all_key = 'g<M-j>'
+let g:multi_cursor_next_key = '<C-j>'
+let g:multi_cursor_prev_key = '<C-k>'
+let g:multi_cursor_skip_key = '<C-x>'
+let g:multi_cursor_quit_key = '<Esc>'
