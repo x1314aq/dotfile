@@ -115,7 +115,7 @@ let g:ycm_filetype_whitelist = {
 
 " GNU global config
 let $GTAGSLABEL = 'native'
-let $GTAGSCONF = '/root/.globalrc'
+let $GTAGSCONF = expand('~/.globalrc')
 
 " vim-gutentags config
 let g:gutentags_project_root = ['.git', '.svn', '.root', '.hg', '.project']
