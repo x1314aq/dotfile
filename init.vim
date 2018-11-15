@@ -20,7 +20,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
 Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
 Plug 'w0rp/ale', {'for': ['c', 'cpp', 'python']}
-Plug 'ludovicchabant/vim-gutentags', {'for': ['c', 'cpp', 'python']}
+Plug 'ludovicchabant/vim-gutentags'
 Plug 'sbdchd/neoformat'
 Plug 'Shougo/echodoc.vim', {'for': ['c', 'cpp']}
 Plug 'jiangmiao/auto-pairs'
@@ -31,7 +31,6 @@ Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim'] }
 Plug 'sgur/vim-textobj-parameter'
 Plug 'dyng/ctrlsf.vim'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'skywind3000/gutentags_plus', {'for': ['c', 'cpp', 'python']}
 
 call plug#end()
 
@@ -106,26 +105,19 @@ let g:ycm_filetype_whitelist = {
                                \ 'python': 1
                                \ }
 
-" gen_tags config
-"let g:loaded_gentags#ctags = 1
-"let g:gen_tags#ctags_bin = '/usr/local/bin/ctags'
-"let g:gen_tags#gtags_bin = '/usr/bin/gtags'
-"let g:gen_tags#global_bin = '/usr/bin/gtags'
-"let g:gen_tags#use_cache_dir = 0
-
-" GNU global config
-let $GTAGSLABEL = 'native'
-let $GTAGSCONF = expand('~/.globalrc')
-
 " vim-gutentags config
 let g:gutentags_project_root = ['.git', '.svn', '.root', '.hg', '.project']
 let g:gutentags_ctags_tagfile = '.tags'
 let s:vim_tags = expand('~/.cache/tags')
 let g:gutentags_cache_dir = s:vim_tags
-let g:gutentags_modules = ['ctags', 'gtags_cscope']
-let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q', '--c++-kinds=+px', '--c-kinds=+px']
-"let g:gutentags_trace = 1
-let g:gutentags_auto_add_gtags_cscope = 0
+let g:gutentags_modules = ['ctags']
+let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extras=+q', '--kinds-C++=+pxNUA', '--kinds-C=+px']
+let g:gutentags_define_advanced_commands = 1
+augroup MyGutentagsStatusLineRefresher
+    autocmd!
+    autocmd User GutentagsUpdating call lightline#update()
+    autocmd User GutentagsUpdated call lightline#update()
+augroup END
 let g:gutentags_file_list_command = {
             \  'markers': {
                 \  '.git': 'git ls-files',
@@ -182,11 +174,6 @@ nmap <leader>s <Plug>CtrlSFPrompt
 nmap <leader>S <Plug>CtrlSFCwordPath
 vmap <leader>s <Plug>CtrlSFVwordExec
 vmap <leader>S <Plug>CtrlSFVwordPath
-
-" FlyGrep config
-"nnoremap <leader>s :FlyGrep<CR>
-"let g:FlyGrep_input_delay = 100
-"let g:FlyGrep_search_tools = ['ag']
 
 " auto-pairs config
 let g:AutoPairsMapCh = 0
