@@ -30,7 +30,9 @@ Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-syntax'
 Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim'] }
 Plug 'sgur/vim-textobj-parameter'
-Plug 'wsdjeg/FlyGrep.vim'
+"Plug 'wsdjeg/FlyGrep.vim'
+Plug 'dyng/ctrlsf.vim'
+Plug 'terryma/vim-multiple-cursors'
 
 call plug#end()
 
@@ -93,7 +95,7 @@ let g:ycm_key_invoke_completion = '<c-z>'
 set completeopt-=preview
 let g:ycm_add_preview_to_completeopt = 0
 noremap <c-z> <NOP>
-nnoremap <leader>gt :YcmCompleter GoTo<CR>
+nnoremap <leader>gd :YcmCompleter GoTo<CR>
 
 let g:ycm_semantic_triggers =  {
                                \ 'c,cpp,python': ['re!\w{2}'],
@@ -158,10 +160,28 @@ let g:Lf_NormalMap = {
 	\ "Colorscheme":    [["<ESC>", ':exec g:Lf_py "colorschemeExplManager.quit()"<CR>']],
 	\ }
 
+" CtrlSF config
+let g:ctrlsf_search_mode = 'async'
+let g:ctrlsf_ackprg = 'ag'
+let g:ctrlsf_confirm_save = 0
+let g:ctrlsf_default_root = 'project+fw'
+let g:ctrlsf_absolute_file_path = 0
+let g:ctrlsf_extra_root_marker = ['.root', '.project']
+let g:ctrlsf_default_view_mode = 'normal'
+let g:ctrlsf_case_sensitive = 'yes'
+let g:ctrlsf_auto_focus = {
+    \  "at": "done",
+    \  "duration_less_than": 1000,
+    \  }
+nmap <leader>s <Plug>CtrlSFPrompt
+nmap <leader>S <Plug>CtrlSFCwordPath
+vmap <leader>s <Plug>CtrlSFVwordExec
+vmap <leader>S <Plug>CtrlSFVwordPath
+
 " FlyGrep config
-nnoremap <leader>s :FlyGrep<CR>
-let g:FlyGrep_input_delay = 100
-let g:FlyGrep_search_tools = ['ag']
+"nnoremap <leader>s :FlyGrep<CR>
+"let g:FlyGrep_input_delay = 100
+"let g:FlyGrep_search_tools = ['ag']
 
 " auto-pairs config
 let g:AutoPairsMapCh = 0
@@ -206,3 +226,4 @@ let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
 let g:cpp_concepts_highlight = 1
+
