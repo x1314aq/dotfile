@@ -140,7 +140,8 @@ let g:LF_WildIgnore = {
         \  }
 let g:Lf_Ctags = "/usr/local/bin/ctags"
 let g:Lf_CtagsFuncOpts = {
-        \  'c': '--c-kinds=fp',
+        \  'c': '--kinds-C=+px',
+        \  'c++': '--kinds-C++=+pxNUA',
         \  }
 let g:Lf_DefaultExternalTool = "ag"
 let g:Lf_HideHelp = 1
