@@ -230,3 +230,25 @@ let g:multi_cursor_next_key = '<C-j>'
 let g:multi_cursor_prev_key = '<C-k>'
 let g:multi_cursor_skip_key = '<C-x>'
 let g:multi_cursor_quit_key = '<Esc>'
+
+" Called once right before/after starting selecting multiple cursors
+command! YcmUnlock call youcompleteme#EnableCursorMovedAutocommands()
+command! YcmLock call youcompleteme#DisableCursorMovedAutocommands()
+
+function! Multiple_cursors_before()
+  if exists(':YcmLock')==2
+    exe 'YcmLock'
+  endif
+  if exists(':ALEDisable')==2
+    exe 'ALEDisable'
+  endif
+endfunction
+
+function! Multiple_cursors_after()
+  if exists(':YcmUnlock')==2
+    exe 'YcmUnlock'
+  endif
+  if exists(':ALEEnable')==2
+    exe 'ALEEnable'
+  endif
+endfunction
