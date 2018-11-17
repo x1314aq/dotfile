@@ -110,6 +110,7 @@ let g:gutentags_project_root = ['.git', '.svn', '.root', '.hg', '.project']
 let g:gutentags_ctags_tagfile = '.tags'
 let s:vim_tags = expand('~/.cache/tags')
 let g:gutentags_cache_dir = s:vim_tags
+let g:gutentags_exclude_filetypes = ['vim', 'text', 'sh', 'cmake', 'json', 'make']
 let g:gutentags_modules = ['ctags']
 let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extras=+q', '--kinds-C++=+pxNUA', '--kinds-C=+px']
 let g:gutentags_define_advanced_commands = 1
