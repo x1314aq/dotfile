@@ -251,19 +251,15 @@ command! YcmUnlock call youcompleteme#EnableCursorMovedAutocommands()
 command! YcmLock call youcompleteme#DisableCursorMovedAutocommands()
 
 function! Multiple_cursors_before()
-  if exists(':YcmLock')==2
+  if &ft == 'c' || &ft == 'cpp'
     exe 'YcmLock'
-  endif
-  if exists(':ALEDisable')==2
     exe 'ALEDisable'
   endif
 endfunction
 
 function! Multiple_cursors_after()
-  if exists(':YcmUnlock')==2
+  if &ft == 'c' || &ft == 'cpp'
     exe 'YcmUnlock'
-  endif
-  if exists(':ALEEnable')==2
     exe 'ALEEnable'
   endif
 endfunction
