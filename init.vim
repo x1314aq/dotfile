@@ -34,6 +34,20 @@ Plug 'terryma/vim-multiple-cursors'
 
 call plug#end()
 
+" Disable arrow key
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+noremap <BS> <Nop>
+noremap <Del> <Nop>
+inoremap <Up> <Nop>
+inoremap <Down> <Nop>
+inoremap <Left> <Nop>
+inoremap <Right> <Nop>
+inoremap <BS> <Nop>
+inoremap <Del> <Nop>
+
 " neovim specifications
 set number
 " set relativenumber   " 显示相对行号
