@@ -31,6 +31,7 @@ Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim'] }
 Plug 'sgur/vim-textobj-parameter'
 Plug 'dyng/ctrlsf.vim'
 Plug 'terryma/vim-multiple-cursors'
+Plug 'justinmk/vim-dirvish'
 
 call plug#end()
 
