@@ -29,6 +29,7 @@ Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim'] }
 Plug 'dyng/ctrlsf.vim'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'justinmk/vim-dirvish'
+Plug 'tpope/vim-unimpaired'
 
 call plug#end()
 
