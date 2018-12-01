@@ -49,30 +49,44 @@ inoremap <BS> <Nop>
 inoremap <Del> <Nop>
 
 " neovim specifications
-set number           " show line number
-set relativenumber   " show relative number
-set expandtab        " use SPACE instead of TAB when insert TAB
-set softtabstop=4    " treat 4 continuous spaces as a TAB
-set tabstop=4        " 1 TAB = 4 SPACEs
+syntax on
+filetype on
+filetype indent on
 
-set autoindent       " auto indent 
-set showmatch        " briefly jump to the matching one when a bracket is inserted 
-set matchtime=3
-set nobackup         " do not keep a backup file
-set showcmd          " display incomplete commands
-set hlsearch         " highlight search results
-set incsearch        " do incremental search
-set ignorecase       " ignore case when searching
-set smartcase        " no ignorecase if Uppercase char present
+set number                    " show line number
+set relativenumber            " show relative number
 
-set wildmenu         " enhanced auto-completion in COMMAND mode
-set cursorline       " hightlight current line
+set expandtab                 " use SPACE instead of TAB when insert TAB
+set smarttab                  "
+set softtabstop=4             " treat 4 continuous SPACEs as a TAB
+set shiftwidth=4              " use 4 SPACEs when auto format
+set tabstop=4                 " 1 TAB = 4 SPACEs
 
-set foldmethod=syntax " syntax highlighting items specify folds
-set nofoldenable      " disable fold when start neovim
-set splitright        " splitting a window will put it right of the current one
-set noshowmode        " disable mode prompt in left bottom corner
-set nrformats=        " treat all numbers as decimal
+set autoindent                " auto indent
+set smartindent               " do smart auto-indent when starting a new line
+set shiftround                " round indent to multiple of 'shiftwidth'
+
+set showmatch                 " briefly jump to the matching one when a bracket is inserted
+set matchtime=1               " tenths of a second (100ms) to show the matching parenthesis
+set nobackup                  " do not keep a backup file
+set novisualbell              " turn off visual bell
+set visualbell t_vb=          " turn off error beep/flush
+set showcmd                   " display incomplete commands
+set noshowmode                " do not display current mode because we use lightline.vim instead
+set scrolloff=3               " keep 3 lines when scrolling
+
+set hlsearch                  " highlight search results
+set incsearch                 " do incremental search
+set ignorecase                " ignore case when searching
+set smartcase                 " no ignorecase if Uppercase char present
+
+set wildmenu                  " enhanced auto-completion in COMMAND mode
+set cursorline                " hightlight current line
+
+set foldmethod=syntax         " syntax highlighting items specify folds
+set nofoldenable              " disable fold when start neovim
+set splitright                " splitting a window will put it right of the current one
+set nrformats=                " treat all numbers as decimal
 
 " colorscheme dracula
 colorscheme gruvbox
