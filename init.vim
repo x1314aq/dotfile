@@ -1,4 +1,4 @@
-set nocompatible
+set nocompatible    " disable vi compatible mode
 
 nnoremap <Space> <Nop>
 let mapleader=" "
@@ -49,27 +49,30 @@ inoremap <BS> <Nop>
 inoremap <Del> <Nop>
 
 " neovim specifications
-set number
-set relativenumber   " 显示相对行号
-set expandtab        " 将tab扩展为空格
-set softtabstop=4    " 让neovim把连续4个空格视为一个tab
-set shiftwidth=4     " 设置格式化时tab占用的空格数
-set tabstop=4        " 设置编辑时tab占用的空格数
+set number           " show line number
+set relativenumber   " show relative number
+set expandtab        " use SPACE instead of TAB when insert TAB
+set softtabstop=4    " treat 4 continuous spaces as a TAB
+set tabstop=4        " 1 TAB = 4 SPACEs
 
-" set nowrap           " 当一行文字过长时不自动折行
-set showmatch
+set autoindent       " auto indent 
+set showmatch        " briefly jump to the matching one when a bracket is inserted 
+set matchtime=3
+set nobackup         " do not keep a backup file
+set showcmd          " display incomplete commands
+set hlsearch         " highlight search results
+set incsearch        " do incremental search
+set ignorecase       " ignore case when searching
+set smartcase        " no ignorecase if Uppercase char present
 
-set nohlsearch       " 不高亮搜索结果
-set incsearch        " 开启实时搜索功能
-" set ignorecase       " 搜索时忽略大小写
+set wildmenu         " enhanced auto-completion in COMMAND mode
+set cursorline       " hightlight current line
 
-set wildmenu         " neovim自身命令行模式智能补全
-set cursorline       " 高亮当前行
-
-set foldmethod=syntax " 基于缩进或语法进行代码折叠
-set nofoldenable      " 启动neovim时关闭代码折叠
-set splitright
-set noshowmode
+set foldmethod=syntax " syntax highlighting items specify folds
+set nofoldenable      " disable fold when start neovim
+set splitright        " splitting a window will put it right of the current one
+set noshowmode        " disable mode prompt in left bottom corner
+set nrformats=        " treat all numbers as decimal
 
 " colorscheme dracula
 colorscheme gruvbox
