@@ -1,6 +1,7 @@
 set nocompatible
 
-let mapleader=";"
+nnoremap <Space> <Nop>
+let mapleader=" "
 let uname = substitute(system('uname'), '\n', '', '')
 
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
@@ -49,7 +50,7 @@ inoremap <Del> <Nop>
 
 " neovim specifications
 set number
-" set relativenumber   " 显示相对行号
+set relativenumber   " 显示相对行号
 set expandtab        " 将tab扩展为空格
 set softtabstop=4    " 让neovim把连续4个空格视为一个tab
 set shiftwidth=4     " 设置格式化时tab占用的空格数
@@ -221,11 +222,11 @@ nmap <silent> <S-n> <Plug>(ale_previous_wrap)
 nmap <silent> <C-m> <Plug>(ale_detail)
 let g:ale_c_parse_compile_commands = 1
 if uname == 'Darwin'
-    let g:ale_c_clang_options = '-std=gnu99 -Wall -Wextra -pedantic'
-    let g:ale_cpp_clang_options = '-std=c++11 -Wall -Wextra -pedantic'
+    let g:ale_c_clang_options = '-std=gnu99 -m32 -Wall -Wextra -pedantic -Werror'
+    let g:ale_cpp_clang_options = '-std=c++11 -Wall -Wextra -pedantic -Werror'
 elseif uname == 'Linux'
-    let g:ale_c_gcc_options = '-std=gnu99 -Wall -Wextra -pedantic'
-    let g:ale_cpp_gcc_options = '-std=c++11 -Wall -Wextra -pedantic'
+    let g:ale_c_gcc_options = '-std=gnu99 -m32 -Wall -Wextra -pedantic -Werror'
+    let g:ale_cpp_gcc_options = '-std=c++11 -Wall -Wextra -pedantic -Werror'
 endif
 
 " cpp-enhanced-highlight config
