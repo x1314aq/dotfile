@@ -17,12 +17,12 @@ Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'Valloric/YouCompleteMe', {'for': ['c', 'cpp', 'python'], 'do': './install.py --clang-completer'}
 Plug 'rdnetto/YCM-Generator', {'branch': 'stable'}
-Plug 'scrooloose/nerdcommenter'
+" Plug 'scrooloose/nerdcommenter'
 Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
 Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
 Plug 'w0rp/ale', {'for': ['c', 'cpp', 'python']}
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'sbdchd/neoformat'
+" Plug 'sbdchd/neoformat'
 Plug 'Shougo/echodoc.vim', {'for': ['c', 'cpp']}
 Plug 'jiangmiao/auto-pairs'
 Plug 'kana/vim-textobj-user'
@@ -235,7 +235,7 @@ elseif uname == 'Linux'
             \  }
 endif
 nmap <silent> <C-n> <Plug>(ale_next_wrap)
-nmap <silent> <S-n> <Plug>(ale_previous_wrap)
+" nmap <silent> <S-n> <Plug>(ale_previous_wrap)
 nmap <silent> <C-m> <Plug>(ale_detail)
 let g:ale_c_parse_compile_commands = 1
 if uname == 'Darwin'
