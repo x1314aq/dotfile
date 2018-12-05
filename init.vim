@@ -14,21 +14,16 @@ call plug#begin('~/.nvim')
 
 Plug 'morhetz/gruvbox'
 Plug 'itchyny/lightline.vim'
-Plug 'tpope/vim-fugitive'
 Plug 'Valloric/YouCompleteMe', {'for': ['c', 'cpp', 'python'], 'do': './install.py --clang-completer'}
 Plug 'rdnetto/YCM-Generator', {'branch': 'stable'}
-" Plug 'scrooloose/nerdcommenter'
 Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
 Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
-Plug 'w0rp/ale', {'for': ['c', 'cpp', 'python']}
 Plug 'ludovicchabant/vim-gutentags'
-" Plug 'sbdchd/neoformat'
 Plug 'Shougo/echodoc.vim', {'for': ['c', 'cpp']}
 Plug 'jiangmiao/auto-pairs'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim'] }
 Plug 'dyng/ctrlsf.vim'
-Plug 'terryma/vim-multiple-cursors'
 Plug 'justinmk/vim-dirvish'
 Plug 'tpope/vim-unimpaired'
 
@@ -98,18 +93,9 @@ let g:lightline = {
       \ 'colorscheme': 'jellybeans',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'fugitive#head'
+      \             ['readonly', 'filename', 'modified' ] ]
       \ },
       \ }
-
-" NERDcommenter config
-let g:NERDSpaceDelims = 0
-let g:NERDCompactSexyComs = 1
-let g:NERDDefaultAligh = 'left'
-let g:NERDTrimTrailingWhitespace = 1
 
 " YCM config
 let g:ycm_confirm_extra_conf = 0
@@ -145,11 +131,6 @@ let g:gutentags_exclude_filetypes = ['vim', 'text', 'sh', 'cmake', 'json', 'make
 let g:gutentags_modules = ['ctags']
 let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extras=+q', '--kinds-C++=+pxNUA', '--kinds-C=+px']
 let g:gutentags_define_advanced_commands = 1
-augroup MyGutentagsStatusLineRefresher
-    autocmd!
-    autocmd User GutentagsUpdating call lightline#update()
-    autocmd User GutentagsUpdated call lightline#update()
-augroup END
 let g:gutentags_file_list_command = {
             \  'markers': {
                 \  '.git': 'git ls-files',
@@ -214,69 +195,8 @@ let g:AutoPairsFlyMode = 1
 let g:AutoPairsShortcutJump = ''
 let g:AutoPairsShortcutFastWrap = ''
 
-" ale config
-let g:airline#extensions#ale#enabled = 0
-let g:ale_sign_column_always = 1
-let g:ale_linters_explicit = 1
-let g:ale_echo_msg_format = '[%linter%] [%severity%] %s'
-let g:ale_lint_on_text_changed = 0
-let g:ale_lint_on_insert_leave = 0
-if uname == 'Darwin'
-    let g:ale_linters = {
-            \  'c': ['clang'],
-            \  'cpp': ['clang'],
-            \  'python': ['pylint'],
-            \  }
-elseif uname == 'Linux'
-    let g:ale_linters = {
-            \  'c': ['gcc'],
-            \  'cpp': ['gcc'],
-            \  'python': ['pylint'],
-            \  }
-endif
-nmap <silent> <C-n> <Plug>(ale_next_wrap)
-" nmap <silent> <S-n> <Plug>(ale_previous_wrap)
-nmap <silent> <C-m> <Plug>(ale_detail)
-let g:ale_c_parse_compile_commands = 1
-if uname == 'Darwin'
-    let g:ale_c_clang_options = '-std=gnu99 -m32 -Wall -Wextra -pedantic -Werror'
-    let g:ale_cpp_clang_options = '-std=c++11 -Wall -Wextra -pedantic -Werror'
-elseif uname == 'Linux'
-    let g:ale_c_gcc_options = '-std=gnu99 -m32 -Wall -Wextra -pedantic -Werror'
-    let g:ale_cpp_gcc_options = '-std=c++11 -Wall -Wextra -pedantic -Werror'
-endif
-
 " cpp-enhanced-highlight config
 let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
 let g:cpp_concepts_highlight = 1
-
-" vim-multiple-cursors config
-let g:multi_cursor_use_default_mapping = 0
-let g:multi_cursor_start_word_key = '<C-j>'
-let g:multi_cursor_select_all_word_key = '<M-j>'
-let g:multi_cursor_start_key = 'g<C-j>'
-let g:multi_cursor_select_all_key = 'g<M-j>'
-let g:multi_cursor_next_key = '<C-j>'
-let g:multi_cursor_prev_key = '<C-k>'
-let g:multi_cursor_skip_key = '<C-x>'
-let g:multi_cursor_quit_key = '<Esc>'
-
-" Called once right before/after starting selecting multiple cursors
-command! YcmUnlock call youcompleteme#EnableCursorMovedAutocommands()
-command! YcmLock call youcompleteme#DisableCursorMovedAutocommands()
-
-function! Multiple_cursors_before()
-  if &ft == 'c' || &ft == 'cpp'
-    exe 'YcmLock'
-    exe 'ALEDisable'
-  endif
-endfunction
-
-function! Multiple_cursors_after()
-  if &ft == 'c' || &ft == 'cpp'
-    exe 'YcmUnlock'
-    exe 'ALEEnable'
-  endif
-endfunction
