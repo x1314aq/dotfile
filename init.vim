@@ -162,6 +162,7 @@ let g:Lf_ShowHidden = 1
 let g:Lf_WorkingDirectoryMode = 'Ac'
 nnoremap <leader>m  :LeaderfMru<CR>
 nnoremap <leader>a  :LeaderfFunction!<CR>
+nnoremap <leader>t  :LeaderfTag<CR>
 let g:Lf_NormalMap = {
 	\ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
 	\ "Buffer": [["<ESC>", ':exec g:Lf_py "bufExplManager.quit()"<CR>']],
