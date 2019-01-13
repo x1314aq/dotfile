@@ -83,6 +83,11 @@ set nofoldenable              " disable fold when start neovim
 set splitright                " splitting a window will put it right of the current one
 set nrformats=                " treat all numbers as decimal
 
+augroup project
+    autocmd!
+    autocmd BufRead,BufNewFile *.h,*.c set filetype=c
+augroup end
+
 " colorscheme dracula
 colorscheme gruvbox
 set background=dark
