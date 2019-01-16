@@ -18,7 +18,7 @@ Plug 'Valloric/YouCompleteMe', {'for': ['c', 'cpp', 'python'], 'do': './install.
 Plug 'rdnetto/YCM-Generator', {'branch': 'stable'}
 Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
 Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
-Plug 'ludovicchabant/vim-gutentags'
+Plug 'jsfaint/gen_tags.vim'
 Plug 'Shougo/echodoc.vim', {'for': ['c', 'cpp']}
 Plug 'jiangmiao/auto-pairs'
 Plug 'kana/vim-textobj-user'
@@ -145,6 +145,12 @@ let g:gutentags_file_list_command = {
 if !isdirectory(s:vim_tags)
     silent! call mkdir(s:vim_tags, 'p')
 endif
+
+" gen_tags config
+let g:gen_tags#ctags_opts = ['--fields=+niazS', '--extras=+q', '--kinds-C=+px', '--kinds-C++=+pxNUA']
+let g:gen_tags#gtags_opts = ['-c', '--verbose']
+let g:gen_tags#ctags_auto_gen = 1
+let g:gen_tags#gtags_auto_gen = 1
 
 " echodoc config
 let g:echodoc_enable_at_startup = 1
