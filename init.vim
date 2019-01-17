@@ -127,28 +127,9 @@ let g:ycm_filetype_whitelist = {
                                \ 'python': 1
                                \ }
 
-" vim-gutentags config
-let g:gutentags_project_root = ['.git', '.svn', '.root', '.hg', '.project']
-let g:gutentags_ctags_tagfile = '.tags'
-let s:vim_tags = expand('~/.cache/tags')
-let g:gutentags_cache_dir = s:vim_tags
-let g:gutentags_exclude_filetypes = ['vim', 'text', 'sh', 'cmake', 'json', 'make']
-let g:gutentags_modules = ['ctags']
-let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extras=+q', '--kinds-C++=+pxNUA', '--kinds-C=+px']
-let g:gutentags_define_advanced_commands = 1
-let g:gutentags_file_list_command = {
-            \  'markers': {
-                \  '.git': 'git ls-files',
-                \  '.hg': 'hg files',
-                \  }
-            \  }
-if !isdirectory(s:vim_tags)
-    silent! call mkdir(s:vim_tags, 'p')
-endif
-
 " gen_tags config
 let g:gen_tags#ctags_opts = ['--fields=+niazS', '--extras=+q', '--kinds-C=+px', '--kinds-C++=+pxNUA']
-let g:gen_tags#gtags_opts = ['-c', '--verbose']
+let g:gen_tags#gtags_opts = ['-c', '--verbose', '--sqlite3']
 let g:gen_tags#ctags_auto_gen = 1
 let g:gen_tags#gtags_auto_gen = 1
 
