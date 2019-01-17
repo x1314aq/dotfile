@@ -14,7 +14,7 @@ call plug#begin('~/.nvim')
 
 Plug 'morhetz/gruvbox'
 Plug 'itchyny/lightline.vim'
-Plug 'Valloric/YouCompleteMe', {'for': ['c', 'cpp', 'python'], 'do': './install.py --clang-completer'}
+Plug 'Valloric/YouCompleteMe', {'for': ['c', 'c.doxygen', 'cpp', 'cpp.doxygen', 'python'], 'do': './install.py --clang-completer'}
 Plug 'rdnetto/YCM-Generator', {'branch': 'stable'}
 Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
 Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
@@ -85,7 +85,7 @@ set nrformats=                " treat all numbers as decimal
 
 augroup project
     autocmd!
-    autocmd BufRead,BufNewFile *.h,*.c set filetype=c
+    autocmd BufRead,BufNewFile *.h,*.c set filetype=c.doxygen
 augroup end
 
 " colorscheme dracula
@@ -119,12 +119,6 @@ nnoremap <leader>gd :YcmCompleter GoTo<CR>
 
 let g:ycm_semantic_triggers =  {
                                \ 'c,cpp,python': ['re!\w{2}'],
-                               \ }
-
-let g:ycm_filetype_whitelist = {
-                               \ 'c': 1,
-                               \ 'cpp': 1,
-                               \ 'python': 1
                                \ }
 
 " gen_tags config
