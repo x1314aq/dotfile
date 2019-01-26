@@ -23,7 +23,6 @@ Plug 'Shougo/echodoc.vim', {'for': ['c', 'cpp']}
 Plug 'jiangmiao/auto-pairs'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim'] }
-Plug 'dyng/ctrlsf.vim'
 Plug 'justinmk/vim-dirvish'
 Plug 'tpope/vim-unimpaired'
 
@@ -142,7 +141,7 @@ let g:Lf_CtagsFuncOpts = {
         \  'c': '--kinds-C=+px',
         \  'c++': '--kinds-C++=+pxNUA',
         \  }
-let g:Lf_DefaultExternalTool = "ag"
+let g:Lf_DefaultExternalTool = "rg"
 let g:Lf_HideHelp = 1
 let g:Lf_ShowHidden = 1
 let g:Lf_WorkingDirectoryMode = 'Ac'
@@ -158,23 +157,11 @@ let g:Lf_NormalMap = {
 	\ "Colorscheme":    [["<ESC>", ':exec g:Lf_py "colorschemeExplManager.quit()"<CR>']],
 	\ }
 
-" CtrlSF config
-let g:ctrlsf_search_mode = 'async'
-let g:ctrlsf_ackprg = 'ag'
-let g:ctrlsf_confirm_save = 0
-let g:ctrlsf_default_root = 'project+fw'
-let g:ctrlsf_absolute_file_path = 0
-let g:ctrlsf_extra_root_marker = ['.root', '.project']
-let g:ctrlsf_default_view_mode = 'normal'
-let g:ctrlsf_case_sensitive = 'yes'
-let g:ctrlsf_auto_focus = {
-    \  "at": "done",
-    \  "duration_less_than": 1000,
-    \  }
-nmap <leader>s <Plug>CtrlSFPrompt
-nmap <leader>S <Plug>CtrlSFCwordPath
-vmap <leader>s <Plug>CtrlSFVwordExec
-vmap <leader>S <Plug>CtrlSFVwordPath
+noremap <leader>s :Leaderf! rg -e 
+" search word under cursor literally and enter normal mode directly
+noremap <leader>S :<C-U><C-R>=printf("Leaderf! rg -Fs -e %s ", expand("<cword>"))<CR>
+" recall last search. If the result window is closed, reopen it.
+noremap go :<C-U>Leaderf! rg --recall<CR>
 
 " auto-pairs config
 let g:AutoPairsMapCh = 0
