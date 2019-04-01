@@ -14,8 +14,7 @@ call plug#begin('~/.nvim')
 
 Plug 'morhetz/gruvbox'
 Plug 'itchyny/lightline.vim'
-Plug 'Valloric/YouCompleteMe', {'for': ['c', 'c.doxygen', 'cpp', 'cpp.doxygen', 'python'], 'do': './install.py --clang-completer'}
-Plug 'rdnetto/YCM-Generator', {'branch': 'stable'}
+Plug 'Valloric/YouCompleteMe', {'for': ['c', 'c.doxygen', 'cpp', 'cpp.doxygen', 'python'], 'do': './install.py --clangd-completer'}
 Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
 Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
 Plug 'jsfaint/gen_tags.vim'
@@ -87,6 +86,11 @@ augroup project
     autocmd BufRead,BufNewFile *.h,*.c set filetype=c.doxygen
 augroup end
 
+" quickfix windows
+" unimpaired has mapped [q to :cprev, ]q to :cnext, [Q to :cfirst and ]Q to :clast
+nnoremap <leader>cw :cwindow<CR>
+nnoremap <leader>cc :cclose<CR>
+
 " colorscheme dracula
 colorscheme gruvbox
 set background=dark
@@ -114,7 +118,15 @@ let g:ycm_key_invoke_completion = '<c-z>'
 set completeopt-=preview
 let g:ycm_add_preview_to_completeopt = 0
 noremap <c-z> <NOP>
-nnoremap <leader>gd :YcmCompleter GoTo<CR>
+nnoremap <leader>gd :YcmCompleter GoToImprecise<CR>
+nnoremap <leader>gf :YcmCompleter GoToReferences<CR>
+nnoremap <leader>gt :YcmCompleter GetTypeImprecise<CR>
+nnoremap <leader>gr :YcmCompleter RefactorRename 
+" Let clangd fully control code completion
+let g:ycm_clangd_uses_ycmd_caching = 0
+" Use installed clangd, not YCM-bundled clangd which doesn't get updates.
+let g:ycm_clangd_binary_path = exepath("clangd")
+let g:ycm_clangd_args = ['-log=verbose', '-pretty', '-background-index']
 
 let g:ycm_semantic_triggers =  {
                                \ 'c,cpp,python': ['re!\w{2}'],
