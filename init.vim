@@ -17,7 +17,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'Valloric/YouCompleteMe', {'for': ['c', 'c.doxygen', 'cpp', 'cpp.doxygen', 'python'], 'do': './install.py --clangd-completer'}
 Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
 Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
-Plug 'jsfaint/gen_tags.vim'
+" Plug 'jsfaint/gen_tags.vim'
 Plug 'Shougo/echodoc.vim', {'for': ['c', 'cpp']}
 Plug 'jiangmiao/auto-pairs'
 Plug 'kana/vim-textobj-user'
@@ -133,10 +133,10 @@ let g:ycm_semantic_triggers =  {
                                \ }
 
 " gen_tags config
-let g:gen_tags#ctags_opts = ['--fields=+niazS', '--extras=+q', '--kinds-C=+px', '--kinds-C++=+pxNUA']
-let g:gen_tags#gtags_opts = ['-c', '--verbose', '--sqlite3']
-let g:gen_tags#ctags_auto_gen = 1
-let g:gen_tags#gtags_auto_gen = 1
+" let g:gen_tags#ctags_opts = ['--fields=+niazS', '--extras=+q', '--kinds-C=+px', '--kinds-C++=+pxNUA']
+" let g:gen_tags#gtags_opts = ['-c', '--verbose', '--sqlite3']
+" let g:gen_tags#ctags_auto_gen = 1
+" let g:gen_tags#gtags_auto_gen = 1
 
 " echodoc config
 let g:echodoc_enable_at_startup = 1
@@ -157,9 +157,10 @@ let g:Lf_DefaultExternalTool = "rg"
 let g:Lf_HideHelp = 1
 let g:Lf_ShowHidden = 1
 let g:Lf_WorkingDirectoryMode = 'Ac'
+let g:Lf_NoChdir = 1
 nnoremap <leader>m  :LeaderfMru<CR>
 nnoremap <leader>a  :LeaderfFunction!<CR>
-nnoremap <leader>t  :LeaderfTag<CR>
+" nnoremap <leader>t  :LeaderfTag<CR>
 let g:Lf_NormalMap = {
 	\ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
 	\ "Buffer": [["<ESC>", ':exec g:Lf_py "bufExplManager.quit()"<CR>']],
@@ -169,11 +170,18 @@ let g:Lf_NormalMap = {
 	\ "Colorscheme":    [["<ESC>", ':exec g:Lf_py "colorschemeExplManager.quit()"<CR>']],
 	\ }
 
-noremap <leader>s :Leaderf! rg -e 
+nnoremap <leader>s :Leaderf! rg -ws -e 
 " search word under cursor literally and enter normal mode directly
-noremap <leader>S :<C-U><C-R>=printf("Leaderf! rg -Fs -e %s ", expand("<cword>"))<CR>
+nnoremap <leader>S :<C-U><C-R>=printf("Leaderf! rg -Fs -e %s ", expand("<cword>"))<CR>
 " recall last search. If the result window is closed, reopen it.
-noremap go :<C-U>Leaderf! rg --recall<CR>
+nnoremap go :<C-U>Leaderf! rg --recall<CR>
+" automatically generate tags file
+let g:Lf_GtagsAutoGenerate = 1
+let g:Lf_GtagsSkipUnreadable = 1
+nnoremap <C-\>g :Leaderf! gtags -g 
+nnoremap <C-\>s :<C-U><C-R>=printf("Leaderf! gtags --literal -s %s", expand("<cword>"))<CR><CR>
+nnoremap <C-\>c :<C-U><C-R>=printf("Leaderf! gtags --literal -r %s", expand("<cword>"))<CR><CR>
+nnoremap <C-]>  :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump v -d %s", expand("<cword>"))<CR><CR>
 
 " auto-pairs config
 let g:AutoPairsMapCh = 0
