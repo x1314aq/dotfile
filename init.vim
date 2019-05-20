@@ -179,9 +179,9 @@ nnoremap go :<C-U>Leaderf! rg --recall<CR>
 let g:Lf_GtagsAutoGenerate = 1
 let g:Lf_GtagsSkipUnreadable = 1
 nnoremap <C-\>g :Leaderf! gtags -g 
-nnoremap <C-\>s :<C-U><C-R>=printf("Leaderf! gtags --literal -s %s", expand("<cword>"))<CR><CR>
-nnoremap <C-\>c :<C-U><C-R>=printf("Leaderf! gtags --literal -r %s", expand("<cword>"))<CR><CR>
-nnoremap <C-]>  :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump v -d %s", expand("<cword>"))<CR><CR>
+nnoremap <C-\>s :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -s %s", expand("<cword>"))<CR><CR>
+nnoremap <C-\>c :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -r %s", expand("<cword>"))<CR><CR>
+nnoremap <C-]>  :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -d %s", expand("<cword>"))<CR><CR>
 
 " auto-pairs config
 let g:AutoPairsMapCh = 0
