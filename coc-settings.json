@@ -1,0 +1,16 @@
+{
+    "suggest.minTriggerInputLength": 2,
+    "languageserver": {
+        "ccls": {
+            "command": "/usr/local/bin/ccls",
+            "filetypes": ["c", "c.doxygen", "cpp"],
+            "rootPatterns": [".ccls", "compile_commands.json", ".vim", ".git", ".hg"],
+            "trace.server": "verbose",
+            "initializationOptions": {
+                "cache": {
+                    "directory": ".ccls-cache"
+                }
+            }
+        }
+    }
+}

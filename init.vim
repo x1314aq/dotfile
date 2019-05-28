@@ -14,11 +14,12 @@ call plug#begin('~/.nvim')
 
 Plug 'gruvbox-community/gruvbox'
 Plug 'itchyny/lightline.vim'
-Plug 'Valloric/YouCompleteMe', {'for': ['c', 'c.doxygen', 'cpp', 'cpp.doxygen', 'python'], 'do': './install.py --clangd-completer'}
+" Plug 'Valloric/YouCompleteMe', {'for': ['c', 'c.doxygen', 'cpp', 'cpp.doxygen', 'python'], 'do': './install.py --clangd-completer'}
+Plug 'neoclide/coc.nvim', {'tag': '*'}
 Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
 Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
 " Plug 'jsfaint/gen_tags.vim'
-Plug 'Shougo/echodoc.vim', {'for': ['c', 'cpp']}
+" Plug 'Shougo/echodoc.vim', {'for': ['c', 'cpp']}
 Plug 'jiangmiao/auto-pairs'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim'] }
@@ -81,10 +82,17 @@ set nofoldenable              " disable fold when start neovim
 set splitright                " splitting a window will put it right of the current one
 set nrformats=                " treat all numbers as decimal
 
+set hidden
+set updatetime=300
+set signcolumn=yes
+set shortmess+=c
+
 augroup project
     autocmd!
     autocmd BufRead,BufNewFile *.h,*.c set filetype=c.doxygen
 augroup end
+
+autocmd FileType json syntax match Comment +\/\/.\+$+
 
 " quickfix windows
 " unimpaired has mapped [q to :cprev, ]q to :cnext, [Q to :cfirst and ]Q to :clast
@@ -110,38 +118,22 @@ let g:lightline = {
       \ },
       \ }
 
-" YCM config
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_use_ultisnips_completer = 0
-let g:ycm_auto_start_csharp_server = 0
-let g:ycm_show_diagnostics_ui = 0
-let g:ycm_collect_identifiers_from_comments_and_strings = 1
-let g:ycm_complete_in_strings = 1
-let g:ycm_min_num_of_chars_for_completion = 999
-let g:ycm_goto_buffer_command = 'same-buffer'
-let g:ycm_key_invoke_completion = '<c-z>'
-set completeopt-=preview
-let g:ycm_add_preview_to_completeopt = 0
-noremap <c-z> <NOP>
-nnoremap <leader>gd :YcmCompleter GoToImprecise<CR>
-nnoremap <leader>gf :YcmCompleter GoToReferences<CR>
-nnoremap <leader>gt :YcmCompleter GetTypeImprecise<CR>
-nnoremap <leader>gr :YcmCompleter RefactorRename 
-" Let clangd fully control code completion
-let g:ycm_clangd_uses_ycmd_caching = 0
-" Use installed clangd, not YCM-bundled clangd which doesn't get updates.
-let g:ycm_clangd_binary_path = exepath("clangd")
-let g:ycm_clangd_args = ['-log=verbose', '-pretty', '-background-index']
+" coc.nvim config
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-let g:ycm_semantic_triggers =  {
-                               \ 'c,cpp,python': ['re!\w{2}'],
-                               \ }
+" close the preview window when completion is done
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
-" gen_tags config
-" let g:gen_tags#ctags_opts = ['--fields=+niazS', '--extras=+q', '--kinds-C=+px', '--kinds-C++=+pxNUA']
-" let g:gen_tags#gtags_opts = ['-c', '--verbose', '--sqlite3']
-" let g:gen_tags#ctags_auto_gen = 1
-" let g:gen_tags#gtags_auto_gen = 1
+" Use `[c` and `]c` to navigate diagnostics
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+" Remap keys for gotos
+nmap <silent> <leader>gd <Plug>(coc-definition)
+nmap <silent> <leader>gy <Plug>(coc-type-definition)
+nmap <silent> <leader>gi <Plug>(coc-implementation)
+nmap <silent> <leader>gr <Plug>(coc-references)
 
 " echodoc config
 let g:echodoc#enable_at_startup = 1
