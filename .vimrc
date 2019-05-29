@@ -2,6 +2,7 @@ set nocompatible        " use vim defaults
 set scrolloff=3         " keep 3 lines when scrolling
 set ai                  " set auto-indenting on for programming
 
+set matchtime=1         " tenths of a second (100ms) to show the matching parenthesis
 set showcmd             " display incomplete commands
 set nobackup            " do not keep a backup file
 set number              " show line numbers
