@@ -24,6 +24,16 @@ syntax on               " turn syntax highlighting on by default
 filetype on             " detect type of file
 filetype indent on      " load indent file for specific file type
 
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+set splitright
+set wildmenu
+set noesckeys
+
+silent! colorscheme dracula
+
 nnoremap <Space>  <Nop>
 let mapleader=" "
 if executable("rg")
