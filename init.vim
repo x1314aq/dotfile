@@ -139,7 +139,8 @@ let g:ycm_semantic_triggers =  {
 " let g:gen_tags#gtags_auto_gen = 1
 
 " echodoc config
-let g:echodoc_enable_at_startup = 1
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = 'virtual'
 
 " LeaderF config
 let g:Lf_RootMarkers = ['.git', '.root']
