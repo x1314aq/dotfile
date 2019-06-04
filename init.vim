@@ -12,7 +12,7 @@ endif
 
 call plug#begin('~/.nvim')
 
-Plug 'morhetz/gruvbox'
+Plug 'gruvbox-community/gruvbox'
 Plug 'itchyny/lightline.vim'
 Plug 'Valloric/YouCompleteMe', {'for': ['c', 'c.doxygen', 'cpp', 'cpp.doxygen', 'python'], 'do': './install.py --clangd-completer'}
 Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
