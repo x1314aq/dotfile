@@ -292,4 +292,4 @@ unbind C-a
 
 # move status line to top
 #set -g status-position top
-set -g default-terminal "tmux-256color" # colors!
+set -g default-terminal "xterm-256color" # colors!
