@@ -4,3 +4,6 @@
 [submodule "deps/gdb-dashboard"]
 	path = deps/gdb-dashboard
 	url = https://github.com/cyrus-and/gdb-dashboard.git
+[submodule "deps/zprezto"]
+	path = deps/zprezto
+	url = https://github.com/x1314aq/prezto.git
