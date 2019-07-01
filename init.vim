@@ -91,6 +91,11 @@ augroup end
 nnoremap <leader>cw :cwindow<CR>
 nnoremap <leader>cc :cclose<CR>
 
+" for DSA
+nnoremap <M-w> :silent vnew term://zsh<CR>
+nnoremap <M-r> :silent !clang++ -std=c++11 -O0 -g -fsanitize=address % -o qwe<CR>
+nnoremap <M-c> :silent !rm -rf qwe*<CR>
+
 " colorscheme dracula
 colorscheme gruvbox
 set background=dark
