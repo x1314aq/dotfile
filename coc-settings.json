@@ -1,10 +1,16 @@
 {
+    "list.normalMappings": {
+        "q":"do:exit"
+    },
+    "list.source.location.defaultOptions": ["--normal"],
+    "list.maxPreviewHeight": 5,
     "suggest.minTriggerInputLength": 2,
+    "signature.target": "echo",
     "languageserver": {
         "ccls": {
             "command": "/usr/local/bin/ccls",
-            "filetypes": ["c", "c.doxygen", "cpp"],
-            "rootPatterns": [".ccls", "compile_commands.json", ".vim", ".git", ".hg"],
+            "filetypes": ["c", "c.doxygen", "cpp", "objc"],
+            "rootPatterns": [".ccls", "compile_commands.json", ".vim", ".git"],
             "trace.server": "verbose",
             "initializationOptions": {
                 "cache": {

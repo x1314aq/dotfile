@@ -15,7 +15,7 @@ call plug#begin('~/.nvim')
 Plug 'gruvbox-community/gruvbox'
 Plug 'itchyny/lightline.vim'
 " Plug 'Valloric/YouCompleteMe', {'for': ['c', 'c.doxygen', 'cpp', 'cpp.doxygen', 'python'], 'do': './install.py --clangd-completer'}
-Plug 'neoclide/coc.nvim', {'tag': '*'}
+Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
 Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
 Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
 " Plug 'jsfaint/gen_tags.vim'
@@ -90,6 +90,7 @@ set shortmess+=c
 augroup project
     autocmd!
     autocmd BufRead,BufNewFile *.h,*.c set filetype=c.doxygen
+    autocmd BufRead,BufNewFile *.m set filetype=objc
 augroup end
 
 autocmd FileType json syntax match Comment +\/\/.\+$+
@@ -125,22 +126,33 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " close the preview window when completion is done
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
+" show signature after jump to next placeholder
+autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+
 " Use `[c` and `]c` to navigate diagnostics
 nmap <silent> [c <Plug>(coc-diagnostic-prev)
 nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
-nmap <silent> <leader>gd <Plug>(coc-definition)
-nmap <silent> <leader>gy <Plug>(coc-type-definition)
-nmap <silent> <leader>gi <Plug>(coc-implementation)
-nmap <silent> <leader>gr <Plug>(coc-references)
+nmap <silent> gd <Plug>(coc-definition)
+" nmap <silent> gD <Plug>(coc-declaration)
+" nmap <silent> gy <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nmap <silent> go :<C-u>CocListResume<CR>
 
-" echodoc config
-let g:echodoc#enable_at_startup = 1
-let g:echodoc#type = 'virtual'
+" disable CocList
+let g:coc_enable_locationlist = 1
+
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+" " echodoc config
+" let g:echodoc#enable_at_startup = 1
+" let g:echodoc#type = 'virtual'
 
 " LeaderF config
-let g:Lf_RootMarkers = ['.git', '.root']
+let g:Lf_RootMarkers = ['.git', '.ccls', 'compile_commands.json', '.vim']
 let g:Lf_DefaultMode = 'NameOnly'
 let g:LF_WildIgnore = {
         \  'dir': ['.svn', '.git'],
@@ -172,11 +184,10 @@ nnoremap <leader>s :Leaderf! rg -ws -e
 " search word under cursor literally and enter normal mode directly
 nnoremap <leader>S :<C-U><C-R>=printf("Leaderf! rg -Fs -e %s ", expand("<cword>"))<CR>
 " recall last search. If the result window is closed, reopen it.
-nnoremap go :<C-U>Leaderf! rg --recall<CR>
+nnoremap <M-o> :<C-U>Leaderf! rg --recall<CR>
 " automatically generate tags file
 let g:Lf_GtagsAutoGenerate = 1
 let g:Lf_GtagsSkipUnreadable = 1
-nnoremap <C-\>g :Leaderf! gtags -g 
 nnoremap <C-\>s :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -s %s", expand("<cword>"))<CR><CR>
 nnoremap <C-\>c :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -r %s", expand("<cword>"))<CR><CR>
 nnoremap <C-]>  :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -d %s", expand("<cword>"))<CR><CR>
