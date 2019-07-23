@@ -21,8 +21,8 @@ Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
 " Plug 'jsfaint/gen_tags.vim'
 " Plug 'Shougo/echodoc.vim', {'for': ['c', 'cpp']}
 Plug 'jiangmiao/auto-pairs'
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim'] }
+" Plug 'kana/vim-textobj-user'
+" Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim'] }
 Plug 'justinmk/vim-dirvish'
 Plug 'tpope/vim-unimpaired'
 

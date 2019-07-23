@@ -2,8 +2,10 @@
     "list.normalMappings": {
         "q":"do:exit"
     },
+    "coc.preferences.extensionUpdateCheck": "never",
     "list.source.location.defaultOptions": ["--normal"],
     "list.maxPreviewHeight": 5,
+    "list.autoResize": false,
     "suggest.minTriggerInputLength": 2,
     "signature.target": "echo",
     "languageserver": {
