@@ -155,7 +155,7 @@ nmap <leader>rn <Plug>(coc-rename)
 let g:Lf_RootMarkers = ['.git', '.ccls', 'compile_commands.json', '.vim']
 let g:Lf_DefaultMode = 'NameOnly'
 let g:LF_WildIgnore = {
-        \  'dir': ['.svn', '.git'],
+        \  'dir': ['.svn', '.git', '.ccls-cache'],
         \  'file': ['*.so', '*.o', '*.a']
         \  }
 let g:Lf_Ctags = "/usr/local/bin/ctags"
