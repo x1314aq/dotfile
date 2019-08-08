@@ -188,6 +188,8 @@ nnoremap <M-o> :<C-U>Leaderf! rg --recall<CR>
 " automatically generate tags file
 let g:Lf_GtagsAutoGenerate = 1
 let g:Lf_GtagsSkipUnreadable = 1
+nnoremap <leader>t :Leaderf! gtags --auto-jump -d 
+nnoremap <M-i> :<C-U>Leaderf! gtags --recall<CR>
 nnoremap <C-\>s :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -s %s", expand("<cword>"))<CR><CR>
 nnoremap <C-\>c :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -r %s", expand("<cword>"))<CR><CR>
 nnoremap <C-]>  :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -d %s", expand("<cword>"))<CR><CR>
