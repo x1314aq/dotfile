@@ -48,7 +48,7 @@ filetype on
 filetype indent on
 
 set number                    " show line number
-set relativenumber            " show relative number
+" set relativenumber            " show relative number
 
 set expandtab                 " use SPACE instead of TAB when insert TAB
 set smarttab                  "
@@ -102,8 +102,7 @@ nnoremap <leader>cc :cclose<CR>
 
 " for DSA
 nnoremap <M-w> :silent vnew term://zsh<CR>
-nnoremap <M-r> :silent !clang++ -std=c++11 -O0 -g -fsanitize=address % -o qwe<CR>
-nnoremap <M-c> :silent !rm -rf qwe*<CR>
+nnoremap <M-t> :silent tabnew term://zsh<CR>
 
 " colorscheme dracula
 colorscheme gruvbox
