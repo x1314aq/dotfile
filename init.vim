@@ -14,15 +14,10 @@ call plug#begin('~/.nvim')
 
 Plug 'gruvbox-community/gruvbox'
 Plug 'itchyny/lightline.vim'
-" Plug 'Valloric/YouCompleteMe', {'for': ['c', 'c.doxygen', 'cpp', 'cpp.doxygen', 'python'], 'do': './install.py --clangd-completer'}
 Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
 Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
 Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
-" Plug 'jsfaint/gen_tags.vim'
-" Plug 'Shougo/echodoc.vim', {'for': ['c', 'cpp']}
 Plug 'jiangmiao/auto-pairs'
-" Plug 'kana/vim-textobj-user'
-" Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim'] }
 Plug 'justinmk/vim-dirvish'
 Plug 'tpope/vim-unimpaired'
 
@@ -48,8 +43,6 @@ filetype on
 filetype indent on
 
 set number                    " show line number
-" set relativenumber            " show relative number
-
 set expandtab                 " use SPACE instead of TAB when insert TAB
 set smarttab                  "
 set softtabstop=4             " treat 4 continuous SPACEs as a TAB
@@ -146,10 +139,6 @@ let g:coc_enable_locationlist = 1
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
 
-" " echodoc config
-" let g:echodoc#enable_at_startup = 1
-" let g:echodoc#type = 'virtual'
-
 " LeaderF config
 let g:Lf_RootMarkers = ['.git', '.ccls', 'compile_commands.json', '.vim']
 let g:Lf_DefaultMode = 'NameOnly'
@@ -168,7 +157,6 @@ let g:Lf_ShowHidden = 1
 let g:Lf_WorkingDirectoryMode = 'Ac'
 let g:Lf_NoChdir = 1
 nnoremap <leader>m  :LeaderfMru<CR>
-nnoremap <leader>a  :LeaderfFunction!<CR>
 " nnoremap <leader>t  :LeaderfTag<CR>
 let g:Lf_NormalMap = {
 	\ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
@@ -179,16 +167,16 @@ let g:Lf_NormalMap = {
 	\ "Colorscheme":    [["<ESC>", ':exec g:Lf_py "colorschemeExplManager.quit()"<CR>']],
 	\ }
 
-nnoremap <leader>s :Leaderf! rg -ws -e 
+nnoremap <leader>s :Leaderf! rg -w -s -e 
 " search word under cursor literally and enter normal mode directly
-nnoremap <leader>S :<C-U><C-R>=printf("Leaderf! rg -Fs -e %s ", expand("<cword>"))<CR>
+nnoremap <leader>S :<C-U><C-R>=printf("Leaderf! rg -F -s -e %s ", expand("<cword>"))<CR>
 " recall last search. If the result window is closed, reopen it.
-nnoremap <M-o> :<C-U>Leaderf! rg --recall<CR>
+nnoremap <M-o> :<C-U>Leaderf! --recall<CR>
 " automatically generate tags file
 let g:Lf_GtagsAutoGenerate = 1
 let g:Lf_GtagsSkipUnreadable = 1
 nnoremap <leader>t :Leaderf! gtags --auto-jump -d 
-nnoremap <M-i> :<C-U>Leaderf! gtags --recall<CR>
+nnoremap <Leader>a :Leaderf! gtags --auto-jump -r 
 nnoremap <C-\>s :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -s %s", expand("<cword>"))<CR><CR>
 nnoremap <C-\>c :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -r %s", expand("<cword>"))<CR><CR>
 nnoremap <C-]>  :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -d %s", expand("<cword>"))<CR><CR>
