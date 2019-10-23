@@ -14,7 +14,7 @@ call plug#begin('~/.nvim')
 
 Plug 'gruvbox-community/gruvbox'
 Plug 'itchyny/lightline.vim'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
 Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
 Plug 'jiangmiao/auto-pairs'
@@ -173,13 +173,17 @@ nnoremap <leader>S :<C-U><C-R>=printf("Leaderf! rg -F -s -e %s ", expand("<cword
 " recall last search. If the result window is closed, reopen it.
 nnoremap <M-o> :<C-U>Leaderf! --recall<CR>
 " automatically generate tags file
-let g:Lf_GtagsAutoGenerate = 1
+let g:Lf_GtagsAutoGenerate = 0
+let g:Lf_GtagsSource = 2
 let g:Lf_GtagsSkipUnreadable = 1
 nnoremap <leader>t :Leaderf! gtags --auto-jump -d 
 nnoremap <Leader>a :Leaderf! gtags --auto-jump -r 
 nnoremap <C-\>s :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -s %s", expand("<cword>"))<CR><CR>
 nnoremap <C-\>c :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -r %s", expand("<cword>"))<CR><CR>
 nnoremap <C-]>  :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -d %s", expand("<cword>"))<CR><CR>
+let g:Lf_PreviewInPopup = 1
+nnoremap <leader>: :Leaderf cmdHistory<CR>
+nnoremap <leader>/ :Leaderf searchHistory<CR>
 
 " auto-pairs config
 let g:AutoPairsMapCh = 0
