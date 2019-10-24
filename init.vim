@@ -167,20 +167,21 @@ let g:Lf_NormalMap = {
 	\ }
 
 nnoremap <leader>s :Leaderf! rg -w -s -e 
-" search word under cursor literally and enter normal mode directly
 nnoremap <leader>S :<C-U><C-R>=printf("Leaderf! rg -F -s -e %s ", expand("<cword>"))<CR>
-" recall last search. If the result window is closed, reopen it.
 nnoremap <M-o> :<C-U>Leaderf! --recall<CR>
-" automatically generate tags file
 let g:Lf_GtagsAutoGenerate = 0
 let g:Lf_GtagsSource = 2
 let g:Lf_GtagsSkipUnreadable = 1
+let g:Lf_GtagsfilesCmd = {
+    \ '.git': 'git ls-files -- "*.c" "*.cpp" "*.h" "*.hpp"',
+    \ }
+
 nnoremap <leader>t :Leaderf! gtags --auto-jump -d 
 nnoremap <Leader>a :Leaderf! gtags --auto-jump -r 
+nnoremap <Leader>A :Leaderf! gtags --auto-jump -s 
 nnoremap <C-\>s :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -s %s", expand("<cword>"))<CR><CR>
 nnoremap <C-\>c :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -r %s", expand("<cword>"))<CR><CR>
 nnoremap <C-]>  :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -d %s", expand("<cword>"))<CR><CR>
-" use popup window for preview
 let g:Lf_PreviewInPopup = 1
 nnoremap <leader>: :Leaderf cmdHistory<CR>
 nnoremap <leader>/ :Leaderf searchHistory<CR>
