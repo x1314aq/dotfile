@@ -95,7 +95,7 @@ nnoremap <leader>cc :cclose<CR>
 
 " for DSA
 nnoremap <M-w> :silent vnew term://zsh<CR>
-nnoremap <M-t> :silent tabnew term://zsh<CR>
+nnoremap <M-W> :silent tabnew term://zsh<CR>
 
 " colorscheme dracula
 colorscheme gruvbox
@@ -142,7 +142,7 @@ nmap <leader>rn <Plug>(coc-rename)
 " LeaderF config
 let g:Lf_RootMarkers = ['.git', '.ccls', 'compile_commands.json', '.vim']
 let g:Lf_DefaultMode = 'NameOnly'
-let g:LF_WildIgnore = {
+let g:Lf_WildIgnore = {
         \  'dir': ['.svn', '.git', '.ccls-cache'],
         \  'file': ['*.so', '*.o', '*.a']
         \  }
@@ -157,7 +157,6 @@ let g:Lf_ShowHidden = 1
 let g:Lf_WorkingDirectoryMode = 'Ac'
 let g:Lf_NoChdir = 1
 nnoremap <leader>m  :LeaderfMru<CR>
-" nnoremap <leader>t  :LeaderfTag<CR>
 let g:Lf_NormalMap = {
 	\ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
 	\ "Buffer": [["<ESC>", ':exec g:Lf_py "bufExplManager.quit()"<CR>']],
@@ -181,9 +180,11 @@ nnoremap <Leader>a :Leaderf! gtags --auto-jump -r
 nnoremap <C-\>s :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -s %s", expand("<cword>"))<CR><CR>
 nnoremap <C-\>c :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -r %s", expand("<cword>"))<CR><CR>
 nnoremap <C-]>  :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -d %s", expand("<cword>"))<CR><CR>
+" use popup window for preview
 let g:Lf_PreviewInPopup = 1
 nnoremap <leader>: :Leaderf cmdHistory<CR>
 nnoremap <leader>/ :Leaderf searchHistory<CR>
+let g:Lf_IgnoreCurrentBufferName = 1
 
 " auto-pairs config
 let g:AutoPairsMapCh = 0
@@ -196,3 +197,21 @@ let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
 let g:cpp_concepts_highlight = 1
+
+function ToggleTab()
+    if &expandtab
+        echo "Toggle TAB"
+        set expandtab!
+        set softtabstop=0
+        set shiftwidth=8
+        set tabstop=8
+    else
+        echo "Toggle SPACE"
+        set expandtab
+        set softtabstop=4
+        set shiftwidth=4
+        set tabstop=4
+    endif
+endfunction
+
+nmap <M-t> :call ToggleTab()<CR>
