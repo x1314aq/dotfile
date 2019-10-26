@@ -136,6 +136,11 @@ nmap <silent> go :<C-u>CocListResume<CR>
 " disable CocList
 let g:coc_enable_locationlist = 1
 
+" session management
+nmap <silent> gi :<C-u>CocList sessions<CR>
+nmap <silent> <M-s> :<C-u>CocCommand session.save<CR>
+nmap <silent> <M-q> :<C-u>CocCommand session.load<CR>
+
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
 
