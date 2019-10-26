@@ -2,10 +2,15 @@
     "list.normalMappings": {
         "q":"do:exit"
     },
+    "lists.disabledLists": ["tags"],
     "coc.preferences.extensionUpdateCheck": "never",
+    "session.saveOnVimLeave": false,
     "list.source.location.defaultOptions": ["--normal"],
     "list.maxPreviewHeight": 5,
     "list.autoResize": false,
+    "list.source.grep.defaultOptions": ["--normal"],
+    "list.source.grep.useLiteral": false,
+    "list.source.sessions.defaultOptions": ["--normal"],
     "suggest.minTriggerInputLength": 2,
     "signature.target": "echo",
     "languageserver": {
