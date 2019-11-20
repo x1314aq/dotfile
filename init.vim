@@ -145,16 +145,16 @@ nmap <silent> <M-q> :<C-u>CocCommand session.load<CR>
 nmap <leader>rn <Plug>(coc-rename)
 
 " LeaderF config
+let g:Lf_WindowPosition='popup'
 let g:Lf_RootMarkers = ['.git', '.ccls', 'compile_commands.json', '.vim']
 let g:Lf_DefaultMode = 'NameOnly'
 let g:Lf_WildIgnore = {
         \  'dir': ['.svn', '.git', '.ccls-cache'],
         \  'file': ['*.so', '*.o', '*.a']
         \  }
-let g:Lf_Ctags = "/usr/local/bin/ctags"
 let g:Lf_CtagsFuncOpts = {
-        \  'c': '--kinds-C=+px',
-        \  'c++': '--kinds-C++=+pxNUA',
+        \  'c': '--kinds-C=fp',
+        \  'c++': '--kinds-C++=fp',
         \  }
 let g:Lf_DefaultExternalTool = "rg"
 let g:Lf_HideHelp = 1
@@ -182,12 +182,10 @@ let g:Lf_GtagsfilesCmd = {
     \ }
 
 nnoremap <leader>t :Leaderf! gtags --auto-jump -d 
-nnoremap <Leader>a :Leaderf! gtags --auto-jump -r 
-nnoremap <Leader>A :Leaderf! gtags --auto-jump -s 
+nnoremap <Leader>a :Leaderf gtags --all --result=ctags-x<CR>
 nnoremap <C-\>s :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -s %s", expand("<cword>"))<CR><CR>
 nnoremap <C-\>c :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -r %s", expand("<cword>"))<CR><CR>
 nnoremap <C-]>  :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -d %s", expand("<cword>"))<CR><CR>
-let g:Lf_PreviewInPopup = 1
 nnoremap <leader>: :Leaderf cmdHistory<CR>
 nnoremap <leader>/ :Leaderf searchHistory<CR>
 let g:Lf_IgnoreCurrentBufferName = 1
