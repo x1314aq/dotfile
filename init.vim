@@ -145,16 +145,12 @@ nmap <silent> <M-q> :<C-u>CocCommand session.load<CR>
 nmap <leader>rn <Plug>(coc-rename)
 
 " LeaderF config
-let g:Lf_WindowPosition='popup'
+let g:Lf_WindowPosition = 'popup'
 let g:Lf_RootMarkers = ['.git', '.ccls', 'compile_commands.json', '.vim']
 let g:Lf_DefaultMode = 'NameOnly'
 let g:Lf_WildIgnore = {
         \  'dir': ['.svn', '.git', '.ccls-cache'],
         \  'file': ['*.so', '*.o', '*.a']
-        \  }
-let g:Lf_CtagsFuncOpts = {
-        \  'c': '--kinds-C=fp',
-        \  'c++': '--kinds-C++=fp',
         \  }
 let g:Lf_DefaultExternalTool = "rg"
 let g:Lf_HideHelp = 1
