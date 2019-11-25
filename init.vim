@@ -157,7 +157,7 @@ let g:Lf_HideHelp = 1
 let g:Lf_ShowHidden = 1
 let g:Lf_WorkingDirectoryMode = 'Ac'
 let g:Lf_NoChdir = 1
-nnoremap <leader>m  :LeaderfMru<CR>
+nnoremap <silent> <leader>m  :LeaderfMru<CR>
 let g:Lf_NormalMap = {
 	\ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
 	\ "Buffer": [["<ESC>", ':exec g:Lf_py "bufExplManager.quit()"<CR>']],
@@ -169,7 +169,7 @@ let g:Lf_NormalMap = {
 
 nnoremap <leader>s :Leaderf! rg -w -s -e 
 nnoremap <leader>S :<C-U><C-R>=printf("Leaderf! rg -F -s -e %s ", expand("<cword>"))<CR>
-nnoremap <M-o> :<C-U>Leaderf! --recall<CR>
+nnoremap <silent> <M-o> :<C-U>Leaderf! --recall<CR>
 let g:Lf_GtagsAutoGenerate = 0
 let g:Lf_GtagsSource = 2
 let g:Lf_GtagsSkipUnreadable = 1
@@ -178,13 +178,15 @@ let g:Lf_GtagsfilesCmd = {
     \ }
 
 nnoremap <leader>t :Leaderf! gtags --auto-jump -d 
-nnoremap <Leader>a :Leaderf gtags --all --result=ctags-x<CR>
-nnoremap <C-\>s :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -s %s", expand("<cword>"))<CR><CR>
-nnoremap <C-\>c :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -r %s", expand("<cword>"))<CR><CR>
-nnoremap <C-]>  :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -d %s", expand("<cword>"))<CR><CR>
-nnoremap <leader>: :Leaderf cmdHistory<CR>
-nnoremap <leader>/ :Leaderf searchHistory<CR>
+nnoremap <silent> <Leader>a :Leaderf gtags --all --result=ctags-x<CR>
+nnoremap <silent> <C-\>s :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -s %s", expand("<cword>"))<CR><CR>
+nnoremap <silent> <C-\>c :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -r %s", expand("<cword>"))<CR><CR>
+nnoremap <silent> <C-]>  :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -d %s", expand("<cword>"))<CR><CR>
+nnoremap <silent> <leader>: :Leaderf cmdHistory<CR>
+nnoremap <silent> <leader>/ :Leaderf searchHistory<CR>
 let g:Lf_IgnoreCurrentBufferName = 1
+nnoremap <silent> [s :<C-U>Leaderf --previous<CR>
+nnoremap <silent> ]s :<C-U>Leaderf --next<CR>
 
 " auto-pairs config
 let g:AutoPairsMapCh = 0
@@ -214,4 +216,4 @@ function ToggleTab()
     endif
 endfunction
 
-nmap <M-t> :call ToggleTab()<CR>
+nmap <silent> <M-t> :call ToggleTab()<CR>
