@@ -167,7 +167,7 @@ let g:Lf_NormalMap = {
 	\ "Colorscheme":    [["<ESC>", ':exec g:Lf_py "colorschemeExplManager.quit()"<CR>']],
 	\ }
 
-nnoremap <leader>s :Leaderf! rg -w -s -e 
+nnoremap <leader>s :Leaderf! rg -s -e 
 nnoremap <leader>S :<C-U><C-R>=printf("Leaderf! rg -F -s -e %s ", expand("<cword>"))<CR>
 nnoremap <silent> <M-o> :<C-U>Leaderf! --recall<CR>
 let g:Lf_GtagsAutoGenerate = 0
