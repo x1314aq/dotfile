@@ -107,9 +107,13 @@ let g:lightline = {
       \ 'colorscheme': 'jellybeans',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             ['readonly', 'filename', 'modified' ] ]
+      \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#status'
       \ },
       \ }
+autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 
 " coc.nvim config
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
