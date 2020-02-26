@@ -32,7 +32,13 @@ set splitright
 set wildmenu
 set noesckeys
 
-silent! colorscheme dracula
+set termguicolors
+set background=dark
+set laststatus=2
+
+packadd! sonokai
+let g:sonokai_disable_italic_comment = 1
+silent! colorscheme sonokai
 
 nnoremap <Space>  <Nop>
 let mapleader=" "

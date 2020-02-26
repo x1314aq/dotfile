@@ -13,6 +13,7 @@ endif
 call plug#begin('~/.nvim')
 
 Plug 'gruvbox-community/gruvbox'
+Plug 'sainnhe/sonokai'
 Plug 'itchyny/lightline.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
@@ -80,6 +81,8 @@ set updatetime=300
 set signcolumn=yes
 set shortmess+=c
 
+set termguicolors
+
 augroup project
     autocmd!
     autocmd BufRead,BufNewFile *.h,*.c set filetype=c.doxygen
@@ -97,14 +100,14 @@ nnoremap <leader>cc :cclose<CR>
 nnoremap <M-w> :silent vnew term://zsh<CR>
 nnoremap <M-W> :silent tabnew term://zsh<CR>
 
-" colorscheme dracula
-colorscheme gruvbox
+"colorscheme gruvbox
+colorscheme sonokai
 set background=dark
-let g:gruvbox_contrast_dark = 'hard'
+"let g:gruvbox_contrast_dark = 'hard'
 
 " lightline config
 let g:lightline = {
-      \ 'colorscheme': 'jellybeans',
+      \ 'colorscheme': 'sonokai',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
