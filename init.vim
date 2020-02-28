@@ -82,6 +82,7 @@ set signcolumn=yes
 set shortmess+=c
 
 set termguicolors
+set inccommand=nosplit
 
 augroup project
     autocmd!
