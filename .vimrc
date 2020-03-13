@@ -63,10 +63,12 @@ nnoremap <silent> [l  :lprev<CR>
 nnoremap <silent> ]l  :lnext<CR>
 nnoremap <silent> [L  :lfirst<CR>
 nnoremap <silent> ]L  :llast<CR>
-nnoremap <silent> [t  :tabp<CR>
-nnoremap <silent> ]t  :tabn<CR>
-nnoremap <silent> [T  :tabfirst<CR>
-nnoremap <silent> ]T  :tablast<CR>
+nnoremap <silent> [t  :tprevious<CR>
+nnoremap <silent> ]t  :tnext<CR>
+nnoremap <silent> [T  :tfirst<CR>
+nnoremap <silent> ]T  :tlast<CR>
 
+nnoremap <leader>t :tag 
+nnoremap <leader>T :tselect 
 nnoremap <silent> <leader>cw  :cwindow<CR>
 nnoremap <silent> <leader>cc  :cclose<CR>
