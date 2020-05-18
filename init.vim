@@ -21,6 +21,7 @@ Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
 Plug 'jiangmiao/auto-pairs'
 Plug 'justinmk/vim-dirvish'
 Plug 'tpope/vim-unimpaired'
+Plug 'sheerun/vim-polyglot'
 
 call plug#end()
 
@@ -185,7 +186,7 @@ let g:Lf_GtagsfilesCmd = {
     \ '.git': 'git ls-files -- "*.c" "*.cpp" "*.h" "*.hpp"',
     \ }
 
-nnoremap <leader>t :LeaderfTagPattern 
+nnoremap <leader>t :tag 
 nnoremap <leader>T :Leaderf tag<CR>
 nnoremap <silent> <Leader>a :LeaderfBufTag<CR>
 nnoremap <silent> <C-\>a :Leaderf gtags --all --result=ctags-x<CR>
@@ -200,7 +201,6 @@ nnoremap <silent> <leader>/ :Leaderf searchHistory<CR>
 let g:Lf_IgnoreCurrentBufferName = 1
 nnoremap <silent> [s :<C-U>Leaderf --previous<CR>
 nnoremap <silent> ]s :<C-U>Leaderf --next<CR>
-let g:Lf_JumpToExistingWindow = 1
 
 " auto-pairs config
 let g:AutoPairsMapCh = 0

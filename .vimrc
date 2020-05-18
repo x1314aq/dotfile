@@ -113,11 +113,16 @@ let g:Lf_GtagsfilesCmd = {
     \ '.git': 'git ls-files -- "*.c" "*.cpp" "*.h" "*.hpp"',
     \ }
 
-nnoremap <leader>t :Leaderf tag<CR>
-nnoremap <silent> <Leader>a :Leaderf gtags --all --result=ctags-x<CR>
+nnoremap <leader>t :tag 
+nnoremap <leader>T :Leaderf tag<CR>
+nnoremap <silent> <Leader>a :LeaderfBufTag<CR>
+nnoremap <silent> <C-\>a :Leaderf gtags --all --result=ctags-x<CR>
 nnoremap <silent> <C-\>s :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -s %s", expand("<cword>"))<CR><CR>
 nnoremap <silent> <C-\>c :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -r %s", expand("<cword>"))<CR><CR>
 nnoremap <silent> <C-\>d :<C-U><C-R>=printf("Leaderf! gtags --literal --auto-jump -d %s", expand("<cword>"))<CR><CR>
+nnoremap <C-\>D :Leaderf! gtags --auto-jump -d 
+nnoremap <C-\>S :Leaderf! gtags --auto-jump -s 
+nnoremap <C-\>C :Leaderf! gtags --auto-jump -r 
 nnoremap <silent> <leader>: :Leaderf cmdHistory<CR>
 nnoremap <silent> <leader>/ :Leaderf searchHistory<CR>
 let g:Lf_IgnoreCurrentBufferName = 1
