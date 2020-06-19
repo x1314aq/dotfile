@@ -128,6 +128,7 @@ nnoremap <silent> <leader>/ :Leaderf searchHistory<CR>
 let g:Lf_IgnoreCurrentBufferName = 1
 nnoremap <silent> [s :<C-U>Leaderf --previous<CR>
 nnoremap <silent> ]s :<C-U>Leaderf --next<CR>
+let g:Lf_JumpToExistingWindow = 0
 
 function ToggleTab()
     if &expandtab

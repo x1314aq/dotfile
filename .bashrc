@@ -8,6 +8,9 @@ case $- in
       *) return;;
 esac
 
+#export TERM=xterm-256color
+export EDITOR=nvim
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
@@ -87,11 +90,6 @@ fi
 
 # colored GCC warnings and errors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# some more ls aliases
-alias ll='ls -AtchlF'
-alias la='ls -atcFhl'
-alias l='ls -lthcF'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert

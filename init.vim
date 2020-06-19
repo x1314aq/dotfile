@@ -201,6 +201,7 @@ nnoremap <silent> <leader>/ :Leaderf searchHistory<CR>
 let g:Lf_IgnoreCurrentBufferName = 1
 nnoremap <silent> [s :<C-U>Leaderf --previous<CR>
 nnoremap <silent> ]s :<C-U>Leaderf --next<CR>
+let g:Lf_JumpToExistingWindow = 0
 
 " auto-pairs config
 let g:AutoPairsMapCh = 0

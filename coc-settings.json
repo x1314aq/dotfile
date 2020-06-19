@@ -16,7 +16,7 @@
     "python.jediEnabled": false,
     "languageserver": {
         "ccls": {
-            "command": "/usr/local/bin/ccls",
+            "command": "ccls",
             "filetypes": ["c", "c.doxygen", "cpp", "objc"],
             "rootPatterns": [".ccls", "compile_commands.json", ".vim", ".git"],
             "trace.server": "verbose",
