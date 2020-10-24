@@ -17,11 +17,12 @@ Plug 'sainnhe/sonokai'
 Plug 'itchyny/lightline.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
-Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
+" Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
 Plug 'jiangmiao/auto-pairs'
 Plug 'justinmk/vim-dirvish'
 Plug 'tpope/vim-unimpaired'
 Plug 'sheerun/vim-polyglot'
+Plug 'jackguo380/vim-lsp-cxx-highlight', {'for': ['cpp', 'c']}
 
 call plug#end()
 
@@ -85,12 +86,6 @@ set shortmess+=c
 set termguicolors
 set inccommand=nosplit
 
-augroup project
-    autocmd!
-    autocmd BufRead,BufNewFile *.h,*.c set filetype=c.doxygen
-    autocmd BufRead,BufNewFile *.m set filetype=objc
-augroup end
-
 autocmd FileType json syntax match Comment +\/\/.\+$+
 
 " quickfix windows
@@ -99,8 +94,8 @@ nnoremap <leader>cw :cwindow<CR>
 nnoremap <leader>cc :cclose<CR>
 
 " for DSA
-nnoremap <M-w> :silent vnew term://zsh<CR>
-nnoremap <M-W> :silent tabnew term://zsh<CR>
+nnoremap <M-w> :silent vnew term://$SHELL<CR>
+nnoremap <M-W> :silent tabnew term://$SHELL<CR>
 
 "colorscheme gruvbox
 colorscheme sonokai
@@ -166,7 +161,8 @@ let g:Lf_HideHelp = 1
 let g:Lf_ShowHidden = 1
 let g:Lf_WorkingDirectoryMode = 'Ac'
 let g:Lf_NoChdir = 1
-nnoremap <silent> <leader>m  :LeaderfMru<CR>
+let g:Lf_JumpToExistingWindow = 0
+let g:Lf_IgnoreCurrentBufferName = 1
 let g:Lf_NormalMap = {
 	\ "File":   [["<ESC>", ':exec g:Lf_py "fileExplManager.quit()"<CR>']],
 	\ "Buffer": [["<ESC>", ':exec g:Lf_py "bufExplManager.quit()"<CR>']],
@@ -176,9 +172,6 @@ let g:Lf_NormalMap = {
 	\ "Colorscheme":    [["<ESC>", ':exec g:Lf_py "colorschemeExplManager.quit()"<CR>']],
 	\ }
 
-nnoremap <leader>s :Leaderf! rg -s -e 
-nnoremap <leader>S :<C-U><C-R>=printf("Leaderf! rg -F -s -e %s ", expand("<cword>"))<CR>
-nnoremap <silent> <M-o> :<C-U>Leaderf! --recall<CR>
 let g:Lf_GtagsAutoGenerate = 0
 let g:Lf_GtagsSource = 2
 let g:Lf_GtagsSkipUnreadable = 1
@@ -186,6 +179,10 @@ let g:Lf_GtagsfilesCmd = {
     \ '.git': 'git ls-files -- "*.c" "*.cpp" "*.h" "*.hpp"',
     \ }
 
+nnoremap <silent> <leader>m  :LeaderfMru<CR>
+nnoremap <leader>s :Leaderf! rg -s -e 
+nnoremap <leader>S :<C-U><C-R>=printf("Leaderf! rg -w -F -s -e %s", expand("<cword>"))<CR>
+nnoremap <silent> <g-o> :<C-U>Leaderf! --recall<CR>
 nnoremap <leader>t :tag 
 nnoremap <leader>T :Leaderf tag<CR>
 nnoremap <silent> <Leader>a :LeaderfBufTag<CR>
@@ -198,10 +195,8 @@ nnoremap <C-\>S :Leaderf! gtags --auto-jump -s
 nnoremap <C-\>C :Leaderf! gtags --auto-jump -r 
 nnoremap <silent> <leader>: :Leaderf cmdHistory<CR>
 nnoremap <silent> <leader>/ :Leaderf searchHistory<CR>
-let g:Lf_IgnoreCurrentBufferName = 1
 nnoremap <silent> [s :<C-U>Leaderf --previous<CR>
 nnoremap <silent> ]s :<C-U>Leaderf --next<CR>
-let g:Lf_JumpToExistingWindow = 0
 
 " auto-pairs config
 let g:AutoPairsMapCh = 0
@@ -210,10 +205,10 @@ let g:AutoPairsShortcutJump = ''
 let g:AutoPairsShortcutFastWrap = ''
 
 " cpp-enhanced-highlight config
-let g:cpp_class_scope_highlight = 1
-let g:cpp_member_variable_highlight = 1
-let g:cpp_class_decl_highlight = 1
-let g:cpp_concepts_highlight = 1
+" let g:cpp_class_scope_highlight = 1
+" let g:cpp_member_variable_highlight = 1
+" let g:cpp_class_decl_highlight = 1
+" let g:cpp_concepts_highlight = 1
 
 function ToggleTab()
     if &expandtab

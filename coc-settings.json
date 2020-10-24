@@ -7,13 +7,11 @@
     "session.saveOnVimLeave": false,
     "list.source.location.defaultOptions": ["--normal"],
     "list.maxPreviewHeight": 5,
-    "list.autoResize": false,
     "list.source.grep.defaultOptions": ["--normal"],
     "list.source.grep.useLiteral": false,
     "list.source.sessions.defaultOptions": ["--normal"],
     "suggest.minTriggerInputLength": 2,
     "signature.target": "echo",
-    "python.jediEnabled": false,
     "languageserver": {
         "ccls": {
             "command": "ccls",
@@ -22,8 +20,9 @@
             "trace.server": "verbose",
             "initializationOptions": {
                 "cache": {
-                    "directory": ".ccls-cache"
-                }
+                    "directory": "/tmp/ccls-cache"
+                },
+                "highlight": {"lsRanges": true}
             }
         }
     }
