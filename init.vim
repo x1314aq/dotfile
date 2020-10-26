@@ -23,6 +23,7 @@ Plug 'justinmk/vim-dirvish'
 Plug 'tpope/vim-unimpaired'
 Plug 'sheerun/vim-polyglot'
 Plug 'jackguo380/vim-lsp-cxx-highlight', {'for': ['cpp', 'c']}
+" Plug 'neovim/nvim-lsp'
 
 call plug#end()
 
@@ -86,6 +87,7 @@ set shortmess+=c
 set termguicolors
 set inccommand=nosplit
 
+
 autocmd FileType json syntax match Comment +\/\/.\+$+
 
 " quickfix windows
@@ -115,6 +117,24 @@ let g:lightline = {
       \ }
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 
+" " nvim-lspconfig
+" lua <<EOF
+"     require'nvim_lsp'.ccls.setup{}
+" EOF
+"
+" set completeopt-=preview
+" set omnifunc=v:lua.vim.lsp.omnifunc
+"
+" " nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+" nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>
+" " nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+" " nnoremap <silent> gd    <cmd>lua vim.lsp.buf.implementation()<CR>
+" nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+" nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+" nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+" nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+" nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+
 " coc.nvim config
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
@@ -131,11 +151,10 @@ nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
-" nmap <silent> gD <Plug>(coc-declaration)
+nmap <silent> gD <Plug>(coc-declaration)
 " nmap <silent> gy <Plug>(coc-type-definition)
 " nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
-nmap <silent> go :<C-u>CocListResume<CR>
 
 " disable CocList
 let g:coc_enable_locationlist = 1
@@ -182,7 +201,7 @@ let g:Lf_GtagsfilesCmd = {
 nnoremap <silent> <leader>m  :LeaderfMru<CR>
 nnoremap <leader>s :Leaderf! rg -s -e 
 nnoremap <leader>S :<C-U><C-R>=printf("Leaderf! rg -w -F -s -e %s", expand("<cword>"))<CR>
-nnoremap <silent> <g-o> :<C-U>Leaderf! --recall<CR>
+nnoremap <silent>go :<C-U>Leaderf! --recall<CR>
 nnoremap <leader>t :tag 
 nnoremap <leader>T :Leaderf tag<CR>
 nnoremap <silent> <Leader>a :LeaderfBufTag<CR>

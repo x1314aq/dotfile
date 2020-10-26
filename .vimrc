@@ -32,13 +32,25 @@ set splitright
 set wildmenu
 set noesckeys
 
+if &term =~# '256color' && ( &term =~# '^screen'  || &term =~# '^tmux' )
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
+
 set termguicolors
 set background=dark
 set laststatus=2
 
+packadd! dracula
 packadd! sonokai
+packadd! vim-polyglot
+packadd! LeaderF
+packadd! lightline
 let g:sonokai_disable_italic_comment = 1
 silent! colorscheme sonokai
+
+set enc=utf-8
+set fileencodings=utf-8,gbk,big5,gb18030,latin1
 
 nnoremap <Space>  <Nop>
 let mapleader=" "
@@ -105,7 +117,7 @@ let g:Lf_NormalMap = {
 
 nnoremap <leader>s :Leaderf! rg -s -e 
 nnoremap <leader>S :<C-U><C-R>=printf("Leaderf! rg -F -s -e %s ", expand("<cword>"))<CR>
-nnoremap <silent> <g-o> :<C-U>Leaderf! --recall<CR>
+nnoremap <silent>go :<C-U>Leaderf! --recall<CR>
 let g:Lf_GtagsAutoGenerate = 0
 let g:Lf_GtagsSource = 2
 let g:Lf_GtagsSkipUnreadable = 1
@@ -129,6 +141,9 @@ let g:Lf_IgnoreCurrentBufferName = 1
 nnoremap <silent> [s :<C-U>Leaderf --previous<CR>
 nnoremap <silent> ]s :<C-U>Leaderf --next<CR>
 let g:Lf_JumpToExistingWindow = 0
+
+" open tag in new tab
+nnoremap <silent> <leader><C-]> <C-w><C-]><C-w>T
 
 function ToggleTab()
     if &expandtab
