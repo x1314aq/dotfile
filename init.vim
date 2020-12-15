@@ -22,7 +22,8 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'justinmk/vim-dirvish'
 Plug 'tpope/vim-unimpaired'
 Plug 'sheerun/vim-polyglot'
-Plug 'jackguo380/vim-lsp-cxx-highlight', {'for': ['cpp', 'c']}
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+" Plug 'jackguo380/vim-lsp-cxx-highlight', {'for': ['cpp', 'c']}
 " Plug 'neovim/nvim-lsp'
 
 call plug#end()
@@ -87,7 +88,6 @@ set shortmess+=c
 set termguicolors
 set inccommand=nosplit
 
-
 autocmd FileType json syntax match Comment +\/\/.\+$+
 
 " quickfix windows
@@ -117,7 +117,7 @@ let g:lightline = {
       \ }
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 
-" " nvim-lspconfig
+" " nvim-lsp config
 " lua <<EOF
 "     require'nvim_lsp'.ccls.setup{}
 " EOF
@@ -134,6 +134,25 @@ autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 " nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
 " nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 " nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+
+" nvim treesitter config
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
+
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained",
+  highlight = {
+    enable = true
+  },
+  incremental_selection = {
+    enable = true
+  },
+  indent = {
+    enable = true
+  }
+}
+EOF
 
 " coc.nvim config
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
