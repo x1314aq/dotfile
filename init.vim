@@ -21,9 +21,9 @@ Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
 Plug 'jiangmiao/auto-pairs'
 Plug 'justinmk/vim-dirvish'
 Plug 'tpope/vim-unimpaired'
-Plug 'sheerun/vim-polyglot'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-" Plug 'jackguo380/vim-lsp-cxx-highlight', {'for': ['cpp', 'c']}
+" Plug 'sheerun/vim-polyglot'
+" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'jackguo380/vim-lsp-cxx-highlight', {'for': ['cpp', 'c']}
 " Plug 'neovim/nvim-lsp'
 
 call plug#end()
@@ -136,23 +136,23 @@ autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 " nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
 " nvim treesitter config
-set foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr()
-
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained",
-  highlight = {
-    enable = true
-  },
-  incremental_selection = {
-    enable = true
-  },
-  indent = {
-    enable = true
-  }
-}
-EOF
+" set foldmethod=expr
+" set foldexpr=nvim_treesitter#foldexpr()
+"
+" lua <<EOF
+" require'nvim-treesitter.configs'.setup {
+"   ensure_installed = "maintained",
+"   highlight = {
+"     enable = true
+"   },
+"   incremental_selection = {
+"     enable = true
+"   },
+"   indent = {
+"     enable = true
+"   }
+" }
+" EOF
 
 " coc.nvim config
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
