@@ -172,8 +172,59 @@ font:
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: true
 
+schemes:
+    GnomeDark: &GnomeDark
+      primary:
+        foreground: '#d0cfcc'
+        background: '#171421'
+
+      normal:
+        black:   '#171421'
+        red:     '#c01c28'
+        green:   '#26a269'
+        yellow:  '#a2734c'
+        blue:    '#12488b'
+        magenta: '#a347ba'
+        cyan:    '#2aa1b3'
+        white:   '#d0cfcc'
+
+      bright:
+        black:   '#5e5c64'
+        red:     '#f66151'
+        green:   '#33d17a'
+        yellow:  '#e9ad0c'
+        blue:    '#2a7bde'
+        magenta: '#c061cb'
+        cyan:    '#33c7de'
+        white:   '#ffffff'
+
+    AyuDark: &AyuDark
+      primary:
+        background: '#0A0E14'
+        foreground: '#B3B1AD'
+
+      normal:
+        black: '#01060E'
+        red: '#EA6C73'
+        green: '#91B362'
+        yellow: '#F9AF4F'
+        blue: '#53BDFA'
+        magenta: '#FAE994'
+        cyan: '#90E1C6'
+        white: '#C7C7C7'
+
+      bright:
+        black: '#686868'
+        red: '#F07178'
+        green: '#C2D94C'
+        yellow: '#FFB454'
+        blue: '#59C2FF'
+        magenta: '#FFEE99'
+        cyan: '#95E6CB'
+        white: '#FFFFFF'
+
 # Colors (Tomorrow Night)
-#colors:
+colors: *GnomeDark
   # Default colors
   #primary:
   #  background: '#1d1f21'
