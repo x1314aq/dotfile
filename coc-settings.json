@@ -4,14 +4,15 @@
     },
     "lists.disabledLists": ["tags"],
     "coc.preferences.extensionUpdateCheck": "never",
+    "coc.preferences.colorSupport": true,
     "session.saveOnVimLeave": false,
-    "list.source.location.defaultOptions": ["--normal"],
-    "list.maxPreviewHeight": 5,
+    "list.maxPreviewHeight": 3,
     "list.source.grep.defaultOptions": ["--normal"],
     "list.source.grep.useLiteral": false,
     "list.source.sessions.defaultOptions": ["--normal"],
     "suggest.minTriggerInputLength": 2,
     "signature.target": "echo",
+    "clangd.enabled": false,
     "languageserver": {
         "ccls": {
             "command": "ccls",
@@ -19,10 +20,11 @@
             "rootPatterns": [".ccls", "compile_commands.json", ".vim", ".git"],
             "trace.server": "verbose",
             "initializationOptions": {
-                "cache": {
-                    "directory": "/tmp/ccls-cache"
-                },
-                "highlight": {"lsRanges": true}
+                "cache": {"directory": "/tmp/ccls-cache"},
+                "highlight": {"lsRanges": true},
+                "client": {"snippestSupport": true},
+                "completion": {"placeholder": false},
+                "index": {"comments": 0, "trackDependency": 1}
             }
         },
         "cmake": {
