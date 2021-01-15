@@ -17,7 +17,6 @@ Plug 'sainnhe/sonokai'
 Plug 'itchyny/lightline.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
-" Plug 'octol/vim-cpp-enhanced-highlight', {'for': 'cpp'}
 Plug 'jiangmiao/auto-pairs'
 Plug 'justinmk/vim-dirvish'
 Plug 'tpope/vim-unimpaired'
@@ -82,13 +81,15 @@ set nrformats=                " treat all numbers as decimal
 
 set hidden
 set updatetime=300
-set signcolumn=yes
+set signcolumn=number
 set shortmess+=c
 
 set termguicolors
 set inccommand=nosplit
 
 autocmd FileType json syntax match Comment +\/\/.\+$+
+
+autocmd BufEnter *.h :setlocal filetype=c
 
 " quickfix windows
 " unimpaired has mapped [q to :cprev, ]q to :cnext, [Q to :cfirst and ]Q to :clast
@@ -135,24 +136,24 @@ autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 " nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 " nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 
-" nvim treesitter config
-" set foldmethod=expr
-" set foldexpr=nvim_treesitter#foldexpr()
-"
-" lua <<EOF
-" require'nvim-treesitter.configs'.setup {
-"   ensure_installed = "maintained",
-"   highlight = {
-"     enable = true
-"   },
-"   incremental_selection = {
-"     enable = true
-"   },
-"   indent = {
-"     enable = true
-"   }
-" }
-" EOF
+" nvim-treesitter config
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained",
+  highlight = {
+    enable = true,
+  },
+  incremental_selection = {
+    enable = true,
+  },
+  indent = {
+    enable = true,
+  },
+}
+EOF
+
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
 
 " coc.nvim config
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
@@ -165,23 +166,41 @@ autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 
 " Use `[c` and `]c` to navigate diagnostics
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
+nmap <silent> [c <Plug>(coc-diagnostic-prev-error)
+nmap <silent> ]c <Plug>(coc-diagnostic-next-error)
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gD <Plug>(coc-declaration)
-" nmap <silent> gy <Plug>(coc-type-definition)
-" nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gt <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" disable CocList
-let g:coc_enable_locationlist = 1
+" Requires 'textDocument/selectionRange' support of language server.
+nmap <silent> <C-s> <Plug>(coc-range-select)
+xmap <silent> <C-s> <Plug>(coc-range-select)
+
+" ccls LSP extensions
+" caller
+nnoremap <silent> gxc :call CocLocationsAsync('ccls','$ccls/call')<CR>
+" callee
+nnoremap <silent> gxC :call CocLocationsAsync('ccls','$ccls/call',{'callee':v:true})<CR>
+" variables
+nnoremap <silent> gxv :call CocLocationsAsync('ccls','$ccls/vars')<CR>
+nnoremap <silent> gxV :call CocLocationsAsync('ccls','$ccls/vars',{'kind':1})<CR>
+
+" disable auto preview of location list
+let g:coc_enable_locationlist = 0
+autocmd User CocLocationsChange CocList --normal location
 
 " session management
-nmap <silent> gi :<C-u>CocList sessions<CR>
+" nmap <silent> gi :<C-u>CocList sessions<CR>
 nmap <silent> <M-s> :<C-u>CocCommand session.save<CR>
 nmap <silent> <M-q> :<C-u>CocCommand session.load<CR>
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+autocmd CursorHoldI * silent call CocActionAsync('showSignatureHelp')
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
