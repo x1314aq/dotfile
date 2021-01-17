@@ -21,8 +21,8 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'justinmk/vim-dirvish'
 Plug 'tpope/vim-unimpaired'
 " Plug 'sheerun/vim-polyglot'
-" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'jackguo380/vim-lsp-cxx-highlight', {'for': ['cpp', 'c']}
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+" Plug 'jackguo380/vim-lsp-cxx-highlight', {'for': ['cpp', 'c']}
 " Plug 'neovim/nvim-lsp'
 
 call plug#end()
