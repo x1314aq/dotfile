@@ -1,3 +1,3 @@
 function
-        echo $hostname
+    echo $hostname
 end
