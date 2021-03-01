@@ -24,6 +24,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " Plug 'jackguo380/vim-lsp-cxx-highlight', {'for': ['cpp', 'c']}
 " Plug 'neovim/nvim-lsp'
+Plug 'itchyny/vim-cursorword'
 
 call plug#end()
 
@@ -199,11 +200,29 @@ nmap <silent> <M-s> :<C-u>CocCommand session.save<CR>
 nmap <silent> <M-q> :<C-u>CocCommand session.load<CR>
 
 " Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
-autocmd CursorHoldI * silent call CocActionAsync('showSignatureHelp')
+" autocmd CursorHold * silent call CocActionAsync('highlight')
+" autocmd CursorHoldI * silent call CocActionAsync('showSignatureHelp')
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
+
+" Use <C-q> for trigger snippet expand.
+imap <C-q> <Plug>(coc-snippets-expand)
+
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+" imap <C-j> <Plug>(coc-snippets-expand-jump)
+
+" Use <leader>x for convert visual selected code to snippet
+xmap <leader>x  <Plug>(coc-convert-snippet)
 
 " LeaderF config
 let g:Lf_WindowPosition = 'popup'
