@@ -25,6 +25,7 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " Plug 'jackguo380/vim-lsp-cxx-highlight', {'for': ['cpp', 'c']}
 " Plug 'neovim/nvim-lsp'
 Plug 'itchyny/vim-cursorword'
+Plug 'voldikss/vim-floaterm'
 
 call plug#end()
 
@@ -97,9 +98,13 @@ autocmd BufEnter *.h :setlocal filetype=c
 nnoremap <leader>cw :cwindow<CR>
 nnoremap <leader>cc :cclose<CR>
 
-" for DSA
-nnoremap <M-w> :silent vnew term://$SHELL<CR>
-nnoremap <M-W> :silent tabnew term://$SHELL<CR>
+" for floaterm
+let g:floaterm_height = 0.8
+let g:floaterm_width = 0.8
+let g:floaterm_opener = 'tabe'
+nnoremap <silent> <M-w> :FloatermNew<CR>
+tnoremap <silent> <M-w> <C-\><C-n>:FloatermHide<CR>
+nnoremap <silent> <M-W> :FloatermToggle<CR>
 
 "colorscheme gruvbox
 colorscheme sonokai
