@@ -145,14 +145,11 @@ autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 " nvim-treesitter config
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained",
+  ensure_installed = {"c", "cpp", "lua", "python", "rust"},
   highlight = {
     enable = true,
   },
   incremental_selection = {
-    enable = true,
-  },
-  indent = {
     enable = true,
   },
 }
@@ -230,6 +227,7 @@ let g:coc_snippet_prev = '<c-k>'
 xmap <leader>x  <Plug>(coc-convert-snippet)
 
 " LeaderF config
+let g:Lf_ShowDevIcons = 0
 let g:Lf_WindowPosition = 'popup'
 let g:Lf_RootMarkers = ['.git', '.ccls', 'compile_commands.json', '.vim']
 let g:Lf_DefaultMode = 'NameOnly'
