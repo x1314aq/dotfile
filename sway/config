@@ -45,8 +45,8 @@ output eDP-1 resolution 1920x1080 position 0,0
 # Example configuration:
 #
 exec swayidle -w \
-         timeout 300 'swaylock' \
-         timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+         timeout 180 'swaylock' \
+         timeout 300 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
          before-sleep 'swaylock'
 #
 # This will lock your screen after 300 seconds of inactivity, then turn off
@@ -100,6 +100,32 @@ exec swayidle -w \
 
     # lock screen
     bindsym $mod+l exec swaylock -e -F -f -c 000000
+
+    # extra XF86 keys
+    # mute/unmute audio
+    bindsym XF86AudioMute exec pactl set-sink-mute 0 toggle
+    bindsym $mod+F1 exec pactl set-sink-mute 0 toggle
+
+    # decrease audio by 5%
+    bindsym XF86AudioLowerVolume exec pactl set-sink-volume 0 -5%
+    bindsym $mod+F2 exec pactl set-sink-volume 0 -5%
+
+    # increase audio by 5%
+    bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5%
+    bindsym $mod+F3 exec pactl set-sink-volume 0 +5%
+
+    # decrease monitor brightness by 10%
+    bindsym XF86MonBrightnessDown exec sudo backlightctl -10%
+    bindsym $mod+F11 exec sudo backlightctl -10%
+
+    # increase monitor brightness by 10%
+    bindsym XF86MonBrightnessUp exec sudo backlightctl +10%
+    bindsym $mod+F12 exec sudo backlightctl +10%
+
+    # switch on/off wlan
+    bindsym XF86WLAN exec fish ~/.config/sway/wlan.fish
+    bindsym $mod+F7 exec fish ~/.config/sway/wlan.fish
+
 #
 # Moving around:
 #
