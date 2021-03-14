@@ -31,7 +31,7 @@ set $menu wofi --show run | xargs swaymsg exec --
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg ~/.config/wallpaper/wallpaper.jpg fill
+output * bg ~/Pictures/yxllvl.jpg fill
 #
 # Example configuration:
 #

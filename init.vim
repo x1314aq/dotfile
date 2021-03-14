@@ -198,8 +198,12 @@ autocmd User CocLocationsChange CocList --normal location
 
 " session management
 " nmap <silent> gi :<C-u>CocList sessions<CR>
-nmap <silent> <M-s> :<C-u>CocCommand session.save<CR>
-nmap <silent> <M-q> :<C-u>CocCommand session.load<CR>
+" nmap <silent> <M-s> :<C-u>CocCommand session.save<CR>
+" nmap <silent> <M-q> :<C-u>CocCommand session.load<CR>
+
+" search symbols
+nnoremap <silent> <M-s> :<C-u>CocList symbols<CR>
+nnoremap <silent> <M-q> :<C-u>CocListResume<CR>
 
 " Highlight the symbol and its references when holding the cursor.
 " autocmd CursorHold * silent call CocActionAsync('highlight')
