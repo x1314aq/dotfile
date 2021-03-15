@@ -102,9 +102,9 @@ nnoremap <leader>cc :cclose<CR>
 let g:floaterm_height = 0.8
 let g:floaterm_width = 0.8
 let g:floaterm_opener = 'tabe'
-nnoremap <silent> <M-w> :FloatermNew<CR>
+" nnoremap <silent> <M-w> :FloatermNew<CR>
 tnoremap <silent> <M-w> <C-\><C-n>:FloatermHide<CR>
-nnoremap <silent> <M-W> :FloatermToggle<CR>
+nnoremap <silent> <M-w> :FloatermToggle<CR>
 
 "colorscheme gruvbox
 colorscheme sonokai
