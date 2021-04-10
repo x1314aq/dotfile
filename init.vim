@@ -18,7 +18,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Yggdroot/LeaderF', {'do': './install.sh'}
 Plug 'jiangmiao/auto-pairs'
-Plug 'justinmk/vim-dirvish'
+" Plug 'justinmk/vim-dirvish'
 Plug 'tpope/vim-unimpaired'
 " Plug 'sheerun/vim-polyglot'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -26,6 +26,7 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " Plug 'neovim/nvim-lsp'
 Plug 'itchyny/vim-cursorword'
 Plug 'voldikss/vim-floaterm'
+Plug 'kevinhwang91/rnvimr'
 
 call plug#end()
 
@@ -310,3 +311,7 @@ function ToggleTab()
 endfunction
 
 nmap <silent> <M-t> :call ToggleTab()<CR>
+
+" rnvimr config
+nnoremap <silent> <M-r> :RnvimrToggle<CR>
+tnoremap <silent> <M-r> <C-\><C-n>:RnvimrToggle<CR>
