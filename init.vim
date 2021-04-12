@@ -27,6 +27,9 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'itchyny/vim-cursorword'
 Plug 'voldikss/vim-floaterm'
 Plug 'kevinhwang91/rnvimr'
+Plug 'skywind3000/asynctasks.vim'
+Plug 'skywind3000/asyncrun.vim'
+Plug 'skywind3000/asyncrun.extra'
 
 call plug#end()
 
@@ -315,3 +318,12 @@ nmap <silent> <M-t> :call ToggleTab()<CR>
 " rnvimr config
 nnoremap <silent> <M-r> :RnvimrToggle<CR>
 tnoremap <silent> <M-r> <C-\><C-n>:RnvimrToggle<CR>
+
+" Asyncrun/Asynctasks config
+" open quickfix window when command finished which is 6 in height
+let g:asyncrun_open = 6
+let g:asyncrun_rootmarks = ['.git', '.ccls', 'compile_commands.json', '.vim']
+let g:asynctasks_term_pos = 'floaterm_reuse'
+nnoremap <silent> <F5> :AsyncTask run<CR>
+nnoremap <silent> <F9> :AsyncTask build<CR>
+nnoremap <silent> <F10> :AsyncTask build-file<CR>
