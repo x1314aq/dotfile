@@ -1,8 +1,8 @@
 set -U fish_greeting
 set -U fish_user_paths $fish_user_paths
 
-set -xU EDITOR vim
-set -xU VISUAL vim
+set -xU EDITOR nvim
+set -xU VISUAL nvim
 
 set -xU LESS_TERMCAP_md (printf "\e[01;31m")
 set -xU LESS_TERMCAP_me (printf "\e[0m")
