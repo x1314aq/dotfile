@@ -1,6 +1,7 @@
 local uv = vim.loop
 local call = vim.call
 local cmd = vim.cmd
+local api = vim.api
 
 local URLPREFIX = 'https://github.com/'
 local LOGFILE = call('stdpath', 'cache') .. '/pmanager.log'
@@ -57,10 +58,10 @@ local function install(pkg)
             args = {'clone', '-b', pkg.branch, pkg.url, pkg.dir},
             stdio = {nil, filp, filp}
         },
-        vim.schedule_wrap( function(code)
-            do_log('install returned ' .. tostring(code))
+        function(code, signal)
+            do_log(string.format('install exited pid:%d code:%d signal:%d', pid, code, signal))
             handle:close()
-        end)
+        end
     )
     do_log(string.format('handle:%s pid:%d', tostring(handle), pid))
 end
@@ -72,17 +73,17 @@ local function update(pkg)
         return
     end
     do_log('going to update package: ' .. pkg.name)
-    local handle = uv.spawn(
+    local handle, pid = uv.spawn(
         'git',
         {
             args = {'pull'},
             cwd = pkg.dir,
             stdio = {nil, filp, filp}
         },
-        vim.schedule_wrap( function(code)
-            do_log('update returned ' .. tostring(code))
+        function(code, signal)
+            do_log(string.format('update exited pid:%d code:%d signal:%d', pid, code, signal))
             handle:close()
-        end)
+        end
     )
 end
 
