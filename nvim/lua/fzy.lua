@@ -1,15 +1,29 @@
-local api = vim.api
+local uv = vim.loop
 local vfn = vim.fn
+local cmd = vim.cmd
+local api = vim.api
+
 local M = {}
+
+-- fzy lua native implementation
+local native = require('fzy/native')
+
+local SEP
+
+if jit.os == 'Windows' then
+    SEP = '\\'
+else
+    SEP = '/'
+end
 
 local function fst(xs)
   return xs and xs[1] or nil
 end
 
 
-local function popup()
+local function popup_create(para)
   local buf = api.nvim_create_buf(false, true)
-  api.nvim_buf_set_keymap(buf, 't', '<ESC>', '<C-\\><C-c>', {})
+  assert(buf, "Failed to create buffer")
   api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
   local columns = api.nvim_get_option('columns')
   local lines = api.nvim_get_option('lines')
@@ -25,6 +39,7 @@ local function popup()
     border = 'single',
   }
   local win = api.nvim_open_win(buf, true, opts)
+  api.nvim_win_set_option(win, 'wrap', false)
   return win, buf, opts
 end
 
@@ -33,7 +48,7 @@ local sinks = {}
 M.sinks = sinks
 function sinks.edit_file(selection)
   if selection and vim.trim(selection) ~= '' then
-    vim.cmd('e ' .. selection)
+    cmd('e ' .. selection)
   end
 end
 
@@ -57,7 +72,7 @@ function M.actions.buf_lines()
   M.pick_one(lines, 'Lines> ', function(x) return x end, function(result, idx)
     if result then
       api.nvim_win_set_cursor(win, {idx, 0})
-      vim.cmd('normal! zvzz')
+      cmd('normal! zvzz')
     end
   end)
 end
@@ -122,7 +137,7 @@ function M.actions.lsp_tags()
           range.start.line + 1,
           range.start.character
         })
-        vim.cmd('normal! zvzz')
+        cmd('normal! zvzz')
       end
     )
   end)
@@ -158,14 +173,14 @@ function M.actions.buf_tags()
       end
       local row = tonumber(vim.split(tag[3], ';')[1])
       api.nvim_win_set_cursor(0, {row, 0})
-      vim.cmd('normal! zvzz')
+      cmd('normal! zvzz')
     end
   )
 end
 
 
 function M.actions.quickfix()
-  vim.cmd('cclose')
+  cmd('cclose')
   local items = vfn.getqflist()
   M.pick_one(
     items,
@@ -179,7 +194,7 @@ function M.actions.quickfix()
       vfn.bufload(item.bufnr)
       api.nvim_win_set_buf(0, item.bufnr)
       api.nvim_win_set_cursor(0, {item.lnum, item.col - 1})
-      vim.cmd('normal! zvzz')
+      cmd('normal! zvzz')
     end
   )
 end
@@ -205,7 +220,7 @@ function M.pick_one(items, prompt, label_fn, cb)
     end,
     prompt
   )
-  vim.cmd('startinsert!')
+  cmd('startinsert!')
   local f = io.open(inputs, 'a')
   for i, item in ipairs(items) do
     local label = string.format(digit_fmt .. ' ¦ %s', i, label_fn(item))
@@ -220,7 +235,7 @@ function M.execute(choices_cmd, on_selection, prompt)
   local tmpfile = vfn.tempname()
   local shell = api.nvim_get_option('shell')
   local shellcmdflag = api.nvim_get_option('shellcmdflag')
-  local popup_win, _, popup_opts = popup()
+  local popup_win, _, popup_opts = popup_create()
   local fzy = (prompt
     and string.format('%s | fzy -l %d -p "%s" > "%s"', choices_cmd, popup_opts.height, prompt, tmpfile)
     or string.format('%s | fzy -l %d > "%s"', choices_cmd, popup_opts.height, tmpfile)
@@ -240,8 +255,48 @@ function M.execute(choices_cmd, on_selection, prompt)
       end
     end;
   })
-  vim.cmd('startinsert!')
+  cmd('startinsert!')
 end
 
+
+function M.qwe(haystack, on_selection, prompt)
+    local prompt_win, prompt_buf, prompt_opts = popup_create()
+    api.nvim_buf_set_option(prompt_buf, 'buftype', 'prompt')
+    vfn.prompt_setprompt(prompt_buf, prompt)
+
+    local result_win, result_buf, result_opts = popup_create()
+    api.nvim_buf_set_lines(result_buf, 0, -1, true, haystack)
+    api.nvim_win_set_option(result_win, 'number', true)
+end
+
+local function default_edit(str)
+  if str and vim.trim(str) ~= '' then
+    cmd('e ' .. str)
+  end
+end
+
+local function list_dir(haystack, path)
+    local str, type, child
+    local handle = uv.fs_scandir(path)
+    while handle do
+        str, type = uv.fs_scandir_next(handle)
+        if not str then
+            break
+        end
+        child = path .. SEP .. str
+        if type == 'directory' then
+            list_dir(haystack, child)
+        else
+            haystack[#haystack + 1] = child
+        end
+    end
+end
+
+function M.file(path)
+    local haystack = {}
+    local cwd = vfn.getcwd()
+    list_dir(haystack, cwd)
+    M.qwe(haystack, default_edit, "File> ")
+end
 
 return M
