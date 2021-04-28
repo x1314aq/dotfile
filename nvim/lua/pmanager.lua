@@ -47,43 +47,44 @@ local function plug(args)
 end
 
 local function install(pkg)
+    local handle, pid
     if pkg.exists then
         do_log(string.format('%s is already exists', pkg.name))
         return
     end
     do_log('going to install package: ' .. pkg.name)
-    local handle, pid = uv.spawn(
+    handle, pid = uv.spawn(
         'git',
         {
             args = {'clone', '-b', pkg.branch, pkg.url, pkg.dir},
             stdio = {nil, filp, filp}
         },
-        function(code, signal)
-            do_log(string.format('install exited pid:%d code:%d signal:%d', pid, code, signal))
+        vim.schedule_wrap(function(code, signal)
+            do_log(string.format('install exited %s pid:%d code:%d signal:%d', tostring(handle), pid, code, signal))
             handle:close()
-        end
+        end)
     )
-    do_log(string.format('handle:%s pid:%d', tostring(handle), pid))
 end
 
 local function update(pkg)
+    local handle, pid
     if not pkg.exists then
         install(pkg)
         pkg.exists = true
         return
     end
     do_log('going to update package: ' .. pkg.name)
-    local handle, pid = uv.spawn(
+    handle, pid = uv.spawn(
         'git',
         {
             args = {'pull'},
             cwd = pkg.dir,
             stdio = {nil, filp, filp}
         },
-        function(code, signal)
-            do_log(string.format('update exited pid:%d code:%d signal:%d', pid, code, signal))
+        vim.schedule_wrap(function(code, signal)
+            do_log(string.format('install exited %s pid:%d code:%d signal:%d', tostring(handle), pid, code, signal))
             handle:close()
-        end
+        end)
     )
 end
 
