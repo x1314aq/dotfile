@@ -28,7 +28,6 @@ utils.opt('o', 'incsearch', true)
 utils.opt('o', 'smartcase', true)
 
 utils.opt('o', 'wildmenu', true)
--- utils.opt('o', 'cursorline', true)
 
 utils.opt('o', 'foldmethod', 'syntax')
 utils.opt('o', 'foldenable', false)

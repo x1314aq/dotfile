@@ -6,7 +6,7 @@ local api = vim.api
 local M = {}
 
 -- fzy lua native implementation
-local native = require('fzy/native')
+local native = require('fzy-lua-native')
 
 local SEP
 

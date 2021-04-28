@@ -14,6 +14,9 @@ require('keymaps')
 
 local Plug = require('pmanager').plug
 
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-lua/popup.nvim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
 Plug 'nvim-treesitter/nvim-treesitter'
+Plug {'x1314aq/fzy-lua-native', dest = 'start'}

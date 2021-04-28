@@ -17,10 +17,10 @@ utils.map('i', '<Right>', '')
 utils.map('i', '<BS>', '')
 utils.map('i', '<Del>', '')
 
-utils.map('n', '<leader>cw', ':cwindow<CR>')
-utils.map('n', '<leader>cc', ':cclose<CR>')
+utils.map('n', '<leader>cw', ':cwindow<CR>', {silent = true})
+utils.map('n', '<leader>cc', ':cclose<CR>', {silent = true})
 
 fzy = require('fzy')
 
-utils.map('n', '<leader>f', ':lua fzy.execute("fd", fzy.sinks.edit_file)<CR>', {silent = true})
-utils.map('n', '<leader>b', ':lua fzy.actions.buffers()<CR>', {silent = true})
+utils.map('n', '<leader>f', ':lua fzy.file()<CR>', {silent = true})
+utils.map('n', '<leader>b', ':lua fzy.buffer()<CR>', {silent = true})
