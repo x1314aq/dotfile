@@ -20,6 +20,7 @@ local function fst(xs)
   return xs and xs[1] or nil
 end
 
+cmd('highlight MyNormal ctermbg=Grey guibg=Grey')
 
 local function popup_create(para)
   local buf = api.nvim_create_buf(false, true)
@@ -32,14 +33,15 @@ local function popup_create(para)
   local opts = {
     relative = 'editor',
     style = 'minimal',
-    row = math.floor((lines - height) * 0.5),
-    col = math.floor((columns - width) * 0.5),
-    width = width,
-    height = height,
-    border = 'single',
+    row = para.row,
+    col = para.col,
+    width = para.width,
+    height = para.height,
+    border = 'none',
   }
-  local win = api.nvim_open_win(buf, true, opts)
+  local win = api.nvim_open_win(buf, para.enter, opts)
   api.nvim_win_set_option(win, 'wrap', false)
+  api.nvim_win_set_option(win, 'winhl', 'NormalFloat:MyNormal')
   return win, buf, opts
 end
 
@@ -260,13 +262,28 @@ end
 
 
 function M.qwe(haystack, on_selection, prompt)
-    local prompt_win, prompt_buf, prompt_opts = popup_create()
+    local para = {}
+    local columns = api.nvim_get_option('columns')
+    local lines = api.nvim_get_option('lines')
+    para.height = 1
+    para.width = math.floor(columns * 0.8)
+    para.row = math.floor(lines * 0.1)
+    para.col = math.floor((columns - para.width) * 0.5)
+    para.enter = true
+    local prompt_win, prompt_buf, prompt_opts = popup_create(para)
     api.nvim_buf_set_option(prompt_buf, 'buftype', 'prompt')
     vfn.prompt_setprompt(prompt_buf, prompt)
+    cmd('startinsert')
 
-    local result_win, result_buf, result_opts = popup_create()
+    para.height = math.floor(lines * 0.6)
+    para.row = para.row + 1
+    para.enter = false
+    local result_win, result_buf, result_opts = popup_create(para)
     api.nvim_buf_set_lines(result_buf, 0, -1, true, haystack)
     api.nvim_win_set_option(result_win, 'number', true)
+    api.nvim_win_set_option(result_win, 'cursorline', true)
+    api.nvim_buf_set_option(result_buf, 'readonly', true)
+    api.nvim_buf_set_option(result_buf, 'modifiable', false)
 end
 
 local function default_edit(str)

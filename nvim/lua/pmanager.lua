@@ -4,7 +4,7 @@ local cmd = vim.cmd
 local api = vim.api
 
 local URLPREFIX = 'https://github.com/'
-local LOGFILE = call('stdpath', 'cache') .. '/pmanager.log'
+local LOGFILE = string.format('%s/pmanager-%d.log', call('stdpath', 'cache'), uv.os_getpid())
 local PACKDIR = call('stdpath', 'data') .. '/site/pack/managed/'
 local filp = uv.fs_open(LOGFILE, 'w+', 384) -- 0600
 local packages = {}
