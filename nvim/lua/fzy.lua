@@ -20,29 +20,29 @@ local function fst(xs)
   return xs and xs[1] or nil
 end
 
-cmd('highlight MyNormal ctermbg=Grey guibg=Grey')
+local fzy_global = {}
 
 local function popup_create(para)
-  local buf = api.nvim_create_buf(false, true)
-  assert(buf, "Failed to create buffer")
-  api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
-  local columns = api.nvim_get_option('columns')
-  local lines = api.nvim_get_option('lines')
-  local width = math.floor(columns * 0.9)
-  local height = math.floor(lines * 0.8)
-  local opts = {
-    relative = 'editor',
-    style = 'minimal',
-    row = para.row,
-    col = para.col,
-    width = para.width,
-    height = para.height,
-    border = 'none',
-  }
-  local win = api.nvim_open_win(buf, para.enter, opts)
-  api.nvim_win_set_option(win, 'wrap', false)
-  api.nvim_win_set_option(win, 'winhl', 'NormalFloat:MyNormal')
-  return win, buf, opts
+    local buf = api.nvim_create_buf(false, true)
+    assert(buf, "Failed to create buffer")
+    api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
+    local columns = api.nvim_get_option('columns')
+    local lines = api.nvim_get_option('lines')
+    local width = math.floor(columns * 0.9)
+    local height = math.floor(lines * 0.8)
+    local opts = {
+        relative = 'editor',
+        style = 'minimal',
+        row = para.row,
+        col = para.col,
+        width = para.width,
+        height = para.height,
+        border = 'none',
+    }
+    local win = api.nvim_open_win(buf, para.enter, opts)
+    api.nvim_win_set_option(win, 'wrap', false)
+    api.nvim_win_set_option(win, 'winhl', 'NormalFloat:FzyNormal')
+    return win, buf, opts
 end
 
 
@@ -261,6 +261,68 @@ function M.execute(choices_cmd, on_selection, prompt)
 end
 
 
+local function buffer_on_lines()
+end
+
+local function buffer_on_detach()
+end
+
+local function do_close_window(entry)
+    api.nvim_win_close(entry[1], true)
+    api.nvim_win_close(entry[2], true)
+end
+
+function M.close_windows()
+    local prompt_buf = api.nvim_win_get_buf(0)
+    local entry = fzy_global[prompt_buf]
+    do_close_window(entry)
+end
+
+function M.open_file()
+    local prompt_buf = api.nvim_win_get_buf(0)
+    local entry = fzy_global[prompt_buf]
+    local result_buf = api.nvim_win_get_buf(entry[2])
+    local cursor = api.nvim_win_get_cursor(entry[2])
+    local str = api.nvim_buf_get_lines(result_buf, cursor[1] - 1, cursor[1], false)
+    do_close_window(entry)
+    api.nvim_command('edit ' .. str[1])
+end
+
+function M.move_cursor(increment)
+    local prompt_buf = api.nvim_win_get_buf(0)
+    local entry = fzy_global[prompt_buf]
+    local result_win = entry[2]
+    local count = api.nvim_buf_line_count(api.nvim_win_get_buf(result_win))
+    local cursor = api.nvim_win_get_cursor(result_win)
+    cursor[1] = cursor[1] + increment
+    if cursor[1] == 0 or cursor[1] == count + 1 then
+        return
+    end
+    api.nvim_win_set_cursor(result_win, cursor)
+    cmd('redraw!')
+end
+
+local function set_mappings(buf_nr)
+    local n_mappings = {
+        ['<CR>'] = 'open_file()',
+        ['q'] = 'close_windows()',
+        ['j'] = 'move_cursor(1)',
+        ['k'] = 'move_cursor(-1)'
+    }
+    local i_mappings = {
+        ['<CR>'] = 'open_file()',
+        ['<c-['] = 'close_windows()',
+        ['<c-j>'] = 'move_cursor(1)',
+        ['<c-k>'] = 'move_cursor(-1)'
+    }
+    for k, v in pairs(n_mappings) do
+        api.nvim_buf_set_keymap(buf_nr, 'n', k, ':lua require("fzy").' .. v .. '<CR>', {nowait = true, silent = true, noremap = true})
+    end
+    for k, v in pairs(i_mappings) do
+        api.nvim_buf_set_keymap(buf_nr, 'i', k, '<C-o>:lua require("fzy").' .. v .. '<CR>', {nowait = true, silent = true, noremap = true})
+    end
+end
+
 function M.qwe(haystack, on_selection, prompt)
     local para = {}
     local columns = api.nvim_get_option('columns')
@@ -273,7 +335,7 @@ function M.qwe(haystack, on_selection, prompt)
     local prompt_win, prompt_buf, prompt_opts = popup_create(para)
     api.nvim_buf_set_option(prompt_buf, 'buftype', 'prompt')
     vfn.prompt_setprompt(prompt_buf, prompt)
-    cmd('startinsert')
+    set_mappings(prompt_buf)
 
     para.height = math.floor(lines * 0.6)
     para.row = para.row + 1
@@ -284,35 +346,30 @@ function M.qwe(haystack, on_selection, prompt)
     api.nvim_win_set_option(result_win, 'cursorline', true)
     api.nvim_buf_set_option(result_buf, 'readonly', true)
     api.nvim_buf_set_option(result_buf, 'modifiable', false)
+
+--    api.nvim_buf_attach(prompt_buf, false, {
+--        on_lines = buffer_on_lines,
+--        on_detach = buffer_on_detach,
+--    })
+
+    fzy_global[prompt_buf] = {
+        prompt_win,
+        result_win
+    }
 end
 
 local function default_edit(str)
-  if str and vim.trim(str) ~= '' then
-    cmd('e ' .. str)
-  end
-end
-
-local function list_dir(haystack, path)
-    local str, type, child
-    local handle = uv.fs_scandir(path)
-    while handle do
-        str, type = uv.fs_scandir_next(handle)
-        if not str then
-            break
-        end
-        child = path .. SEP .. str
-        if type == 'directory' then
-            list_dir(haystack, child)
-        else
-            haystack[#haystack + 1] = child
-        end
+    if str and vim.trim(str) ~= '' then
+        cmd('e ' .. str)
     end
 end
 
+local function list_dir(path)
+    return vfn.systemlist('fd -L -t f . ' .. path)
+end
+
 function M.file(path)
-    local haystack = {}
-    local cwd = vfn.getcwd()
-    list_dir(haystack, cwd)
+    local haystack = list_dir(vfn.getcwd())
     M.qwe(haystack, default_edit, "File> ")
 end
 
