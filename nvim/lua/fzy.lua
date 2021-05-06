@@ -268,8 +268,8 @@ local function buffer_on_detach()
 end
 
 local function do_close_window(entry)
-    api.nvim_win_close(entry[1], true)
-    api.nvim_win_close(entry[2], true)
+    api.nvim_win_close(entry.pwin, true)
+    api.nvim_win_close(entry.rwin, true)
 end
 
 function M.close_windows()
@@ -281,17 +281,17 @@ end
 function M.open_file()
     local prompt_buf = api.nvim_win_get_buf(0)
     local entry = fzy_global[prompt_buf]
-    local result_buf = api.nvim_win_get_buf(entry[2])
-    local cursor = api.nvim_win_get_cursor(entry[2])
+    local result_buf = api.nvim_win_get_buf(entry.rwin)
+    local cursor = api.nvim_win_get_cursor(entry.rwin)
     local str = api.nvim_buf_get_lines(result_buf, cursor[1] - 1, cursor[1], false)
     do_close_window(entry)
-    api.nvim_command('edit ' .. str[1])
+    entry.on_selection(str[1])
 end
 
 function M.move_cursor(increment)
     local prompt_buf = api.nvim_win_get_buf(0)
     local entry = fzy_global[prompt_buf]
-    local result_win = entry[2]
+    local result_win = entry.rwin
     local count = api.nvim_buf_line_count(api.nvim_win_get_buf(result_win))
     local cursor = api.nvim_win_get_cursor(result_win)
     cursor[1] = cursor[1] + increment
@@ -353,8 +353,9 @@ function M.qwe(haystack, on_selection, prompt)
 --    })
 
     fzy_global[prompt_buf] = {
-        prompt_win,
-        result_win
+        pwin = prompt_win,
+        rwin = result_win,
+        on_selection = on_selection
     }
 end
 
@@ -371,6 +372,7 @@ end
 function M.file(path)
     local haystack = list_dir(vfn.getcwd())
     M.qwe(haystack, default_edit, "File> ")
+    --cmd('startinsert')
 end
 
 return M
