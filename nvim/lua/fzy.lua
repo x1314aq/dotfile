@@ -264,14 +264,12 @@ end
 local function buffer_on_lines(str, buf, changedtick, first, last, newlast, bytes)
     local entry = fzy_global[buf]
     local rwin = entry.rwin
+    local rbuf = api.nvim_win_get_buf(rwin)
     local line = api.nvim_buf_get_lines(buf, first, newlast, true)[1]
     local query = string.sub(line, string.len(entry.prompt) + 1)
-    if query == '' then return end
+    if query == '' then vim.schedule(function() api.nvim_buf_set_lines(rbuf, 0, -1, true, entry.haystack) end) end
 
-    local rbuf = api.nvim_win_get_buf(rwin)
-    local lines = api.nvim_buf_get_lines(rbuf, 0, -1, true)
-
-    local res = native.filter(query, lines, true)
+    local res = native.filter(query, entry.haystack, true)
     table.sort(res, function(a, b) return a[3] > b[3] end)
     local new_lines = {}
     vim.tbl_map(function(a) table.insert(new_lines, a[1]) end, res)
@@ -281,7 +279,8 @@ local function buffer_on_lines(str, buf, changedtick, first, last, newlast, byte
 end
 
 local function buffer_on_detach(str, buf)
-    print("buffer_on_detach called")
+    fzy_global[buf] = nil
+    --print("buffer_on_detach called")
 end
 
 local function do_close_window(entry)
@@ -373,7 +372,8 @@ function M.qwe(haystack, on_selection, prompt)
         pwin = prompt_win,
         rwin = result_win,
         on_selection = on_selection,
-        prompt = prompt
+        prompt = prompt,
+        haystack = haystack
     }
 end
 
