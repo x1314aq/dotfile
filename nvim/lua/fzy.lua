@@ -380,6 +380,7 @@ end
 local function default_edit(str)
     if str and vim.trim(str) ~= '' then
         cmd('e ' .. str)
+        cmd('stopinsert')
     end
 end
 
@@ -397,7 +398,7 @@ function M.file(path)
     end
     --print(pwd, #pwd, vim.inspect(haystack))
     M.qwe(haystack, default_edit, "File> ")
-    --cmd('startinsert')
+    cmd('startinsert')
 end
 
 return M
