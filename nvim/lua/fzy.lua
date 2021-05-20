@@ -261,10 +261,27 @@ function M.execute(choices_cmd, on_selection, prompt)
 end
 
 
-local function buffer_on_lines()
+local function buffer_on_lines(str, buf, changedtick, first, last, newlast, bytes)
+    local entry = fzy_global[buf]
+    local rwin = entry.rwin
+    local line = api.nvim_buf_get_lines(buf, first, newlast, true)[1]
+    local query = string.sub(line, string.len(entry.prompt) + 1)
+    if query == '' then return end
+
+    local rbuf = api.nvim_win_get_buf(rwin)
+    local lines = api.nvim_buf_get_lines(rbuf, 0, -1, true)
+
+    local res = native.filter(query, lines, true)
+    table.sort(res, function(a, b) return a[3] > b[3] end)
+    local new_lines = {}
+    vim.tbl_map(function(a) table.insert(new_lines, a[1]) end, res)
+
+    vim.schedule(function() api.nvim_buf_set_lines(rbuf, 0, -1, true, new_lines) end)
+    --print(vim.inspect(new_lines))
 end
 
-local function buffer_on_detach()
+local function buffer_on_detach(str, buf)
+    print("buffer_on_detach called")
 end
 
 local function do_close_window(entry)
@@ -344,18 +361,19 @@ function M.qwe(haystack, on_selection, prompt)
     api.nvim_buf_set_lines(result_buf, 0, -1, true, haystack)
     api.nvim_win_set_option(result_win, 'number', true)
     api.nvim_win_set_option(result_win, 'cursorline', true)
-    api.nvim_buf_set_option(result_buf, 'readonly', true)
-    api.nvim_buf_set_option(result_buf, 'modifiable', false)
+    --api.nvim_buf_set_option(result_buf, 'readonly', true)
+    --api.nvim_buf_set_option(result_buf, 'modifiable', false)
 
---    api.nvim_buf_attach(prompt_buf, false, {
---        on_lines = buffer_on_lines,
---        on_detach = buffer_on_detach,
---    })
+    api.nvim_buf_attach(prompt_buf, false, {
+        on_lines = buffer_on_lines,
+        on_detach = buffer_on_detach,
+    })
 
     fzy_global[prompt_buf] = {
         pwin = prompt_win,
         rwin = result_win,
-        on_selection = on_selection
+        on_selection = on_selection,
+        prompt = prompt
     }
 end
 
@@ -370,7 +388,14 @@ local function list_dir(path)
 end
 
 function M.file(path)
-    local haystack = list_dir(vfn.getcwd())
+    local pwd = vfn.getcwd()
+    local haystack = list_dir(pwd)
+    for i = 1, #haystack do
+        if vim.startswith(haystack[i], pwd) then
+            haystack[i] = string.sub(haystack[i], #pwd + 2)
+        end
+    end
+    --print(pwd, #pwd, vim.inspect(haystack))
     M.qwe(haystack, default_edit, "File> ")
     --cmd('startinsert')
 end
