@@ -21,15 +21,12 @@ local function fst(xs)
 end
 
 local fzy_global = {}
+local fzy_cache = {}
 
 local function popup_create(para)
     local buf = api.nvim_create_buf(false, true)
     assert(buf, "Failed to create buffer")
     api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
-    local columns = api.nvim_get_option('columns')
-    local lines = api.nvim_get_option('lines')
-    local width = math.floor(columns * 0.9)
-    local height = math.floor(lines * 0.8)
     local opts = {
         relative = 'editor',
         style = 'minimal',
@@ -261,24 +258,34 @@ function M.execute(choices_cmd, on_selection, prompt)
 end
 
 
-local function buffer_on_lines(str, buf, changedtick, first, last, newlast, bytes)
-    local entry = fzy_global[buf]
+local function update_result(pbuf)
+    local entry = fzy_global[pbuf]
     local rwin = entry.rwin
     local rbuf = api.nvim_win_get_buf(rwin)
-    local line = api.nvim_buf_get_lines(buf, first, newlast, true)[1]
+    local line = api.nvim_buf_get_lines(pbuf, 0, 1, true)[1]
     local query = string.sub(line, string.len(entry.prompt) + 1)
-    if query == '' then vim.schedule(function() api.nvim_buf_set_lines(rbuf, 0, -1, true, entry.haystack) end) end
+    if query == '' or query == entry.last_query then return end
 
     local res = native.filter(query, entry.haystack, true)
     table.sort(res, function(a, b) return a[3] > b[3] end)
+    local rwin_height = api.nvim_win_get_height(rwin)
+    local num_lines = math.min(rwin_height, vim.tbl_count(res))
     local new_lines = {}
-    vim.tbl_map(function(a) table.insert(new_lines, a[1]) end, res)
+    for i = 1, num_lines do
+        new_lines[i] = res[i][1]
+    end
 
-    vim.schedule(function() api.nvim_buf_set_lines(rbuf, 0, -1, true, new_lines) end)
-    --print(vim.inspect(new_lines))
+    api.nvim_buf_set_lines(rbuf, 0, -1, true, new_lines)
+    entry.last_query = query
+end
+
+local function buffer_on_lines(str, buf, changedtick, first, last, newlast, bytes)
 end
 
 local function buffer_on_detach(str, buf)
+    local timer = fzy_global[buf].timer
+    timer:stop()
+    timer:close()
     fzy_global[buf] = nil
     --print("buffer_on_detach called")
 end
@@ -363,8 +370,11 @@ function M.qwe(haystack, on_selection, prompt)
     --api.nvim_buf_set_option(result_buf, 'readonly', true)
     --api.nvim_buf_set_option(result_buf, 'modifiable', false)
 
+    local timer = uv.new_timer();
+    timer:start(1000, 1000, vim.schedule_wrap(function() update_result(prompt_buf) end))
+
     api.nvim_buf_attach(prompt_buf, false, {
-        on_lines = buffer_on_lines,
+        --on_lines = buffer_on_lines,
         on_detach = buffer_on_detach,
     })
 
@@ -373,7 +383,8 @@ function M.qwe(haystack, on_selection, prompt)
         rwin = result_win,
         on_selection = on_selection,
         prompt = prompt,
-        haystack = haystack
+        haystack = haystack,
+        timer = timer
     }
 end
 
@@ -390,7 +401,11 @@ end
 
 function M.file(path)
     local pwd = vfn.getcwd()
-    local haystack = list_dir(pwd)
+    local haystack = fzy_cache[pwd]
+    if haystack == nil then
+        haystack = list_dir(pwd)
+        fzy_cache[pwd] = haystack
+    end
     for i = 1, #haystack do
         if vim.startswith(haystack[i], pwd) then
             haystack[i] = string.sub(haystack[i], #pwd + 2)
@@ -399,6 +414,9 @@ function M.file(path)
     --print(pwd, #pwd, vim.inspect(haystack))
     M.qwe(haystack, default_edit, "File> ")
     cmd('startinsert')
+end
+
+function M.grep()
 end
 
 return M
