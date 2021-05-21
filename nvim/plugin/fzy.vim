@@ -75,8 +75,9 @@ highlight default link FzyResultsDiffDelete DiffDelete
 highlight default link FzyResultsDiffUntracked NonText
 
 " Commands
-command! -bang FzyFile :lua require('fzy').file()
-command! -bang FzyBuffer :lua require('fzy').buffer()
+command! -nargs=0 -bang FzyFile :lua require('fzy').file()
+command! -nargs=0 -bang FzyBuffer :lua require('fzy').buffer()
+command! -nargs=+ -bang FzyGrep :lua require('fzy').grep(<q-args>, "<bang>")
 
 let &cpo = s:saved_cpo " restore user coptions
 unlet s:saved_cpo

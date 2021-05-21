@@ -22,3 +22,5 @@ utils.map('n', '<leader>cc', ':cclose<CR>', {silent = true, nowait = true})
 
 utils.map('n', '<leader>f', ':FzyFile<CR>', {silent = true, nowait = true})
 utils.map('n', '<leader>b', ':FzyBuffer<CR>', {silent = true, nowait = true})
+utils.map('n', '<leader>s', ':FzyGrep ', {nowait = true})
+utils.map('n', '<leader>S', ':FzyGrep! ', {nowait = true})

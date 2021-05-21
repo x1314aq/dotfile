@@ -416,7 +416,20 @@ function M.file(path)
     cmd('startinsert')
 end
 
-function M.grep()
+function M.grep(args, bang)
+    if args == "" then return end
+    local a = vim.split(args, ' ', true)
+    local haystack = fzy_cache[a]
+    if haystack == nil then
+        local cmd = 'rg'
+        for i = 1, #a do
+            cmd = cmd .. ' -e ' .. a[i]
+        end
+        haystack = vfn.systemlist(cmd)
+        fzy_cache[a] = haystack
+    end
+    M.qwe(haystack, default_edit, "Grep> ")
+    cmd('startinsert')
 end
 
 return M
