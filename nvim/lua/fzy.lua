@@ -258,28 +258,15 @@ function M.execute(choices_cmd, on_selection, prompt)
 end
 
 
-local function update_result(pbuf)
+local function buffer_on_lines(str, pbuf, changedtick, first, last, newlast, bytes)
     local entry = fzy_global[pbuf]
     local rwin = entry.rwin
     local rbuf = api.nvim_win_get_buf(rwin)
     local line = api.nvim_buf_get_lines(pbuf, 0, 1, true)[1]
     local query = string.sub(line, string.len(entry.prompt) + 1)
-    if query == '' or query == entry.last_query then return end
 
-    local res = native.filter(query, entry.haystack, true)
-    table.sort(res, function(a, b) return a[3] > b[3] end)
-    local rwin_height = api.nvim_win_get_height(rwin)
-    local num_lines = math.min(rwin_height, vim.tbl_count(res))
-    local new_lines = {}
-    for i = 1, num_lines do
-        new_lines[i] = res[i][1]
-    end
-
-    api.nvim_buf_set_lines(rbuf, 0, -1, true, new_lines)
-    entry.last_query = query
-end
-
-local function buffer_on_lines(str, buf, changedtick, first, last, newlast, bytes)
+    if query ~= '' then return end
+    vim.schedule(function() api.nvim_buf_set_lines(rbuf, 0, -1, true, entry.haystack) end)
 end
 
 local function buffer_on_detach(str, buf)
@@ -346,7 +333,7 @@ local function set_mappings(buf_nr)
     end
 end
 
-function M.qwe(haystack, on_selection, prompt)
+function M.qwe(haystack, on_selection, on_timeout, prompt)
     local para = {}
     local columns = api.nvim_get_option('columns')
     local lines = api.nvim_get_option('lines')
@@ -371,10 +358,10 @@ function M.qwe(haystack, on_selection, prompt)
     --api.nvim_buf_set_option(result_buf, 'modifiable', false)
 
     local timer = uv.new_timer();
-    timer:start(1000, 1000, vim.schedule_wrap(function() update_result(prompt_buf) end))
+    timer:start(1000, 1000, vim.schedule_wrap(function() on_timeout(prompt_buf) end))
 
     api.nvim_buf_attach(prompt_buf, false, {
-        --on_lines = buffer_on_lines,
+        on_lines = buffer_on_lines,
         on_detach = buffer_on_detach,
     })
 
@@ -388,22 +375,69 @@ function M.qwe(haystack, on_selection, prompt)
     }
 end
 
-local function default_edit(str)
-    if str and vim.trim(str) ~= '' then
-        cmd('e ' .. str)
-        cmd('stopinsert')
+local function default_timeout(pbuf)
+    local entry = fzy_global[pbuf]
+    local rwin = entry.rwin
+    local rbuf = api.nvim_win_get_buf(rwin)
+    local line = api.nvim_buf_get_lines(pbuf, 0, 1, true)[1]
+    local query = string.sub(line, string.len(entry.prompt) + 1)
+    if query == '' or query == entry.last_query then return end
+
+    local res = native.filter(query, entry.haystack, true)
+    table.sort(res, function(a, b) return a[3] > b[3] end)
+    local rwin_height = api.nvim_win_get_height(rwin)
+    local num_lines = math.min(rwin_height, vim.tbl_count(res))
+    local new_lines = {}
+    for i = 1, num_lines do
+        new_lines[i] = res[i][1]
     end
+
+    api.nvim_buf_set_lines(rbuf, 0, -1, true, new_lines)
+    entry.last_query = query
 end
 
-local function list_dir(path)
-    return vfn.systemlist('fd -L -t f . ' .. path)
+local function default_edit(str)
+    if str and vim.trim(str) == '' then return end
+    cmd('e ' .. str)
+    cmd('stopinsert')
+end
+
+local function grep_edit(str)
+    if str and vim.trim(str) == '' then return end
+    local tmp = vim.split(str, ':', true)
+    cmd('e ' .. tmp[1])
+    cmd('stopinsert')
+    api.nvim_win_set_cursor(0, {tonumber(tmp[2]), tonumber(tmp[3]) - 1})
+end
+
+local grep_tmp = {}
+
+local function grep_timeout(pbuf)
+    local entry = fzy_global[pbuf]
+    local rwin = entry.rwin
+    local rbuf = api.nvim_win_get_buf(rwin)
+    local line = api.nvim_buf_get_lines(pbuf, 0, 1, true)[1]
+    local query = string.sub(line, string.len(entry.prompt) + 1)
+    if query == '' or query == entry.last_query then return end
+
+    local res = native.filter(query, vim.tbl_keys(grep_tmp), true)
+    table.sort(res, function(a, b) return a[3] > b[3] end)
+    local rwin_height = api.nvim_win_get_height(rwin)
+    local num_lines = math.min(rwin_height, vim.tbl_count(res))
+    local new_lines = {}
+    for i = 1, num_lines do
+        new_lines[i] = grep_tmp[res[i][1]]
+    end
+
+    api.nvim_buf_set_lines(rbuf, 0, -1, true, new_lines)
+    entry.last_query = query
 end
 
 function M.file(path)
     local pwd = vfn.getcwd()
     local haystack = fzy_cache[pwd]
     if haystack == nil then
-        haystack = list_dir(pwd)
+        haystack = vfn.systemlist('fd -L -t f . ' .. pwd)
         fzy_cache[pwd] = haystack
     end
     for i = 1, #haystack do
@@ -412,7 +446,7 @@ function M.file(path)
         end
     end
     --print(pwd, #pwd, vim.inspect(haystack))
-    M.qwe(haystack, default_edit, "File> ")
+    M.qwe(haystack, default_edit, default_timeout, "File> ")
     cmd('startinsert')
 end
 
@@ -421,14 +455,16 @@ function M.grep(args, bang)
     local a = vim.split(args, ' ', true)
     local haystack = fzy_cache[a]
     if haystack == nil then
-        local cmd = 'rg'
+        local cmd = 'rg -L --vimgrep'
+        if bang == '!' then cmd = cmd .. ' -F ' end
         for i = 1, #a do
             cmd = cmd .. ' -e ' .. a[i]
         end
         haystack = vfn.systemlist(cmd)
         fzy_cache[a] = haystack
     end
-    M.qwe(haystack, default_edit, "Grep> ")
+    vim.tbl_map(function(e) grep_tmp[vim.split(e, ':', true)[4]] = e end, haystack)
+    M.qwe(haystack, grep_edit, grep_timeout, "Grep> ")
     cmd('startinsert')
 end
 
