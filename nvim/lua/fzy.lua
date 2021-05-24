@@ -393,6 +393,12 @@ local function default_timeout(pbuf)
     end
 
     api.nvim_buf_set_lines(rbuf, 0, -1, true, new_lines)
+    for i = 1, num_lines do
+        for j = 1, #res[i][2] do
+            local col = res[i][2][j]
+            api.nvim_buf_add_highlight(rbuf, -1, "FzyMatching", i - 1, col - 1, col)
+        end
+    end
     entry.last_query = query
 end
 
@@ -430,6 +436,12 @@ local function grep_timeout(pbuf)
     end
 
     api.nvim_buf_set_lines(rbuf, 0, -1, true, new_lines)
+    for i = 1, num_lines do
+        for j = 1, #res[i][2] do
+            local col = res[i][2][j] + #new_lines[i] - #res[i][1]
+            api.nvim_buf_add_highlight(rbuf, -1, "FzyMatching", i - 1, col - 1, col)
+        end
+    end
     entry.last_query = query
 end
 
