@@ -351,7 +351,7 @@ function M.qwe(haystack, on_selection, on_timeout, prompt)
     para.row = para.row + 1
     para.enter = false
     local result_win, result_buf, result_opts = popup_create(para)
-    api.nvim_buf_set_lines(result_buf, 0, -1, true, haystack)
+--    api.nvim_buf_set_lines(result_buf, 0, -1, true, haystack)
     api.nvim_win_set_option(result_win, 'number', true)
     api.nvim_win_set_option(result_win, 'cursorline', true)
     --api.nvim_buf_set_option(result_buf, 'readonly', true)
@@ -431,12 +431,18 @@ local function grep_timeout(pbuf)
     local rwin_height = api.nvim_win_get_height(rwin)
     local num_lines = math.min(rwin_height, vim.tbl_count(res))
     local new_lines = {}
+    local hls = {}
     for i = 1, num_lines do
-        new_lines[i] = grep_tmp[res[i][1]]
+        local tmp = grep_tmp[res[i][1]]
+        tmp[4] = res[i][1]
+        new_lines[i] = table.concat(tmp, ':')
+        hls[i] = {#tmp[1], #tmp[2] + #tmp[3]}
     end
 
     api.nvim_buf_set_lines(rbuf, 0, -1, true, new_lines)
     for i = 1, num_lines do
+        api.nvim_buf_add_highlight(rbuf, -1, "FzyResultsClass", i - 1, 0, hls[i][1])
+        api.nvim_buf_add_highlight(rbuf, -1, "FzyResultsLineNr", i - 1, hls[i][1] + 1, hls[i][1] + 1 + hls[i][2] + 1)
         for j = 1, #res[i][2] do
             local col = res[i][2][j] + #new_lines[i] - #res[i][1]
             api.nvim_buf_add_highlight(rbuf, -1, "FzyMatching", i - 1, col - 1, col)
@@ -475,7 +481,10 @@ function M.grep(args, bang)
         haystack = vfn.systemlist(cmd)
         fzy_cache[a] = haystack
     end
-    vim.tbl_map(function(e) grep_tmp[vim.split(e, ':', true)[4]] = e end, haystack)
+    vim.tbl_map(function(e)
+        local tmp = vim.split(e, ':', true)
+        grep_tmp[tmp[4]] = {tmp[1], tmp[2], tmp[3]}
+    end, haystack)
     M.qwe(haystack, grep_edit, grep_timeout, "Grep> ")
     cmd('startinsert')
 end
