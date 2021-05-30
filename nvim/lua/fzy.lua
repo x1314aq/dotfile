@@ -3,6 +3,8 @@ local vfn = vim.fn
 local cmd = vim.cmd
 local api = vim.api
 
+local Job = require('plenary/job')
+
 local M = {}
 
 -- fzy lua native implementation
@@ -358,7 +360,7 @@ function M.qwe(haystack, on_selection, on_timeout, prompt)
     --api.nvim_buf_set_option(result_buf, 'modifiable', false)
 
     local timer = uv.new_timer();
-    timer:start(1000, 1000, vim.schedule_wrap(function() on_timeout(prompt_buf) end))
+    timer:start(500, 500, vim.schedule_wrap(function() on_timeout(prompt_buf) end))
 
     api.nvim_buf_attach(prompt_buf, false, {
         on_lines = buffer_on_lines,
@@ -455,7 +457,7 @@ function M.file(path)
     local pwd = vfn.getcwd()
     local haystack = fzy_cache[pwd]
     if haystack == nil then
-        haystack = vfn.systemlist('fd -L -t f . ' .. pwd)
+        haystack = vfn.systemlist("fd -L -t f . " .. pwd)
         fzy_cache[pwd] = haystack
     end
     for i = 1, #haystack do
@@ -465,7 +467,65 @@ function M.file(path)
     end
     --print(pwd, #pwd, vim.inspect(haystack))
     M.qwe(haystack, default_edit, default_timeout, "File> ")
-    cmd('startinsert')
+    cmd("startinsert")
+end
+
+local function async_file_timeout(pbuf)
+    local entry = fzy_global[pbuf]
+    local rwin = entry.rwin
+    local rbuf = api.nvim_win_get_buf(rwin)
+    local line = api.nvim_buf_get_lines(pbuf, 0, 1, true)[1]
+    local query = string.sub(line, string.len(entry.prompt) + 1)
+    if query == '' or query == entry.last_query then return end
+
+    local res = native.filter(query, entry.haystack, true)
+    table.sort(res, function(a, b) return a[3] > b[3] end)
+    local rwin_height = api.nvim_win_get_height(rwin)
+    local num_lines = math.min(rwin_height, vim.tbl_count(res))
+    local new_lines = {}
+    for i = 1, num_lines do
+        new_lines[i] = res[i][1]
+    end
+
+    api.nvim_buf_set_lines(rbuf, 0, -1, true, new_lines)
+    for i = 1, num_lines do
+        for j = 1, #res[i][2] do
+            local col = res[i][2][j]
+            api.nvim_buf_add_highlight(rbuf, -1, "FzyMatching", i - 1, col - 1, col)
+        end
+    end
+    entry.last_query = query
+end
+
+function M.async_file(path)
+    local pwd = vfn.getcwd()
+    local haystack = fzy_cache[pwd]
+    if haystack == nil then
+        haystack = {}
+        local job = Job:new({
+            command = 'fd',
+            args = {"-L", "-t", 'f', '.', pwd},
+            cwd = pwd,
+            on_stdout = function(_, line)
+                print("[stdout]", line)
+                table.insert(haystack, line)
+            end,
+            on_stderr = function(_, line)
+            end,
+            on_start = function()
+            end,
+            on_exit = function(code)
+                if code == 0 then
+                    fzy_cache[pwd] = haystack
+                end
+            end,
+            enable_recording = false
+        })
+        --fzy_cache[pwd] = haystack
+        job:start()
+    end
+    M.qwe(haystack, default_edit, default_timeout, "File> ")
+    cmd("startinsert")
 end
 
 function M.grep(args, bang)
@@ -473,7 +533,7 @@ function M.grep(args, bang)
     local a = vim.split(args, ' ', true)
     local haystack = fzy_cache[a]
     if haystack == nil then
-        local cmd = 'rg -L --vimgrep'
+        local cmd = "rg -L --vimgrep"
         if bang == '!' then cmd = cmd .. ' -F ' end
         for i = 1, #a do
             cmd = cmd .. ' -e ' .. a[i]

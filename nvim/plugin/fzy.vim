@@ -76,6 +76,7 @@ highlight default link FzyResultsDiffUntracked NonText
 
 " Commands
 command! -nargs=0 -bang FzyFile :lua require('fzy').file()
+command! -nargs=0 -bang FzyAsyncFile :lua require('fzy').async_file()
 command! -nargs=0 -bang FzyBuffer :lua require('fzy').buffer()
 command! -nargs=+ -bang FzyGrep :lua require('fzy').grep(<q-args>, "<bang>")
 

@@ -15,7 +15,7 @@ utils.map('i', '<Down>', '')
 utils.map('i', '<Left>', '')
 utils.map('i', '<Right>', '')
 -- utils.map('i', '<BS>', '')
-utils.map('i', '<Del>', '')
+-- utils.map('i', '<Del>', '')
 
 utils.map('n', '<leader>cw', ':cwindow<CR>', {silent = true, nowait = true})
 utils.map('n', '<leader>cc', ':cclose<CR>', {silent = true, nowait = true})
