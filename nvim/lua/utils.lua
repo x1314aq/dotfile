@@ -14,15 +14,15 @@ function M.map(mode, lhs, rhs, opts)
 end
 
 function M.toggle_tab()
-    if scopes['o']['expandtab'] then
-        --vim.api.nvim_echo('Toggle TAB')
-        M.opt('o', 'expandtab', false)
+    if scopes['b']['expandtab'] then
+        print('Toggle TAB')
+        M.opt('b', 'expandtab', false)
         M.opt('o', 'softtabstop', 0)
         M.opt('o', 'shiftwidth', 8)
         M.opt('o', 'tabstop', 8)
     else
-        --vim.api.nvim_echo('Toggle SAPCE')
-        M.opt('o', 'expandtab', true)
+        print('Toggle SAPCE')
+        M.opt('b', 'expandtab', true)
         M.opt('o', 'softtabstop', 4)
         M.opt('o', 'shiftwidth', 4)
         M.opt('o', 'tabstop', 4)

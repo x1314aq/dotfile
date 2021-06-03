@@ -533,7 +533,7 @@ function M.grep(args, bang)
     local a = vim.split(args, ' ', true)
     local haystack = fzy_cache[a]
     if haystack == nil then
-        local cmd = "rg -L --vimgrep"
+        local cmd = "rg -L --vimgrep --no-messages"
         if bang == '!' then cmd = cmd .. ' -F ' end
         for i = 1, #a do
             cmd = cmd .. ' -e ' .. a[i]

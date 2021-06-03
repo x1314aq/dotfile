@@ -20,6 +20,8 @@ utils.map('i', '<Right>', '')
 utils.map('n', '<leader>cw', ':cwindow<CR>', {silent = true, nowait = true})
 utils.map('n', '<leader>cc', ':cclose<CR>', {silent = true, nowait = true})
 
+utils.map('n', '<M-t>', ':lua require("utils").toggle_tab()<CR>', {silent = true, nowait = true})
+
 utils.map('n', '<leader>f', ':FzyFile<CR>', {silent = true, nowait = true})
 utils.map('n', '<leader>b', ':FzyBuffer<CR>', {silent = true, nowait = true})
 utils.map('n', '<leader>s', ':FzyGrep ', {nowait = true})
