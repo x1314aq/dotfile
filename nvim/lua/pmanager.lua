@@ -3,9 +3,11 @@ local call = vim.call
 local cmd = vim.cmd
 local api = vim.api
 
+local OS = require('platform')
+
 local URLPREFIX = 'https://github.com/'
-local LOGFILE = string.format('%s/pmanager-%d.log', call('stdpath', 'cache'), uv.os_getpid())
-local PACKDIR = call('stdpath', 'data') .. '/site/pack/managed/'
+local LOGFILE = string.format(call('stdpath', 'cache') .. OS.SEP .. 'pmanager-%d.log', uv.os_getpid())
+local PACKDIR = call('stdpath', 'data') .. OS.SEP .. 'site' .. OS.SEP .. 'pack' .. OS.SEP .. 'managed' .. OS.SEP
 local filp = uv.fs_open(LOGFILE, 'w+', 384) -- 0600
 local packages = {}
 local nr_pkgs = 0
@@ -26,9 +28,9 @@ local function plug(args)
     end
 
     if args.dest then
-        dir = PACKDIR .. args.dest .. '/' .. name
+        dir = PACKDIR .. args.dest .. OS.SEP .. name
     else
-        dir = PACKDIR .. 'opt/' .. name
+        dir = PACKDIR .. 'opt' .. OS.SEP .. name
     end
 
     packages[name] = {
@@ -96,7 +98,7 @@ local function rmdir(path)
         if not name then
             break
         end
-        child = path .. '/' .. name
+        child = path .. OS.SEP .. name
         if type == 'directory' then
             rmdir(child)
         else
@@ -131,7 +133,7 @@ local function clean()
             break
         end
         if type == 'directory' then
-            clean_dir(PACKDIR .. '/' .. name)
+            clean_dir(PACKDIR .. OS.SEP .. name)
         end
     end
 end

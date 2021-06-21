@@ -45,5 +45,8 @@ utils.opt('o', 'signcolumn', 'number')
 utils.opt('o', 'termguicolors', true)
 utils.opt('o', 'inccommand', 'nosplit')
 
+utils.opt('o', 'breakindent', true)
+utils.opt('o', 'completeopt', 'menuone,noselect')
+
 -- Highlight on yank
 cmd 'au TextYankPost * lua vim.highlight.on_yank {on_visual = false}'

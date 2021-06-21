@@ -4,19 +4,12 @@ local cmd = vim.cmd
 local api = vim.api
 
 local Job = require('plenary/job')
+local OS = require('platform')
 
 local M = {}
 
 -- fzy lua native implementation
 local native = require('fzy-lua-native')
-
-local SEP
-
-if jit.os == 'Windows' then
-    SEP = '\\'
-else
-    SEP = '/'
-end
 
 local function fst(xs)
   return xs and xs[1] or nil
