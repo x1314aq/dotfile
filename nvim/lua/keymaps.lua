@@ -31,7 +31,7 @@ utils.map('n', '<M-t>', '<cmd>lua require("utils").toggle_tab()<CR>', {silent = 
 --utils.map('n', '<leader>S', ':FzyGrep! ', {nowait = true})
 
 -- telescope maps
-utils.map('n', '<leader>f', '<cmd>lua require("telescope.builtin").find_files()<CR>', {silent = true, nowait = true})
+utils.map('n', '<leader>f', '<cmd>lua require("telescope.builtin").find_files({follow=true})<CR>', {silent = true, nowait = true})
 utils.map('n', '<leader>b', '<cmd>lua require("telescope.builtin").buffers()<CR>', {silent = true, nowait = true})
-utils.map('n', '<leader>s', '<cmd>lua require("telescope.builtin").live_grep()<CR>', {silent = true, nowait = true})
+utils.map('n', '<leader>s', '<cmd>lua require("telescope.builtin").live_grep({grep_open_files=true)<CR>', {silent = true, nowait = true})
 utils.map('n', '<leader>S', '<cmd>lua require("telescope.builtin").grep_string()<CR>', {silent = true, nowait = true})

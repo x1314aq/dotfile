@@ -5,6 +5,7 @@ local cmd = vim.cmd
 cmd 'syntax enable'
 cmd 'filetype plugin indent on'
 
+utils.opt('w', 'wrap', false)
 utils.opt('w', 'number', true)
 utils.opt('b', 'expandtab', true)
 utils.opt('o', 'smarttab', true)
