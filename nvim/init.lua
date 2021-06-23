@@ -29,7 +29,7 @@ require('onedark').setup()
 -- statusline
 require('statusline')
 
--- lsp and completion
+-- lsp, completion and tree-sitter
 require('lsp')
 
 -- fuzzy finder

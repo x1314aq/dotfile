@@ -24,6 +24,8 @@ utils.map('n', '<leader>cw', '<cmd>cwindow<CR>', {silent = true, nowait = true})
 utils.map('n', '<leader>cc', '<cmd>cclose<CR>', {silent = true, nowait = true})
 
 utils.map('n', '<M-t>', '<cmd>lua require("utils").toggle_tab()<CR>', {silent = true, nowait = true})
+utils.map('n', '<M-w>', '<cmd>vs term://bash<CR>', {silent = true, nowait = true})
+utils.map('t', '<Esc>', '<c-\\><c-n>', {silent = true, nowait = true})
 
 --utils.map('n', '<leader>f', ':FzyFile<CR>', {silent = true, nowait = true})
 --utils.map('n', '<leader>b', ':FzyBuffer<CR>', {silent = true, nowait = true})
