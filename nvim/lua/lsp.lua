@@ -81,8 +81,14 @@ vim.api.nvim_set_keymap('i', "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 vim.api.nvim_set_keymap('s', "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 
 -- treesitter config
+-- add more languages here on Windows
+if vim.fn.has("win32") == 1 then
+  langs = {"c"}
+else
+  langs = {"c", "cpp", "lua"}
+end
 require('nvim-treesitter.configs').setup {
-  ensure_installed = {"c", "cpp", "lua"},
+  ensure_installed = langs,
   highlight = {
     enable = true
   },

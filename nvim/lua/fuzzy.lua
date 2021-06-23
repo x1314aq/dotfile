@@ -16,6 +16,16 @@ end
 
 require('telescope').setup{
   defaults = {
+    mappings = {
+      i = {
+        ["<C-n>"] = false,
+        ["<C-p>"] = false,
+        ["<C-j>"] = require('telescope.actions').move_selection_next,
+        ["<C-k>"] = require('telescope.actions').move_selection_previous,
+      },
+      n = {
+      },
+    },
     vimgrep_arguments = {
       'rg',
       '--color=never',
