@@ -96,14 +96,8 @@ vim.api.nvim_set_keymap('i', "<CR>", "compe#confirm('<CR>')", {expr = true, sile
 vim.api.nvim_set_keymap('i', "<c-e>", "compe#close('<c-e>')", {expr = true, silent = true, noremap = true})
 
 -- treesitter config
--- add more languages here on Windows
-if vim.fn.has("win32") == 1 then
-  langs = {"c"}
-else
-  langs = {"c", "cpp", "lua"}
-end
 require('nvim-treesitter.configs').setup {
-  ensure_installed = langs,
+  ensure_installed = {"c", "cpp", "lua"},
   highlight = {
     enable = true
   },
