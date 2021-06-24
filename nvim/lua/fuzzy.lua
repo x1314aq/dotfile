@@ -82,6 +82,22 @@ require('telescope').setup{
 
 M = {}
 
+function M.find_files()
+  local opts = {
+    previewer = false,
+    follow = true,
+  }
+  require("telescope.builtin").find_files(opts)
+end
+
+function M.buffers()
+  local opts = {
+    previewer = false,
+    ignore_current_buffer = true,
+  }
+  require("telescope.builtin").buffers(opts)
+end
+
 function M.grep_string(fixed)
   local opts = {
     previewer = false,
@@ -93,9 +109,36 @@ function M.grep_string(fixed)
   else
     opts.search = vim.fn.input("Pattern: ", "")
     opts.use_regex = true
-    opts.word_match = '-e'
+    opts.word_match = '-Se'
+  end
+  if opts.search == '' then
+    print("Cancelled with empty pattern!")
+    return
   end
   require("telescope.builtin").grep_string(opts)
+end
+
+function M.lsp_symbols(doc)
+  local opts = {
+    timeout = 1000,
+  }
+  if doc then
+    require("telescope.builtin").lsp_document_symbols(opts)
+  else
+    opts.query = vim.fn.input("Query: ")
+    if opts.query == '' then
+      print("Cancelled with empty query!")
+      return
+    end
+    require("telescope.builtin").lsp_workspace_symbols(opts)
+  end
+end
+
+function M.lsp_references()
+  local opts = {
+    timeout = 1000,
+  }
+  require("telescope.builtin").lsp_references(opts)
 end
 
 return M
