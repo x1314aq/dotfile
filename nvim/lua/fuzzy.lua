@@ -24,6 +24,7 @@ require('telescope').setup{
         ["<C-k>"] = require('telescope.actions').move_selection_previous,
       },
       n = {
+        ["q"] = require('telescope.actions').close,
       },
     },
     vimgrep_arguments = {
@@ -32,7 +33,6 @@ require('telescope').setup{
       '--no-heading',
       '--line-number',
       '--column',
-      '--smart-case'
     },
     prompt_position = "bottom",
     prompt_prefix = "> ",
@@ -50,9 +50,9 @@ require('telescope').setup{
         mirror = false,
       },
     },
-    file_sorter =  require'telescope.sorters'.get_fuzzy_file,
+    file_sorter =  require'telescope.sorters'.get_fzy_sorter,
     file_ignore_patterns = {},
-    generic_sorter =  require'telescope.sorters'.get_generic_fuzzy_sorter,
+    generic_sorter =  require'telescope.sorters'.get_fzy_sorter,
     shorten_path = true,
     winblend = 0,
     width = 0.75,
@@ -79,3 +79,23 @@ require('telescope').setup{
     }
   }
 }
+
+M = {}
+
+function M.grep_string(fixed)
+  local opts = {
+    previewer = false,
+  }
+  if fixed then
+    opts.search = vim.fn.expand("<cword>")
+    opts.use_regex = false
+    opts.word_match = '-Fs'
+  else
+    opts.search = vim.fn.input("Pattern: ", "")
+    opts.use_regex = true
+    opts.word_match = '-e'
+  end
+  require("telescope.builtin").grep_string(opts)
+end
+
+return M

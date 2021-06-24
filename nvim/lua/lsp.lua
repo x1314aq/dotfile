@@ -13,7 +13,9 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '[c', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', ']c', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  --vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>t', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>a', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
 end
 
 nvim_lsp.clangd.setup {
@@ -79,6 +81,9 @@ vim.api.nvim_set_keymap('i', "<Tab>", "v:lua.tab_complete()", {expr = true})
 vim.api.nvim_set_keymap('s', "<Tab>", "v:lua.tab_complete()", {expr = true})
 vim.api.nvim_set_keymap('i', "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 vim.api.nvim_set_keymap('s', "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+
+vim.api.nvim_set_keymap('i', "<CR>", "compe#confirm('<CR>')", {expr = true, silent = true, noremap = true})
+vim.api.nvim_set_keymap('i', "<c-e>", "compe#close('<c-e>')", {expr = true, silent = true, noremap = true})
 
 -- treesitter config
 -- add more languages here on Windows

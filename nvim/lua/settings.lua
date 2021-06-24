@@ -41,7 +41,7 @@ utils.opt('o', 'clipboard','unnamed,unnamedplus')
 utils.opt('o', 'hidden', true)
 utils.opt('o', 'updatetime', 300)
 utils.opt('o', 'signcolumn', 'number')
--- set shortmess+=c
+utils.opt('o', 'shortmess', 'filnxtToOFc')
 
 utils.opt('o', 'termguicolors', true)
 utils.opt('o', 'inccommand', 'nosplit')
