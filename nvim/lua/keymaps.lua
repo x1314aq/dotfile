@@ -21,9 +21,9 @@ utils.map('i', '<Right>', '')
 utils.map('n', '<F2>', '<cmd>LspStart<CR>')
 
 -- for quickfix windows and location list
-utils.map('n', '<leader>cw', '<cmd>cwindow<CR>', {silent = true, nowait = true})
+utils.map('n', '<leader>cw', '<cmd>copen<CR>', {silent = true, nowait = true})
 utils.map('n', '<leader>cc', '<cmd>cclose<CR>', {silent = true, nowait = true})
-utils.map('n', '<leader>lw', '<cmd>lwindow<CR>', {silent = true, nowait = true})
+utils.map('n', '<leader>lw', '<cmd>lopen<CR>', {silent = true, nowait = true})
 utils.map('n', '<leader>lc', '<cmd>lclose<CR>', {silent = true, nowait = true})
 utils.map('n', ']q', '<cmd>cnext<CR>', {silent = true, nowait = true})
 utils.map('n', '[q', '<cmd>cprev<CR>', {silent = true, nowait = true})

@@ -1,18 +1,15 @@
 -- fuzzy finder using telescope
-
-local no_preview = function()
-  return require('telescope.themes').get_dropdown({
+local theme = require('telescope.themes').get_dropdown({
     borderchars = {
       { '─', '│', '─', '│', '┌', '┐', '┘', '└'},
       prompt = {"─", "│", " ", "│", '┌', '┐', "│", "│"},
       results = {"─", "│", "─", "│", "├", "┤", "┘", "└"},
       preview = { '─', '│', '─', '│', '┌', '┐', '┘', '└'},
     },
-    width = 0.8,
+    width = 140,
+    results_height = 40,
     previewer = false,
-    prompt_title = true
   })
-end
 
 require('telescope').setup{
   defaults = {
@@ -20,6 +17,7 @@ require('telescope').setup{
       i = {
         ["<C-n>"] = false,
         ["<C-p>"] = false,
+        ["<C-q>"] = require('telescope.actions').smart_send_to_qflist,
         ["<C-j>"] = require('telescope.actions').move_selection_next,
         ["<C-k>"] = require('telescope.actions').move_selection_previous,
       },
@@ -68,40 +66,36 @@ require('telescope').setup{
     grep_previewer = require'telescope.previewers'.vim_buffer_vimgrep.new,
     qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
   },
-  pickers = {
-    buffers = {
-      theme = "dropdown",
-      previewer = false,
-    },
-    find_files = {
-      theme = "dropdown",
-      previewer = false,
-    }
-  }
+  -- pickers = {
+  --   buffers = {
+  --     theme = "dropdown",
+  --     previewer = false,
+  --   },
+  --   find_files = {
+  --     theme = "dropdown",
+  --     previewer = false,
+  --   },
+  -- }
 }
 
 M = {}
 
 function M.find_files()
   local opts = {
-    previewer = false,
     follow = true,
   }
-  require("telescope.builtin").find_files(opts)
+  require("telescope.builtin").find_files(vim.tbl_extend("error", opts, theme))
 end
 
 function M.buffers()
   local opts = {
-    previewer = false,
     ignore_current_buffer = true,
   }
-  require("telescope.builtin").buffers(opts)
+  require("telescope.builtin").buffers(vim.tbl_extend("error", opts, theme))
 end
 
 function M.grep_string(fixed)
-  local opts = {
-    previewer = false,
-  }
+  local opts = {}
   if fixed then
     opts.search = vim.fn.expand("<cword>")
     opts.use_regex = false
