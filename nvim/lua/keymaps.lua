@@ -37,8 +37,7 @@ utils.map('n', ']L', '<cmd>llast<CR>', {silent = true, nowait = true})
 utils.map('n', '<M-t>', '<cmd>lua require("utils").toggle_tab()<CR>', {silent = true, nowait = true})
 
 if vim.fn.has("win32") ~= 1 then
-  utils.map('n', '<M-w>', '<cmd>vs term://bash<CR>', {silent = true, nowait = true})
-  utils.map('t', '<Esc>', '<c-\\><c-n>', {silent = true, nowait = true})
+  utils.map('n', '<M-w>', '<cmd>lua require("utils").toggle_terminal()<CR>', {silent = true, nowait = true})
 end
 
 --utils.map('n', '<leader>f', ':FzyFile<CR>', {silent = true, nowait = true})
