@@ -54,3 +54,6 @@ utils.map('n', '<leader>S', '<cmd>lua require("fuzzy").grep_string(true)<CR>', {
 utils.map('n', '<leader>t', '<cmd>lua require("fuzzy").lsp_symbols(false)<CR>', {silent = true, nowait = true})
 utils.map('n', '<leader>a', '<cmd>lua require("fuzzy").lsp_symbols(true)<CR>', {silent = true, nowait = true})
 utils.map('n', 'gr', '<cmd>lua require("fuzzy").lsp_references()<CR>', {silent = true, nowait = true})
+
+-- nvim-tree maps
+utils.map('n', '<c-k><c-b>', '<cmd>NvimTreeToggle<CR>', {silent = true, nowait = true})
