@@ -1,4 +1,39 @@
 -- lspconfig related
+local M = {}
+
+local function list_or_jump(action, opts)
+  opts = opts or {}
+
+  local params = vim.lsp.util.make_position_params()
+  local result, err = vim.lsp.buf_request_sync(0, action, vim.tbl_extend('error', params, opts), 1000)
+  if err then
+    vim.api.nvim_err_writeln("Error when executing " .. action .. " : " .. err)
+    return
+  end
+
+  local locs = {}
+  for _, res in pairs(result) do
+    vim.list_extend(locs, res.result)
+  end
+
+  if #locs == 0 then
+    print('empty result from LSP server')
+  elseif #locs == 1 then
+    vim.lsp.util.jump_to_location(locs[1])
+  else
+    vim.lsp.util.set_loclist(vim.lsp.util.locations_to_items(locs), 0)
+    vim.cmd('lwindow')
+  end
+end
+
+M.find_caller = function()
+  list_or_jump('$ccls/call')
+end
+
+M.find_callee = function()
+  list_or_jump('$ccls/call', {callee = true})
+end
+
 local nvim_lsp = require('lspconfig')
 local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -14,6 +49,11 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '[c', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', ']c', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   --vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+
+  if client.name == 'ccls' then
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gc', '<cmd>lua require("lsp").find_caller()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gC', '<cmd>lua require("lsp").find_callee()<CR>', opts)
+  end
 end
 
 if vim.fn.executable("ccls") == 1 then
@@ -140,3 +180,5 @@ require('nvim-treesitter.configs').setup {
     },
   },
 }
+
+return M
