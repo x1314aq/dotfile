@@ -82,8 +82,8 @@ function M.find_files()
   local opts = {
     follow = true,
   }
-  theme.width = math.floor(vim.api.nvim_win_get_width(0) * 0.7)
-  theme.results_height = math.floor(vim.api.nvim_win_get_height(0) * 0.6)
+  theme.width = math.floor(vim.api.nvim_get_option('columns') * 0.7)
+  theme.results_height = math.floor(vim.api.nvim_get_option('lines') * 0.6)
   require("telescope.builtin").find_files(vim.tbl_extend("error", opts, theme))
 end
 
@@ -91,8 +91,8 @@ function M.buffers()
   local opts = {
     ignore_current_buffer = true,
   }
-  theme.width = math.floor(vim.api.nvim_win_get_width(0) * 0.7)
-  theme.results_height = math.floor(vim.api.nvim_win_get_height(0) * 0.6)
+  theme.width = math.floor(vim.api.nvim_get_option('columns') * 0.7)
+  theme.results_height = math.floor(vim.api.nvim_get_option('lines') * 0.6)
   require("telescope.builtin").buffers(vim.tbl_extend("error", opts, theme))
 end
 

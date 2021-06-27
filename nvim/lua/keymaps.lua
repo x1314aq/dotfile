@@ -40,6 +40,9 @@ if vim.fn.has("win32") ~= 1 then
   utils.map('n', '<M-w>', '<cmd>lua require("utils").toggle_terminal()<CR>', {silent = true, nowait = true})
 end
 
+-- projects maps
+--utils.map('n', '<leader>p', '<cmd>lua require("project").projects()<CR>', {silent = true, nowait = true})
+
 --utils.map('n', '<leader>f', ':FzyFile<CR>', {silent = true, nowait = true})
 --utils.map('n', '<leader>b', ':FzyBuffer<CR>', {silent = true, nowait = true})
 --utils.map('n', '<leader>s', ':FzyGrep ', {nowait = true})
