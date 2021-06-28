@@ -46,6 +46,10 @@ end
 --utils.map('n', '<leader>s', ':FzyGrep ', {nowait = true})
 --utils.map('n', '<leader>S', ':FzyGrep! ', {nowait = true})
 
+-- hop.nvim maps
+utils.map('n', 'gw', '<cmd>lua require("hop").hint_words()<CR>', {silent = true, nowait = true})
+utils.map('n', 'g.', '<cmd>lua require("hop").hint_char1()<CR>', {silent = true, nowait = true})
+
 -- telescope maps
 utils.map('n', '<leader>f', '<cmd>lua require("fuzzy").find_files()<CR>', {silent = true, nowait = true})
 utils.map('n', '<leader>b', '<cmd>lua require("fuzzy").buffers()<CR>', {silent = true, nowait = true})

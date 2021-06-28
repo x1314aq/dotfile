@@ -93,3 +93,6 @@ vim.g.nvim_tree_bindings = {
   ["-"]              = tree_cb("dir_up"),
   ["q"]              = tree_cb("close"),
 }
+
+-- hop.nvim config
+require('hop').setup()
