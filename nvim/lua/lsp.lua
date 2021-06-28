@@ -78,42 +78,42 @@ end
 local sumneko_root_path = vim.env.sumneko_root_path
 local sumneko_binary = vim.env.sumneko_binary
 
-if not sumneko_binary and not sumneko_root_path then
-  print("ENVIRONMENT variable 'sumneko_binary' and 'sumneko_root_path' not set!")
-end
+if sumneko_binary and sumneko_root_path then
+  local runtime_path = vim.split(package.path, ';')
+  table.insert(runtime_path, "lua/?.lua")
+  table.insert(runtime_path, "lua/?/init.lua")
 
-local runtime_path = vim.split(package.path, ';')
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/?/init.lua")
-
-require'lspconfig'.sumneko_lua.setup {
-  autostart = true,
-  on_attach = on_attach,
-  cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"};
-  settings = {
-    Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
-        -- Setup your lua path
-        path = runtime_path,
-      },
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = {'vim'},
-      },
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file("", true),
-        preloadFileSize = 1024,
-      },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = {
-        enable = false,
+  require'lspconfig'.sumneko_lua.setup {
+    autostart = true,
+    on_attach = on_attach,
+    cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"};
+    settings = {
+      Lua = {
+        runtime = {
+          -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+          version = 'LuaJIT',
+          -- Setup your lua path
+          path = runtime_path,
+        },
+        diagnostics = {
+          -- Get the language server to recognize the `vim` global
+          globals = {'vim'},
+        },
+        workspace = {
+          -- Make the server aware of Neovim runtime files
+          library = vim.api.nvim_get_runtime_file("", true),
+          preloadFileSize = 1024,
+        },
+        -- Do not send telemetry data containing a randomized but unique identifier
+        telemetry = {
+          enable = false,
+        },
       },
     },
-  },
-}
+  }
+else
+  print("ENVIRONMENT variable 'sumneko_binary' or 'sumneko_root_path' not set!")
+end
 
 -- nvim-compe config
 require('compe').setup {

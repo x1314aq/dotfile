@@ -18,8 +18,6 @@ utils.map('i', '<Right>', '')
 -- utils.map('i', '<BS>', '')
 -- utils.map('i', '<Del>', '')
 
-utils.map('n', '<F2>', '<cmd>LspStart<CR>')
-
 -- for quickfix windows and location list
 utils.map('n', '<leader>cw', '<cmd>copen<CR>', {silent = true, nowait = true})
 utils.map('n', '<leader>cc', '<cmd>cclose<CR>', {silent = true, nowait = true})
