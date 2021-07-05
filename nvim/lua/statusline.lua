@@ -6,5 +6,8 @@ require('lualine').setup {
     component_separators = "|",
     section_separators = "",
     disabled_filetypes = {"NvimTree"}
+  },
+  sections = {
+    lualine_c = {'filename', function() return vim.fn['nvim_treesitter#statusline'](30) end},
   }
 }

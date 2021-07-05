@@ -49,6 +49,9 @@ utils.opt('o', 'inccommand', 'nosplit')
 utils.opt('o', 'breakindent', true)
 utils.opt('o', 'completeopt', 'menuone,noselect')
 
+utils.opt('w', 'foldmethod', 'expr')
+utils.opt('w', 'foldexpr', 'nvim_treesitter#foldexpr()')
+
 -- Highlight on yank
 cmd 'au TextYankPost * lua vim.highlight.on_yank {on_visual = false}'
 
