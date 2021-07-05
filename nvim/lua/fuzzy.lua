@@ -30,7 +30,6 @@ require('telescope').setup{
       '--line-number',
       '--column',
     },
-    prompt_position = "bottom",
     prompt_prefix = "> ",
     selection_caret = "> ",
     entry_prefix = "  ",
@@ -38,23 +37,22 @@ require('telescope').setup{
     selection_strategy = "reset",
     sorting_strategy = "descending",
     layout_strategy = "horizontal",
-    layout_defaults = {
+    layout_config = {
       horizontal = {
         mirror = false,
       },
       vertical = {
         mirror = false,
       },
+      prompt_position = "bottom",
+      width = 0.75,
+      preview_cutoff = 120,
     },
     file_sorter =  require'telescope.sorters'.get_fzy_sorter,
     file_ignore_patterns = {},
     generic_sorter =  require'telescope.sorters'.get_fzy_sorter,
     shorten_path = true,
     winblend = 0,
-    width = 0.75,
-    preview_cutoff = 120,
-    results_height = 1,
-    results_width = 0.8,
     border = {},
     borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
     color_devicons = false,
@@ -81,19 +79,23 @@ M = {}
 function M.find_files()
   local opts = {
     follow = true,
+    layout_config = {
+      width = math.floor(vim.api.nvim_get_option('columns') * 0.7),
+      height = math.floor(vim.api.nvim_get_option('lines') * 0.6),
+    },
   }
-  theme.width = math.floor(vim.api.nvim_get_option('columns') * 0.7)
-  theme.results_height = math.floor(vim.api.nvim_get_option('lines') * 0.6)
-  require("telescope.builtin").find_files(vim.tbl_extend("error", opts, theme))
+  require("telescope.builtin").find_files(vim.tbl_deep_extend("keep", opts, theme))
 end
 
 function M.buffers()
   local opts = {
     ignore_current_buffer = true,
+    layout_config = {
+      width = math.floor(vim.api.nvim_get_option('columns') * 0.7),
+      height = math.floor(vim.api.nvim_get_option('lines') * 0.6),
+    },
   }
-  theme.width = math.floor(vim.api.nvim_get_option('columns') * 0.7)
-  theme.results_height = math.floor(vim.api.nvim_get_option('lines') * 0.6)
-  require("telescope.builtin").buffers(vim.tbl_extend("error", opts, theme))
+  require("telescope.builtin").buffers(vim.tbl_deep_extend("keep", opts, theme))
 end
 
 function M.grep_string(fixed)
