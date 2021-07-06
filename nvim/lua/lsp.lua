@@ -1,9 +1,13 @@
 -- lspconfig related
 local M = {}
 
-local function lsp_handler(err, method, result)
+local function list_or_jump(action, opts)
+  opts = opts or {}
+
+  local params = vim.lsp.util.make_position_params()
+  local result, err = vim.lsp.buf_request_sync(0, action, vim.tbl_extend('error', params, opts), 1000)
   if err then
-    vim.api.nvim_err_writeln("Error when executing " .. method .. " : " .. err)
+    vim.api.nvim_err_writeln("Error when executing " .. action .. " : " .. err)
     return
   end
 
@@ -20,13 +24,6 @@ local function lsp_handler(err, method, result)
     vim.lsp.util.set_loclist(vim.lsp.util.locations_to_items(locs), 0)
     vim.cmd('lwindow')
   end
-end
-
-local function list_or_jump(method, opts)
-  opts = opts or {}
-
-  local params = vim.lsp.util.make_position_params()
-  vim.lsp.buf_request(0, method, vim.tbl_extend('error', params, opts), lsp_handler)
 end
 
 M.find_caller = function()
