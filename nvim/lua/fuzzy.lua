@@ -74,6 +74,9 @@ require('telescope').setup{
   -- }
 }
 
+vim.cmd [[highlight! link TelescopePromptBorder TelescopeBorder]]
+vim.cmd [[highlight! link TelescopeResultsBorder TelescopeBorder]]
+
 M = {}
 
 function M.find_files()
