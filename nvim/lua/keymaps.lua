@@ -55,9 +55,7 @@ utils.map('n', '<leader>f', '<cmd>lua require("fuzzy").find_files()<CR>', {silen
 utils.map('n', '<leader>b', '<cmd>lua require("fuzzy").buffers()<CR>', {silent = true, nowait = true})
 utils.map('n', '<leader>s', '<cmd>lua require("fuzzy").grep_string(false)<CR>', {silent = true, nowait = true})
 utils.map('n', '<leader>S', '<cmd>lua require("fuzzy").grep_string(true)<CR>', {silent = true, nowait = true})
-utils.map('n', '<leader>t', '<cmd>lua require("fuzzy").lsp_symbols(false)<CR>', {silent = true, nowait = true})
-utils.map('n', '<leader>a', '<cmd>lua require("fuzzy").lsp_symbols(true)<CR>', {silent = true, nowait = true})
+utils.map('n', '<leader>t', '<cmd>lua require("fuzzy").global_symbols()<CR>', {silent = true, nowait = true})
+utils.map('n', '<leader>a', '<cmd>lua require("fuzzy").local_symbols()<CR>', {silent = true, nowait = true})
 utils.map('n', 'gr', '<cmd>lua require("fuzzy").lsp_references()<CR>', {silent = true, nowait = true})
-
--- nvim-tree maps
-utils.map('n', '<c-k><c-b>', '<cmd>NvimTreeToggle<CR>', {silent = true, nowait = true})
+utils.map('n', '<M-o>', '<cmd>lua require("telescope.builtin").resume()<CR>', {silent = true, nowait = true})

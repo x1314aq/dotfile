@@ -1,14 +1,4 @@
 -- fuzzy finder using telescope
-local theme = require('telescope.themes').get_dropdown({
-    borderchars = {
-      { '─', '│', '─', '│', '┌', '┐', '┘', '└'},
-      prompt = {"─", "│", " ", "│", '┌', '┐', "│", "│"},
-      results = {"─", "│", "─", "│", "├", "┤", "┘", "└"},
-      preview = { '─', '│', '─', '│', '┌', '┐', '┘', '└'},
-    },
-    previewer = false,
-  })
-
 require('telescope').setup{
   defaults = {
     mappings = {
@@ -48,10 +38,11 @@ require('telescope').setup{
       width = 0.75,
       preview_cutoff = 120,
     },
+    preview = false,
     file_sorter =  require'telescope.sorters'.get_fzy_sorter,
     file_ignore_patterns = {},
     generic_sorter =  require'telescope.sorters'.get_fzy_sorter,
-    path_display = {"absolute"},
+    path_display = {shorten = 1},
     winblend = 0,
     border = {},
     borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
@@ -61,18 +52,16 @@ require('telescope').setup{
     file_previewer = require'telescope.previewers'.vim_buffer_cat.new,
     grep_previewer = require'telescope.previewers'.vim_buffer_vimgrep.new,
     qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
+    extensions = {
+      fzy_native = {
+        override_generic_sorter = false,
+        override_file_sorter = true,
+      }
+    },
   },
-  -- pickers = {
-  --   buffers = {
-  --     theme = "dropdown",
-  --     previewer = false,
-  --   },
-  --   find_files = {
-  --     theme = "dropdown",
-  --     previewer = false,
-  --   },
-  -- }
 }
+
+require('telescope').load_extension('fzy_native')
 
 vim.cmd [[highlight! link TelescopePromptBorder TelescopeBorder]]
 vim.cmd [[highlight! link TelescopeResultsBorder TelescopeBorder]]
@@ -87,7 +76,7 @@ function M.find_files()
       height = math.floor(vim.api.nvim_get_option('lines') * 0.6),
     },
   }
-  require("telescope.builtin").find_files(vim.tbl_deep_extend("keep", opts, theme))
+  require("telescope.builtin").find_files(opts)
 end
 
 function M.buffers()
@@ -98,19 +87,22 @@ function M.buffers()
       height = math.floor(vim.api.nvim_get_option('lines') * 0.6),
     },
   }
-  require("telescope.builtin").buffers(vim.tbl_deep_extend("keep", opts, theme))
+  require("telescope.builtin").buffers(opts)
 end
 
 function M.grep_string(fixed)
-  local opts = {}
+  local opts = {preview = true, sort_only_text = true}
   if fixed then
     opts.search = vim.fn.expand("<cword>")
     opts.use_regex = false
-    opts.word_match = '-Fs'
+    opts.additional_args = '-Fs'
+    opts.word_match = '-w'
   else
+    vim.fn.inputsave()
     opts.search = vim.fn.input("Pattern: ", "")
+    vim.fn.inputrestore()
+    vim.cmd("redraw!")
     opts.use_regex = true
-    opts.word_match = '-Se'
   end
   if opts.search == '' then
     print("Cancelled with empty pattern!")
@@ -119,14 +111,24 @@ function M.grep_string(fixed)
   require("telescope.builtin").grep_string(opts)
 end
 
-function M.lsp_symbols(doc)
+function M.lsp_references()
+  local opts = {
+    timeout = 1000,
+  }
+  require("telescope.builtin").lsp_references(opts)
+end
+
+function lsp_symbols(doc)
   local opts = {
     timeout = 1000,
   }
   if doc then
     require("telescope.builtin").lsp_document_symbols(opts)
   else
+    vim.fn.inputsave()
     opts.query = vim.fn.input("Query: ")
+    vim.fn.inputrestore()
+    vim.cmd("redraw!")
     if opts.query == '' then
       print("Cancelled with empty query!")
       return
@@ -135,11 +137,22 @@ function M.lsp_symbols(doc)
   end
 end
 
-function M.lsp_references()
-  local opts = {
-    timeout = 1000,
-  }
-  require("telescope.builtin").lsp_references(opts)
+function M.global_symbols()
+  local clients = vim.lsp.buf_get_clients()
+  if next(clients) == nil then
+    require("telescope.builtin").tags()
+  else
+    lsp_symbols(false)
+  end
+end
+
+function M.local_symbols()
+  local clients = vim.lsp.buf_get_clients()
+  if next(clients) == nil then
+    require("telescope.builtin").current_buffer_tags()
+  else
+    lsp_symbols(true)
+  end
 end
 
 return M

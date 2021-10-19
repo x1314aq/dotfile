@@ -59,7 +59,7 @@ end
 if vim.fn.executable("ccls") == 1 then
   print("LSP server is ccls")
   nvim_lsp.ccls.setup {
-    autostart = true,
+    autostart = false,
     on_attach = on_attach,
     init_options = {
       cache = {directory = ".ccls-cache"}
@@ -68,7 +68,7 @@ if vim.fn.executable("ccls") == 1 then
 elseif vim.fn.executable("clangd") == 1 then
   print("LSP server is clangd")
   nvim_lsp.clangd.setup {
-    autostart = true,
+    autostart = false,
     on_attach = on_attach,
   }
 end

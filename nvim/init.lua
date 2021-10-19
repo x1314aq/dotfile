@@ -12,10 +12,8 @@ Plug {'nvim-treesitter/nvim-treesitter-textobjects', dest='start'}
 Plug {'nvim-telescope/telescope.nvim', dest='start'}
 Plug {'navarasu/onedark.nvim', dest='start'}
 Plug {'hoob3rt/lualine.nvim', dest='start'}
-Plug {'kyazdani42/nvim-web-devicons', dest='start'}
-Plug {'kyazdani42/nvim-tree.lua', dest='start'}
 Plug {'phaazon/hop.nvim', dest='start'}  -- easy motion plugin
-Plug {'romgrk/fzy-lua-native', dest='start'}
+Plug {'nvim-telescope/telescope-fzy-native.nvim', dest='start'}
 
 -- Sensible defaults
 require('settings')
