@@ -17,6 +17,7 @@ Plug {'hrsh7th/cmp-buffer', dest='start', branch='main'}
 Plug {'hrsh7th/nvim-cmp', dest='start', branch='main'}
 Plug {'L3MON4D3/LuaSnip', dest='start'}
 Plug {'saadparwaiz1/cmp_luasnip', dest='start'}
+Plug {'lukas-reineke/indent-blankline.nvim', dest='start'}
 
 -- Sensible defaults
 require('settings')
