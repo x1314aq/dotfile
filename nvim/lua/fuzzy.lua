@@ -39,6 +39,7 @@ require('telescope').setup{
       preview_cutoff = 120,
     },
     preview = false,
+    dynamic_preview_title = true,
     file_sorter =  require'telescope.sorters'.get_fzy_sorter,
     file_ignore_patterns = {},
     generic_sorter =  require'telescope.sorters'.get_fzy_sorter,
@@ -91,7 +92,13 @@ function M.buffers()
 end
 
 function M.grep_string(fixed)
-  local opts = {preview = true, sort_only_text = true}
+  local opts = {
+    preview = {
+      timeout = 500,
+      treesitter = false,
+    },
+    sort_only_text = true
+  }
   if fixed then
     opts.search = vim.fn.expand("<cword>")
     opts.use_regex = false
@@ -114,6 +121,10 @@ end
 function M.lsp_references()
   local opts = {
     timeout = 1000,
+    preview = {
+      timeout = 500,
+      treesitter = false,
+    },
   }
   require("telescope.builtin").lsp_references(opts)
 end
@@ -121,6 +132,10 @@ end
 function lsp_symbols(doc)
   local opts = {
     timeout = 1000,
+    preview = {
+      timeout = 500,
+      treesitter = false,
+    },
   }
   if doc then
     require("telescope.builtin").lsp_document_symbols(opts)
