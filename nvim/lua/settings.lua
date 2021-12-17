@@ -53,7 +53,7 @@ utils.opt('w', 'foldmethod', 'expr')
 utils.opt('w', 'foldexpr', 'nvim_treesitter#foldexpr()')
 
 utils.opt('o', 'list', true)
-utils.opt('o', 'listchars', 'space:⋅')
+utils.opt('o', 'listchars', 'space:⋅,tab:>-')
 
 -- Highlight on yank
 cmd 'au TextYankPost * lua vim.highlight.on_yank {on_visual = false}'
