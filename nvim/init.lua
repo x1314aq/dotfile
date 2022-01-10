@@ -1,6 +1,3 @@
-local vfn = vim.fn
-local cmd = vim.cmd
-
 local Plug = require('pmanager').plug
 
 Plug {'nvim-lua/plenary.nvim', dest='start'}
@@ -27,7 +24,10 @@ require('settings')
 require('keymaps')
 
 -- colorscheme
-require('onedark').setup()
+require('onedark').setup {
+  style = 'darker'
+}
+require('onedark').load()
 
 -- statusline
 require('statusline')
