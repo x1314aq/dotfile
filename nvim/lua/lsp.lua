@@ -60,7 +60,6 @@ local on_attach = function(client, bufnr)
 end
 
 if vim.fn.executable("ccls") == 1 then
-  print("LSP server is ccls")
   nvim_lsp.ccls.setup {
     autostart = false,
     on_attach = on_attach,
@@ -70,7 +69,6 @@ if vim.fn.executable("ccls") == 1 then
     capabilities = capabilities,
   }
 elseif vim.fn.executable("clangd") == 1 then
-  print("LSP server is clangd")
   nvim_lsp.clangd.setup {
     autostart = false,
     on_attach = on_attach,
@@ -116,8 +114,6 @@ if sumneko_binary and sumneko_root_path then
       },
     },
   }
-else
-  print("ENVIRONMENT variable 'sumneko_binary' or 'sumneko_root_path' not set!")
 end
 
 -- nvim-cmp config
@@ -174,7 +170,7 @@ require('nvim-autopairs').setup({
 
 -- treesitter config
 require('nvim-treesitter.configs').setup {
-  ensure_installed = {"c", "cpp", "lua"},
+  ensure_installed = {"c", "cpp", "lua", "python"},
   highlight = {
     enable = true
   },

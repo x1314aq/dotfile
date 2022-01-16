@@ -28,6 +28,7 @@ require('onedark').setup {
   style = 'darker'
 }
 require('onedark').load()
+vim.api.nvim_del_keymap('', '<leader>ts')
 
 -- statusline
 require('statusline')
