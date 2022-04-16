@@ -1,3 +1,5 @@
+require('impatient').enable_profile() -- cached lua modules
+
 local Plug = require('pmanager').plug
 
 Plug {'nvim-lua/plenary.nvim', dest='start'}
@@ -15,6 +17,7 @@ Plug {'L3MON4D3/LuaSnip', dest='start'}
 Plug {'saadparwaiz1/cmp_luasnip', dest='start'}
 Plug {'lukas-reineke/indent-blankline.nvim', dest='start'}
 Plug {'windwp/nvim-autopairs', dest='start'}
+Plug {'lewis6991/impatient.nvim', dest='start'}
 
 -- Sensible defaults
 require('settings')
