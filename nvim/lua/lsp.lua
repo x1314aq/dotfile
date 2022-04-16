@@ -59,18 +59,22 @@ local on_attach = function(client, bufnr)
   end
 end
 
-if vim.fn.executable("ccls") == 1 then
+if vim.env.ccls_exe then
   nvim_lsp.ccls.setup {
-    autostart = false,
+    autostart = true,
     on_attach = on_attach,
     init_options = {
       cache = {directory = ".ccls-cache"}
     },
     capabilities = capabilities,
   }
-elseif vim.fn.executable("clangd") == 1 then
+elseif vim.env.clangd_exe then
   nvim_lsp.clangd.setup {
-    autostart = false,
+    cmd = {
+      vim.env.clangd_exe,
+      "--header-insertion=never",
+    },
+    autostart = true,
     on_attach = on_attach,
     capabilities = capabilities,
   }

@@ -6,14 +6,13 @@ local api = vim.api
 local OS = require('platform')
 
 local URLPREFIX = 'https://github.com/'
-local LOGFILE = string.format(call('stdpath', 'cache') .. OS.SEP .. 'pmanager-%d.log', uv.os_getpid())
 local PACKDIR = call('stdpath', 'data') .. OS.SEP .. 'site' .. OS.SEP .. 'pack' .. OS.SEP .. 'managed' .. OS.SEP
-local filp = uv.fs_open(LOGFILE, 'w+', 384) -- 0600
 local packages = {}
 local nr_pkgs = 0
+local LOGTABLE = {}
 
 local function do_log(str)
-    uv.fs_write(filp, str .. '\n', -1)
+    table.insert(LOGTABLE, str)
 end
 
 local function plug(args)
@@ -50,6 +49,8 @@ end
 
 local function install(pkg)
     local handle, pid
+    local stdout = uv.new_pipe()
+    local stderr = uv.new_pipe()
     if pkg.exists then
         do_log(string.format('%s is already exists', pkg.name))
         return
@@ -59,17 +60,33 @@ local function install(pkg)
         'git',
         {
             args = {'clone', '-b', pkg.branch, pkg.url, pkg.dir},
-            stdio = {nil, filp, filp}
+            stdio = {nil, stdout, stderr}
         },
         vim.schedule_wrap(function(code, signal)
             do_log(string.format('install exited %s pid:%d code:%d signal:%d', tostring(handle), pid, code, signal))
             handle:close()
         end)
     )
+    uv.read_start(stdout,
+        function(err, data)
+            if data then
+                do_log(data)
+            end
+        end
+    )
+    uv.read_start(stderr,
+        function(err, data)
+            if data then
+                do_log(data)
+            end
+        end
+    )
 end
 
 local function update(pkg)
     local handle, pid
+    local stdout = uv.new_pipe()
+    local stderr = uv.new_pipe()
     if not pkg.exists then
         install(pkg)
         pkg.exists = true
@@ -81,12 +98,26 @@ local function update(pkg)
         {
             args = {'pull'},
             cwd = pkg.dir,
-            stdio = {nil, filp, filp}
+            stdio = {nil, stdout, stderr}
         },
         vim.schedule_wrap(function(code, signal)
             do_log(string.format('install exited %s pid:%d code:%d signal:%d', tostring(handle), pid, code, signal))
             handle:close()
         end)
+    )
+    uv.read_start(stdout,
+        function(err, data)
+            if data then
+                do_log(data)
+            end
+        end
+    )
+    uv.read_start(stderr,
+        function(err, data)
+            if data then
+                do_log(data)
+            end
+        end
     )
 end
 
@@ -145,24 +176,7 @@ local function list()
 end
 
 local function open_log()
-    -- local f = call('readfile', LOGFILE)
-    -- local buf = vim.api.nvim_create_buf(false, false)
-    -- vim.api.nvim_buf_set_lines(buf, 0, -1, true, f)
-    -- vim.api.nvim_buf_set_option(buf, 'buftype', 'nowrite')
-    -- local config = {
-    --     relative = 'win',
-    --     width = 15,
-    --     height = 15,
-    --     row = 3,
-    --     col = 3
-    -- }
-    -- vim.api.nvim_open_win(buf, false, config)
-    cmd('sp ' .. LOGFILE)
-end
-
-local function clean_log()
-    uv.fs_close(filp)
-    uv.fs_unlink(LOGFILE)
+    print(vim.inspect(LOGTABLE))
 end
 
 local function setup(args)
@@ -183,5 +197,4 @@ return {
     clean = clean,
     setup = setup,
     open_log = open_log,
-    clean_log = clean_log,
 }
