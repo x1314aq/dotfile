@@ -1,6 +1,6 @@
 local M = {}
 
-local scopes = {o = vim.o, b = vim.bo, w = vim.wo}
+local scopes = {o = vim.o, bo = vim.bo, wo = vim.wo}
 
 function M.opt(scope, key, value)
     scopes[scope][key] = value
@@ -12,24 +12,6 @@ function M.map(mode, lhs, rhs, opts)
     if opts then options = vim.tbl_extend('force', options, opts) end
     vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
-
-function M.toggle_tab()
-    if scopes['b']['expandtab'] then
-        print('Toggle TAB')
-        M.opt('b', 'expandtab', false)
-        M.opt('o', 'softtabstop', 0)
-        M.opt('o', 'shiftwidth', 8)
-        M.opt('o', 'tabstop', 8)
-    else
-        print('Toggle SAPCE')
-        M.opt('b', 'expandtab', true)
-        M.opt('o', 'softtabstop', 4)
-        M.opt('o', 'shiftwidth', 4)
-        M.opt('o', 'tabstop', 4)
-    end
-end
-
-vim.keymap.set('n', '<M-t>', M.toggle_tab)
 
 local term_buf = -1
 
@@ -50,7 +32,7 @@ local function popup_create()
   vim.api.nvim_win_set_option(win,  'winhl', 'Normal:Normal')
 end
 
-function M.toggle_terminal(exited)
+local function toggle_terminal(exited)
   local shell = vim.env.SHELL or 'bash'
   if vim.api.nvim_buf_get_option(0, 'buftype') == 'terminal' then
     vim.api.nvim_win_close(0, true)
@@ -76,7 +58,7 @@ function M.toggle_terminal(exited)
 end
 
 if vim.fn.has("win32") ~= 1 then
-  vim.keymap.set('n', '<M-w>', M.toggle_terminal)
+  vim.keymap.set('n', '<M-w>', toggle_terminal)
 end
 
 return M

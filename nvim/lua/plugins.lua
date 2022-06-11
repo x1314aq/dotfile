@@ -19,10 +19,17 @@ local function init()
        requires={{"nvim-lua/plenary.nvim"}},
        config = function() require("config.telescope") end,
       }
-  use {"navarasu/onedark.nvim"}
-  use {"nvim-lualine/lualine.nvim"}
+  use {"navarasu/onedark.nvim",
+       config = function() require("onedark").setup {
+         style = "darker",
+         toggle_style_key = "<localleader>cs",
+       } end,
+      }
+  use {"nvim-lualine/lualine.nvim",
+       config = function() require("config.lualine") end,
+      }
   use {"phaazon/hop.nvim",
-       config = function() require("hop").setup() end,
+       config = function() require("config.hop") end,
       }
   use {"nvim-telescope/telescope-fzf-native.nvim",
        run = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
@@ -39,7 +46,12 @@ local function init()
          space_char_blankline = ' ',
        } end,
       }
-  use {"windwp/nvim-autopairs"}
+  use {"windwp/nvim-autopairs",
+       config = function() require("nvim-autopairs").setup {
+         map_c_w = true,
+         enable_check_bracket_line = false,
+       } end,
+      }
   use {"lewis6991/impatient.nvim"}
 end
 

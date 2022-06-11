@@ -166,12 +166,6 @@ cmp.setup {
   },
 }
 
--- nvim-autopairs config
-require('nvim-autopairs').setup({
-  map_c_w = true,
-  enable_check_bracket_line = false,
-})
-
 -- treesitter config
 require('nvim-treesitter.configs').setup {
   ensure_installed = {"c", "cpp", "lua", "python"},
