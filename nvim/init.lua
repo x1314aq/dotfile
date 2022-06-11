@@ -1,23 +1,22 @@
-require('impatient').enable_profile() -- cached lua modules
+local g = vim.g
+local cmd = vim.cmd
+local o, wo, bo = vim.o, vim.wo, vim.bo
 
-local Plug = require('pmanager').plug
+g.do_filetype_lua = 1
+g.did_load_filetypes = 0
 
-Plug {'nvim-lua/plenary.nvim', dest='start'}
-Plug {'neovim/nvim-lspconfig', dest='start'}
-Plug {'nvim-treesitter/nvim-treesitter', dest='start'}
-Plug {'nvim-telescope/telescope.nvim', dest='start'}
-Plug {'navarasu/onedark.nvim', dest='start'}
-Plug {'nvim-lualine/lualine.nvim', dest='start'}
-Plug {'phaazon/hop.nvim', dest='start'}  -- easy motion plugin
-Plug {'nvim-telescope/telescope-fzy-native.nvim', dest='start'}
-Plug {'hrsh7th/cmp-nvim-lsp', dest='start', branch='main'}
-Plug {'hrsh7th/cmp-buffer', dest='start', branch='main'}
-Plug {'hrsh7th/nvim-cmp', dest='start', branch='main'}
-Plug {'L3MON4D3/LuaSnip', dest='start'}
-Plug {'saadparwaiz1/cmp_luasnip', dest='start'}
-Plug {'lukas-reineke/indent-blankline.nvim', dest='start'}
-Plug {'windwp/nvim-autopairs', dest='start'}
-Plug {'lewis6991/impatient.nvim', dest='start'}
+local status, impatient = pcall(require, 'impatient')
+if status then
+  impatient.enable_profile()
+end
+
+-- plugins
+cmd [[command! PackerInstall lua require("plugins").install()]]
+cmd [[command! PackerUpdate lua require("plugins").update()]]
+cmd [[command! PackerSync lua require("plugins").sync()]]
+cmd [[command! PackerClean lua require("plugins").clean()]]
+cmd [[command! PackerCompile lua require("plugins").compile()]]
+require('plugins')
 
 -- Sensible defaults
 require('settings')

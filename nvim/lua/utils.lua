@@ -29,6 +29,8 @@ function M.toggle_tab()
     end
 end
 
+vim.keymap.set('n', '<M-t>', M.toggle_tab)
+
 local term_buf = -1
 
 local function popup_create()
@@ -71,6 +73,10 @@ function M.toggle_terminal(exited)
     end
     vim.cmd('startinsert!')
   end
+end
+
+if vim.fn.has("win32") ~= 1 then
+  vim.keymap.set('n', '<M-w>', M.toggle_terminal)
 end
 
 return M

@@ -58,13 +58,3 @@ utils.opt('o', 'listchars', 'space:⋅,tab:>-')
 -- Highlight on yank
 cmd 'au TextYankPost * lua vim.highlight.on_yank {on_visual = false}'
 cmd 'au BufNewFile,BufRead *.h set filetype=c'
-
--- hop.nvim config
-require('hop').setup()
-
--- indent_blankline config
-require('indent_blankline').setup {
-  char = '|',
-  buftype_exclude = {'terminal'},
-  space_char_blankline = ' ',
-}

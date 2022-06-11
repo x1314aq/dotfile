@@ -32,12 +32,6 @@ utils.map('n', '[l', '<cmd>lprev<CR>', {silent = true, nowait = true})
 utils.map('n', '[L', '<cmd>lfirst<CR>', {silent = true, nowait = true})
 utils.map('n', ']L', '<cmd>llast<CR>', {silent = true, nowait = true})
 
-utils.map('n', '<M-t>', '<cmd>lua require("utils").toggle_tab()<CR>', {silent = true, nowait = true})
-
-if vim.fn.has("win32") ~= 1 then
-  utils.map('n', '<M-w>', '<cmd>lua require("utils").toggle_terminal()<CR>', {silent = true, nowait = true})
-end
-
 -- projects maps
 --utils.map('n', '<leader>p', '<cmd>lua require("project").projects()<CR>', {silent = true, nowait = true})
 
