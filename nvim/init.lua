@@ -1,6 +1,5 @@
 local g = vim.g
 local cmd = vim.cmd
-local o, wo, bo = vim.o, vim.wo, vim.bo
 
 g.do_filetype_lua = 1
 g.did_load_filetypes = 0
@@ -44,45 +43,44 @@ g.loaded_netrwPlugin = 1
 g.loaded_netrwSettings = 1
 
 -- basic settings
-wo.wrap = false
-wo.number = true
-bo.expandtab = true
-bo.softtabstop = 4
-bo.shiftwidth = 4
-bo.tabstop = 4
+local scopes = {o = vim.o, bo = vim.bo, wo = vim.wo}
 
-bo.smartindent = true
-o.shiftround = true
+local function setopt(scope, key, value)
+  scopes[scope][key] = value
+  if scope ~= 'o' then
+    scopes['o'][key] = value
+  end
+end
 
-o.showmatch = true
-o.matchtime = 1
-o.showmode = false
-o.scrolloff = 3
-
-o.smartcase = true
-
-o.splitbelow = true
-o.splitright = true
-
-o.wildmode = "list:longest"
-o.clipboard = "unnamed,unnamedplus"
-
-o.updatetime = 300
-wo.signcolumn = "number"
-o.shortmess = "filnxtToOFc"
-
-o.termguicolors = true
-
-wo.breakindent = true
-o.completeopt = "menuone,noselect"
-
-wo.foldmethod = "expr"
-wo.foldexpr = "nvim_treesitter#foldexpr()"
-wo.foldenable = false
-
-wo.list = true
-wo.listchars = "space:⋅,tab:>-"
-o.lazyredraw = true
+setopt("wo", "wrap", false)
+setopt("wo", "number", true)
+setopt("bo", "expandtab", true)
+setopt("bo", "softtabstop", 4)
+setopt("bo", "shiftwidth", 4)
+setopt("bo", "tabstop", 4)
+setopt("bo", "smartindent", true)
+setopt("o", "shiftround", true)
+setopt("o", "showmatch", true)
+setopt("o", "matchtime", 1)
+setopt("o", "showmode", false)
+setopt("o", "scrolloff", 3)
+setopt("o", "smartcase", true)
+setopt("o", "splitbelow", true)
+setopt("o", "splitright", true)
+setopt("o", "wildmode", "list:longest")
+setopt("o", "clipboard", "unnamed,unnamedplus")
+setopt("o", "updatetime", 300)
+setopt("wo", "signcolumn", "number")
+setopt("o", "shortmess", "filnxtToOFc")
+setopt("o", "termguicolors", true)
+setopt("wo", "breakindent", true)
+setopt("o", "completeopt", "menuone,noselect")
+setopt("wo", "foldmethod", "expr")
+setopt("wo", "foldexpr", "nvim_treesitter#foldexpr()")
+setopt("wo", "foldenable", false)
+setopt("wo", "list", true)
+setopt("wo", "listchars", "space:⋅,tab:>-")
+setopt("o", "lazyredraw", true)
 
 -- Highlight on yank
 cmd [[au TextYankPost * lua vim.highlight.on_yank {on_visual = false}]]
@@ -102,18 +100,18 @@ require('keymaps')
 
 -- expand tab of not
 local function toggle_tab()
-  if bo.expandtab then
+  if vim.bo.expandtab then
     print('Toggle TAB')
-    bo.expandtab = false
-    bo.softtabstop = 0
-    bo.shiftwidth = 8
-    bo.tabstop = 8
+    setopt("bo", "expandtab", false)
+    setopt("bo", "softtabstop", 8)
+    setopt("bo", "shiftwidth", 8)
+    setopt("bo", "tabstop", 8)
   else
     print('Toggle SAPCE')
-    bo.expandtab = true
-    bo.softtabstop = 4
-    bo.shiftwidth = 4
-    bo.tabstop = 4
+    setopt("bo", "expandtab", true)
+    setopt("bo", "softtabstop", 4)
+    setopt("bo", "shiftwidth", 4)
+    setopt("bo", "tabstop", 4)
   end
 end
 
