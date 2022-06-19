@@ -88,6 +88,11 @@ cmd [[au TextYankPost * lua vim.highlight.on_yank {on_visual = false}]]
 -- set filetype of .h to c instead of cpp
 cmd [[au BufNewFile,BufRead *.h set filetype=c]]
 
+-- set file format to unix on Windows
+if jit.os == "Windows" then
+    cmd [[au BufNewFile * set ff=unix]]
+end
+
 -- packer.nvim commands
 cmd [[command! PackerInstall lua require("plugins").install()]]
 cmd [[command! PackerUpdate lua require("plugins").update()]]
