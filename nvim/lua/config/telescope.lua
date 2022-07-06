@@ -19,7 +19,10 @@ require("telescope").setup {
         ['q'] = actions.close,
       },
     },
-    preview = false,
+    preview = {
+      filesize_limit = 1,
+      treesitter = true,
+    },
     dynamic_preview_title = true,
     file_ignore_patterns = {
       "^%..+" .. PATH_SEPERATOR,
@@ -55,6 +58,7 @@ vim.keymap.set('n', '<M-o>', function() require("telescope.builtin").resume() en
 local function find_files()
   local opts = {
     follow = true,
+    previewer = false,
     layout_config = {
       width = math.floor(vim.api.nvim_get_option('columns') * 0.7),
       height = math.floor(vim.api.nvim_get_option('lines') * 0.6),
@@ -68,6 +72,7 @@ vim.keymap.set('n', '<leader>f', find_files, {silent = true, nowait = true, nore
 local function buffers()
   local opts = {
     ignore_current_buffer = true,
+    previewer = false,
     layout_config = {
       width = math.floor(vim.api.nvim_get_option('columns') * 0.7),
       height = math.floor(vim.api.nvim_get_option('lines') * 0.6),
@@ -80,10 +85,6 @@ vim.keymap.set('n', '<leader>b', buffers, {silent = true, nowait = true, noremap
 
 local function grep_string(fixed)
   local opts = {
-    preview = {
-      timeout = 500,
-      treesitter = false,
-    },
     sort_only_text = true
   }
   if fixed then
@@ -111,10 +112,6 @@ vim.keymap.set('n', '<leader>S', function() grep_string(true) end, {silent = tru
 local function lsp_references()
   local opts = {
     timeout = 1000,
-    preview = {
-      timeout = 500,
-      treesitter = false,
-    },
   }
   require("telescope.builtin").lsp_references(opts)
 end
@@ -124,10 +121,6 @@ vim.keymap.set('n', 'gr', lsp_references, {silent = true, nowait = true, noremap
 local function lsp_symbols(doc)
   local opts = {
     timeout = 1000,
-    preview = {
-      timeout = 500,
-      treesitter = false,
-    },
   }
   if doc then
     require("telescope.builtin").lsp_document_symbols(opts)
@@ -164,4 +157,4 @@ local function local_symbols()
   end
 end
 
-vim.keymap.set('n', '<leader>a', local_symbols, {silent = true, nowait = true, noremap = true})--
+vim.keymap.set('n', '<leader>a', local_symbols, {silent = true, nowait = true, noremap = true})
