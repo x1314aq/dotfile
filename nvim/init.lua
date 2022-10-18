@@ -1,9 +1,6 @@
 local g = vim.g
 local cmd = vim.cmd
 
-g.do_filetype_lua = 1
-g.did_load_filetypes = 0
-
 local status, impatient = pcall(require, "impatient")
 if status then
   impatient.enable_profile()
@@ -81,6 +78,7 @@ setopt("wo", "foldenable", false)
 setopt("wo", "list", true)
 setopt("wo", "listchars", "space:⋅,tab:>-")
 setopt("o", "lazyredraw", true)
+setopt("o", "mouse", nil)
 
 -- Highlight on yank
 cmd [[au TextYankPost * lua vim.highlight.on_yank {on_visual = false}]]
