@@ -42,9 +42,10 @@ local function toggle_terminal(exited)
       term_buf = vim.api.nvim_win_get_buf(0)
       vim.api.nvim_buf_set_keymap(term_buf, 't', '<Esc>', '<c-\\><c-n>', {silent = true, nowait = true})
       vim.api.nvim_buf_set_option(term_buf, 'buflisted', false)
-      vim.cmd([[
-        au TermClose <buffer> lua require('utils').toggle_terminal(true)
-      ]])
+      vim.api.nvim_create_autocmd("TermClose", {
+        buffer = term_buf,
+        callback = function() toggle_terminal(true) end,
+      })
     end
     vim.cmd('startinsert!')
   end

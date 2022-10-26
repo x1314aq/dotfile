@@ -81,14 +81,23 @@ setopt("o", "lazyredraw", true)
 setopt("o", "mouse", nil)
 
 -- Highlight on yank
-cmd [[au TextYankPost * lua vim.highlight.on_yank {on_visual = false}]]
+vim.api.nvim_create_autocmd("TextYankPost", {
+  pattern = "*",
+  callback = function() vim.highlight.on_yank {on_visual = false} end,
+})
 
 -- set filetype of .h to c instead of cpp
-cmd [[au BufNewFile,BufRead *.h set filetype=c]]
+vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
+  pattern = "*.h",
+  command = "set filetype=c",
+})
 
 -- set file format to unix on Windows
 if jit.os == "Windows" then
-    cmd [[au BufNewFile * set ff=unix]]
+  vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
+    pattern = "*",
+    command = "set ff=unix",
+  })
 end
 
 -- packer.nvim commands
