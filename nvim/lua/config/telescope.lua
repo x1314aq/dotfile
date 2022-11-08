@@ -53,7 +53,10 @@ require("telescope").setup {
 require("telescope").load_extension("fzf")
 
 -- telescope key mappings
-vim.keymap.set('n', '<M-o>', function() require("telescope.builtin").resume() end, {silent = true, nowait = true, noremap = true})
+local builtin = require("telescope.builtin")
+local keymap_opts = {silent = true, nowait = true, noremap = true}
+
+vim.keymap.set('n', '<M-o>', builtin.resume, keymap_opts)
 
 local function find_files()
   local opts = {
@@ -64,10 +67,10 @@ local function find_files()
       height = math.floor(vim.api.nvim_get_option('lines') * 0.6),
     },
   }
-  require("telescope.builtin").find_files(opts)
+  builtin.find_files(opts)
 end
 
-vim.keymap.set('n', '<leader>f', find_files, {silent = true, nowait = true, noremap = true})
+vim.keymap.set('n', '<leader>f', find_files, keymap_opts)
 
 local function buffers()
   local opts = {
@@ -78,10 +81,10 @@ local function buffers()
       height = math.floor(vim.api.nvim_get_option('lines') * 0.6),
     },
   }
-  require("telescope.builtin").buffers(opts)
+  builtin.buffers(opts)
 end
 
-vim.keymap.set('n', '<leader>b', buffers, {silent = true, nowait = true, noremap = true})
+vim.keymap.set('n', '<leader>b', buffers, keymap_opts)
 
 local function grep_string(fixed)
   local opts = {
@@ -103,27 +106,38 @@ local function grep_string(fixed)
     print("Cancelled with empty pattern!")
     return
   end
-  require("telescope.builtin").grep_string(opts)
+  builtin.grep_string(opts)
 end
 
-vim.keymap.set('n', '<leader>s', function() grep_string(false) end, {silent = true, nowait = true, noremap = true})
-vim.keymap.set('n', '<leader>S', function() grep_string(true) end, {silent = true, nowait = true, noremap = true})
+vim.keymap.set('n', '<leader>s', function() grep_string(false) end, keymap_opts)
+vim.keymap.set('n', '<leader>S', function() grep_string(true) end, keymap_opts)
 
 local function lsp_references()
   local opts = {
     timeout = 1000,
+    include_declaration = false,
   }
-  require("telescope.builtin").lsp_references(opts)
+  builtin.lsp_references(opts)
 end
 
-vim.keymap.set('n', 'gr', lsp_references, {silent = true, nowait = true, noremap = true})
+vim.keymap.set('n', 'gr', lsp_references, keymap_opts)
+
+local function diagnostics()
+  local opts = {
+    timeout = 1000,
+    buf_nr = 0,
+  }
+  builtin.diagnostics(opts)
+end
+
+vim.keymap.set('n', '<leader>d', diagnostics, keymap_opts)
 
 local function lsp_symbols(doc)
   local opts = {
     timeout = 1000,
   }
   if doc then
-    require("telescope.builtin").lsp_document_symbols(opts)
+    builtin.lsp_document_symbols(opts)
   else
     vim.fn.inputsave()
     opts.query = vim.fn.input("Query: ")
@@ -133,28 +147,46 @@ local function lsp_symbols(doc)
       print("Cancelled with empty query!")
       return
     end
-    require("telescope.builtin").lsp_workspace_symbols(opts)
+    builtin.lsp_workspace_symbols(opts)
   end
 end
 
 local function global_symbols()
-  local clients = vim.lsp.buf_get_clients()
+  local clients = vim.lsp.get_active_clients({buffer = 0})
   if next(clients) == nil then
-    require("telescope.builtin").tags()
+    builtin.tags()
   else
     lsp_symbols(false)
   end
 end
 
-vim.keymap.set('n', '<leader>t', global_symbols, {silent = true, nowait = true, noremap = true})
+vim.keymap.set('n', '<leader>t', global_symbols, keymap_opts)
 
 local function local_symbols()
-  local clients = vim.lsp.buf_get_clients()
+  local clients = vim.lsp.get_active_clients({buffer = 0})
   if next(clients) == nil then
-    require("telescope.builtin").current_buffer_tags()
+    builtin.current_buffer_tags()
   else
     lsp_symbols(true)
   end
 end
 
-vim.keymap.set('n', '<leader>a', local_symbols, {silent = true, nowait = true, noremap = true})
+vim.keymap.set('n', '<leader>a', local_symbols, keymap_opts)
+
+local function lsp_incoming_calls()
+  local opts = {
+    timeout = 1000,
+  }
+  builtin.lsp_incoming_calls(opts)
+end
+
+vim.keymap.set('n', 'gc', lsp_incoming_calls, keymap_opts)
+
+local function lsp_outgoing_calls()
+  local opts = {
+    timeout = 1000,
+  }
+  builtin.lsp_outgoing_calls(opts)
+end
+
+vim.keymap.set('n', 'gC', lsp_outgoing_calls, keymap_opts)

@@ -19,42 +19,41 @@ local function list_or_jump(action, opts)
   if #locs == 0 then
     print('empty result from LSP server')
   elseif #locs == 1 then
-    vim.lsp.util.jump_to_location(locs[1])
+    vim.lsp.util.jump_to_location(locs[1], 'utf-8', true)
   else
-    vim.lsp.util.set_loclist(vim.lsp.util.locations_to_items(locs), 0)
-    vim.cmd('lwindow')
+    vim.fn.setloclist(0, vim.lsp.util.locations_to_items(locs, 'utf-8'))
+    vim.api.nvim_command('lopen')
   end
 end
 
-M.find_caller = function()
+local function find_caller()
   list_or_jump('$ccls/call')
 end
 
-M.find_callee = function()
+local function find_callee()
   list_or_jump('$ccls/call', {callee = true})
 end
 
 capabilities = require('cmp_nvim_lsp').default_capabilities()
 
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, {noremap = true, silent = true})
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, {noremap = true, silent = true})
+
 local nvim_lsp = require('lspconfig')
 local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-  local opts = {noremap=true, silent=true}
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  --vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '[c', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ']c', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-  --vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  local opts = {noremap = true, silent = true, buffer = bufnr}
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+  vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+  vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
 
   if client.name == 'ccls' then
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gc', '<cmd>lua require("lsp").find_caller()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gC', '<cmd>lua require("lsp").find_callee()<CR>', opts)
+    vim.keymap.set('n', 'gc', find_caller, opts)
+    vim.keymap.set('n', 'gC', find_callee, opts)
   end
 end
 
