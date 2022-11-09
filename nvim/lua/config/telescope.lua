@@ -86,22 +86,15 @@ end
 
 vim.keymap.set('n', '<leader>b', buffers, keymap_opts)
 
-local function grep_string(fixed)
+local function grep_current_word()
   local opts = {
-    sort_only_text = true
+    sort_only_text = true,
+    use_regex = false,
+    additional_args = '-Fs',
+    word_match = '-w',
+    search = vim.fn.expand("<cword>"),
   }
-  if fixed then
-    opts.search = vim.fn.expand("<cword>")
-    opts.use_regex = false
-    opts.additional_args = '-Fs'
-    opts.word_match = '-w'
-  else
-    vim.fn.inputsave()
-    opts.search = vim.fn.input("Pattern: ", "")
-    vim.fn.inputrestore()
-    vim.cmd("redraw!")
-    opts.use_regex = true
-  end
+
   if opts.search == '' then
     print("Cancelled with empty pattern!")
     return
@@ -109,8 +102,28 @@ local function grep_string(fixed)
   builtin.grep_string(opts)
 end
 
-vim.keymap.set('n', '<leader>s', function() grep_string(false) end, keymap_opts)
-vim.keymap.set('n', '<leader>S', function() grep_string(true) end, keymap_opts)
+vim.keymap.set('n', '<leader>S', grep_current_word, keymap_opts)
+
+local function grep_string()
+  local opts = {
+    sort_only_text = true,
+    use_regex = true,
+  }
+
+  vim.ui.input({
+      prompt = "Pattern",
+    },
+    function(input)
+      if input == nil or input == "" then
+        print("Cancelled with empty pattern!")
+        return
+      end
+      opts.search = input
+      builtin.grep_string(opts)
+    end)
+end
+
+vim.keymap.set('n', '<leader>s', grep_string, keymap_opts)
 
 local function lsp_references()
   local opts = {
@@ -139,20 +152,22 @@ local function lsp_symbols(doc)
   if doc then
     builtin.lsp_document_symbols(opts)
   else
-    vim.fn.inputsave()
-    opts.query = vim.fn.input("Query: ")
-    vim.fn.inputrestore()
-    vim.cmd("redraw!")
-    if opts.query == '' then
-      print("Cancelled with empty query!")
-      return
-    end
-    builtin.lsp_workspace_symbols(opts)
+    vim.ui.input({
+      prompt = "Query",
+    },
+    function(input)
+      if input == nil or input == "" then
+        print("Cancelled with empty query!")
+        return
+      end
+      opts.query = input
+      builtin.lsp_workspace_symbols(opts)
+    end)
   end
 end
 
 local function global_symbols()
-  local clients = vim.lsp.get_active_clients({buffer = 0})
+  local clients = vim.lsp.get_active_clients({bufnr = 0})
   if next(clients) == nil then
     builtin.tags()
   else
@@ -163,7 +178,7 @@ end
 vim.keymap.set('n', '<leader>t', global_symbols, keymap_opts)
 
 local function local_symbols()
-  local clients = vim.lsp.get_active_clients({buffer = 0})
+  local clients = vim.lsp.get_active_clients({bufnr = 0})
   if next(clients) == nil then
     builtin.current_buffer_tags()
   else

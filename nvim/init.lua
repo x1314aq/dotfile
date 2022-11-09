@@ -137,3 +137,6 @@ require('lsp')
 
 -- snippets
 require('snippets')
+
+-- custom input UI
+require('ui')
