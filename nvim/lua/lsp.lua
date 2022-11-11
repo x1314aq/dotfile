@@ -51,10 +51,10 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
   vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
 
-  if client.name == 'ccls' then
-    vim.keymap.set('n', 'gc', find_caller, opts)
-    vim.keymap.set('n', 'gC', find_callee, opts)
-  end
+--  if client.name == 'ccls' then
+--    vim.keymap.set('n', 'gc', find_caller, opts)
+--    vim.keymap.set('n', 'gC', find_callee, opts)
+--  end
 end
 
 if vim.env.ccls_exe then
