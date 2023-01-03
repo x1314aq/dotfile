@@ -87,16 +87,30 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 -- set filetype of .h to c instead of cpp
+local function set_ft_c(arg)
+  local modifiable = vim.api.nvim_buf_get_option(arg.buf, "modifiable")
+  if modifiable then
+    vim.api.nvim_buf_set_option(arg.buf, "filetype", "c")
+  end
+end
+
 vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
   pattern = "*.h",
-  command = "set filetype=c",
+  callback = set_ft_c,
 })
 
 -- set file format to unix on Windows
+local function set_ff_unix(arg)
+  local modifiable = vim.api.nvim_buf_get_option(arg.buf, "modifiable")
+  if modifiable then
+    vim.api.nvim_buf_set_option(arg.buf, "fileformat", "unix")
+  end
+end
+
 if jit.os == "Windows" then
   vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
     pattern = "*",
-    command = "set ff=unix",
+    callback = set_ff_unix,
   })
 end
 
