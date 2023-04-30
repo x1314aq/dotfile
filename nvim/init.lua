@@ -1,11 +1,6 @@
 local g = vim.g
 local cmd = vim.cmd
 
-local status, impatient = pcall(require, "impatient")
-if status then
-  impatient.enable_profile()
-end
-
 -- map <Space> to leader key
 g.mapleader = ' '
 g.maplocalleader = ','
@@ -14,30 +9,8 @@ g.maplocalleader = ','
 g.loaded_ruby_provider = 0
 g.loaded_perl_provider = 0
 g.loaded_node_provider = 0
-if jit.os == "Windows" then
-    g.python3_host_prog = "python3.exe"
-else
-    g.python3_host_prog = "python3"
-end
-
--- disable built-in plugins
-g.loaded_gzip = 1
-g.loaded_zip = 1
-g.loaded_zipPlugin = 1
-g.loaded_tar = 1
-g.loaded_tarPlugin = 1
-g.loaded_getscript = 1
-g.loaded_getscriptPlugin = 1
-g.loaded_vimball = 1
-g.loaded_vimballPlugin = 1
-g.loaded_2html_plugin = 1
-g.loaded_matchit = 1
-g.loaded_matchparen = 1
-g.loaded_logiPat = 1
-g.loaded_rrhelper = 1
-g.loaded_netrw = 1
-g.loaded_netrwPlugin = 1
-g.loaded_netrwSettings = 1
+g.loaded_python_provider = 0
+g.loaded_python3_provider = 0
 
 -- basic settings
 local scopes = {o = vim.o, bo = vim.bo, wo = vim.wo}
@@ -114,17 +87,10 @@ if jit.os == "Windows" then
   })
 end
 
--- packer.nvim commands
-cmd [[command! PackerInstall lua require("plugins").install()]]
-cmd [[command! PackerUpdate lua require("plugins").update()]]
-cmd [[command! PackerSync lua require("plugins").sync()]]
-cmd [[command! PackerClean lua require("plugins").clean()]]
-cmd [[command! PackerCompile lua require("plugins").compile()]]
-
 -- key mappings
 require('keymaps')
 
--- expand tab of not
+-- expand tab or not
 local function toggle_tab()
   if vim.bo.expandtab then
     print('Toggle TAB')
@@ -143,14 +109,52 @@ end
 
 vim.keymap.set('n', '<M-t>', toggle_tab)
 
+-- lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  -- bootstrap lazy.nvim
+  -- stylua: ignore
+  vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", "--branch=stable", lazypath })
+end
+vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
+
+require("lazy").setup({
+  spec = {
+    {import = "plugins"},
+  },
+  git = {
+    timeout = 30
+  },
+  defaults = {
+    lazy = true,
+    version = "*",
+  },
+  install = {
+    missing = false,
+    coloscheme = {"onedark"},
+  },
+  performance = {
+    rtp = {
+      disabled_plugins = {
+        "gzip",
+        "matchit",
+        "matchparen",
+        "netrwPlugin",
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
+        "vimballPlugin",
+      },
+    },
+  },
+})
+
 -- colorscheme
 cmd [[colorscheme onedark]]
 
--- lsp, completion and tree-sitter
-require('lsp')
-
 -- snippets
-require('snippets')
+--require('snippets')
 
 -- custom input UI
 require('ui')
